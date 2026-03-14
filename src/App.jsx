@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
-import Bezel from "./components/Bezel"
-import Desktop from "./components/Desktop"
+import Bezel from "./components/bezel"
+import Desktop from "./components/desktop"
 
 export default function App() {
   const [powered, setPowered] = useState(false)
