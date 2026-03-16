@@ -1,9 +1,9 @@
-import window from "./window"
+import WindowBox from "./windowbox"
 
 export default function Desktop() {
   return (
     <>
-      <window />
+      <WindowBox />
     </>
   )
 }

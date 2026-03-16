@@ -1,4 +1,4 @@
-export default function Bezel({ powered, volume, knobAngle, handleKnobDown, handleKnobUp, setPowered }) {
+export default function Bezel({ screenState, volume, knobAngle, handleKnobDown, handleKnobUp, setPowered }) {
   return (
     <>
       {/* VOLUME KNOB — behind bezel */}
@@ -13,25 +13,26 @@ export default function Bezel({ powered, volume, knobAngle, handleKnobDown, hand
           width: "13%",
           aspectRatio: "1",
           cursor: "pointer",
-          zIndex: 100,
+          zIndex: 200,
         }}
       >
-        <img src="/volume_knob.png" style={{
-          width: "100%", height: "100%",
-          transform: `rotate(${knobAngle}deg)`,
-          transformOrigin: "center center",
-          pointerEvents: "none",
-        }} />
+        <img src="/knobs/volume_knob_h_d.png" style={{
+  width: "100%", height: "100%",
+  transform: `rotate(${knobAngle}deg)`,
+  transformOrigin: "center center",
+  transition: "transform 0.1s ease-out",
+  pointerEvents: "none",
+}} />
       </div>
 
       {/* BEZEL */}
-      <img src="/bezel.png" style={{
+      <img src="/bezeld.png" style={{
         position: "absolute",
         top: 0, left: 0,
         width: "100%", height: "100%",
         objectFit: "fill",
         pointerEvents: "none",
-        zIndex: 111,
+        zIndex: 300,
       }} />
 
       {/* LED METER */}
@@ -42,14 +43,14 @@ export default function Bezel({ powered, volume, knobAngle, handleKnobDown, hand
         display: "flex",
         flexDirection: "column-reverse",
         gap: "3px",
-        zIndex: 115,
+        zIndex: 315,
         pointerEvents: "none",
       }}>
         {Array.from({ length: 10 }).map((_, i) => {
           const lit = i < Math.round(volume * 10)
           return (
             <img key={i}
-              src={lit ? "/led_on.png" : "/led_off.png"}
+              src={lit ? "/lights/led_on.png" : "/lights/led_off.png"}
               style={{ width: "17px", height: "17px", pointerEvents: "none" }}
             />
           )
@@ -57,20 +58,20 @@ export default function Bezel({ powered, volume, knobAngle, handleKnobDown, hand
       </div>
 
       {/* POWER ON BUTTON */}
-      {powered && (
-        <img src="/power_on.png" style={{
+      {(screenState === 'on' || screenState === 'shutting_down' )&& (
+        <img src="/screen/power_on.png" style={{
           position: "absolute",
           top: 0, left: 0,
           width: "100%", height: "100%",
           objectFit: "fill",
           pointerEvents: "none",
-          zIndex: 112,
+          zIndex: 312,
         }} />
       )}
 
       {/* POWER CLICK ZONE */}
       <div
-        onClick={() => setPowered(prev => !prev)}
+        onClick={setPowered}
         style={{
           position: "absolute",
           bottom: "4%",
@@ -78,7 +79,7 @@ export default function Bezel({ powered, volume, knobAngle, handleKnobDown, hand
           width: "18%",
           height: "12%",
           cursor: "pointer",
-          zIndex: 116,
+          zIndex: 316,
         }}
       />
     </>

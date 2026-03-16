@@ -1,4 +1,4 @@
-export default function Window() {
+export default function WindowBox() {
   return (
     <div style={{
       position: "relative",
@@ -6,7 +6,7 @@ export default function Window() {
       backgroundColor: "#1a1a2e",
       border: "1px solid #009191",
       boxShadow: "2px 2px 0px #000000",
-      zIndex: 200,
+      zIndex: 203,
     }}>
       <div style={{
         background: "white",

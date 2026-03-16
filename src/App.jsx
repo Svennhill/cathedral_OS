@@ -1,22 +1,37 @@
 import { useState, useEffect, useRef } from "react"
 import Bezel from "./components/bezel"
-import Desktop from "./components/desktop"
+import Screen from "./components/screen"
 
 export default function App() {
-  const [powered, setPowered] = useState(false)
+  const [screenState, setScreenState] = useState('off')
   const [knobAngle, setKnobAngle] = useState(0)
   const [volume, setVolume] = useState(0.5)
   const audioRef = useRef(null)
   const knobIntervalRef = useRef(null)
+const [dimensions, setDimensions] = useState({
+  height: window.innerHeight,
+  width: window.innerHeight * (2208 / 2427)
+})
+
+useEffect(() => {
+  const handleResize = () => {
+    setDimensions({
+      height: window.innerHeight,
+      width: window.innerHeight * (2208 / 2427)
+    })
+  }
+  window.addEventListener('resize', handleResize)
+  return () => window.removeEventListener('resize', handleResize)
+}, [])
 
   useEffect(() => {
-    if (!powered) {
+    if (screenState === 'on') {
       audioRef.current.play().catch(() => {})
     } else {
       audioRef.current.pause()
       audioRef.current.currentTime = 0
     }
-  }, [powered])
+  }, [screenState])
 
   useEffect(() => {
     audioRef.current.volume = volume
@@ -27,20 +42,27 @@ export default function App() {
     const isTopHalf = e.clientY - rect.top < rect.height / 2
     const adjust = () => {
       setVolume(prev => Math.min(1, Math.max(0, isTopHalf ? prev + 0.03 : prev - 0.03)))
-      setKnobAngle(prev => isTopHalf ? prev - 15 : prev + 15)
+      setKnobAngle(isTopHalf ? -15 : 15)
     }
     adjust()
     knobIntervalRef.current = setInterval(adjust, 150)
   }
 
-  const handleKnobUp = () => clearInterval(knobIntervalRef.current)
+  const handleKnobUp = () => {
+  clearInterval(knobIntervalRef.current)
+  setKnobAngle(0)
+}
+  const handlePowerClick = () => {
+  if (screenState === 'off') setScreenState('crt_on')
+  if (screenState === 'on') setScreenState('shutting_down')
+  }
 
-  const height = window.innerHeight
-  const width = height * (2208 / 2427)
+
 
   return (
     <>
-      <audio ref={audioRef} src="/powered_off.wav" loop />
+  
+      <audio ref={audioRef} src="/OS/music_OS.wav" loop />
       <div style={{
         width: "100vw",
         height: "100vh",
@@ -48,11 +70,12 @@ export default function App() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+          
       }}>
         <div style={{
           position: "relative",
-          width: width,
-          height: height,
+          width: dimensions.width,
+          height: dimensions.height,
           background: "#000",
           display: "flex",
           alignItems: "center",
@@ -60,49 +83,19 @@ export default function App() {
           fontFamily: "opendyslexic, monospace",
           overflow: "hidden",
           flexShrink: 0,
+          //canvas div ^
         }}>
 
-          {/* BLACK BASE */}
-          <div style={{
-            position: "absolute",
-            top: 0, left: 0,
-            width: "100%", height: "100%",
-            backgroundColor: "#000",
-            zIndex: 0,
-          }} />
-
-          {/* SCREEN CONTENT */}
-          {powered ? (
-            <>
-              <img src="/background_OS.png" style={{
-                position: "absolute",
-                top: 0, left: 0,
-                width: "100%", height: "100%",
-                objectFit: "cover",
-                pointerEvents: "none",
-                zIndex: 102,
-              }} />
-              <Desktop />
-            </>
-          ) : (
-            <img src="/screen_off.png" style={{
-              position: "absolute",
-              top: 0, left: 0,
-              width: "100%", height: "100%",
-              objectFit: "fill",
-              pointerEvents: "none",
-              zIndex: 101,
-            }} />
-          )}
+          <Screen screenState={screenState} setScreenState={setScreenState} />
 
           {/* BEZEL + CONTROLS */}
           <Bezel
-            powered={powered}
-            setPowered={setPowered}
+            screenState={screenState}
             volume={volume}
             knobAngle={knobAngle}
             handleKnobDown={handleKnobDown}
             handleKnobUp={handleKnobUp}
+            setPowered={handlePowerClick}
           />
 
         </div>
