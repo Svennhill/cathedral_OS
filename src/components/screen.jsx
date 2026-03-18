@@ -1,6 +1,11 @@
 import Desktop from "./desktop"
+import BootScreen from "./bootscreen"
 
-export default function Screen({screenState, setScreenState}) {
+export default function Screen({screenState, setScreenState, luminance, density, clarity, illuminate, align}) {
+  const screenFilter = screenState !== 'off'
+    ? `brightness(${luminance}) contrast(${density}) blur(${clarity}px)`
+    : 'none'
+
   return (
     <>
       {/* BACKGROUND OS */}
@@ -13,6 +18,7 @@ export default function Screen({screenState, setScreenState}) {
             objectFit: "cover",
             pointerEvents: "none",
             zIndex: 201,
+            filter: screenFilter,
           }} />
           {screenState === 'on' && <Desktop />}
         </>
@@ -27,7 +33,13 @@ export default function Screen({screenState, setScreenState}) {
           objectFit: "fill",
           pointerEvents: "none",
           zIndex: 201,
+          filter: screenFilter,
         }} />
+      )}
+
+      {/* BOOT SCREEN */}
+      {screenState === 'booting' && (
+        <BootScreen onBootComplete={() => setScreenState('on')} />
       )}
 
       {/* CRT ON VIDEO */}
@@ -36,7 +48,7 @@ export default function Screen({screenState, setScreenState}) {
           src="/fx/crt_on.mp4"
           autoPlay
           playsInline
-          onEnded={() => setScreenState('on')}
+          onEnded={() => setScreenState('booting')}
           style={{
             position: "absolute",
             top: 0, left: 0,
@@ -44,9 +56,15 @@ export default function Screen({screenState, setScreenState}) {
             objectFit: "fill",
             pointerEvents: "none",
             zIndex: 202,
+            filter: screenFilter,
             clipPath: "inset(5% 10% 22% 0%)"
           }}
         />
+      )}
+
+      {/* CRT ON AUDIO */}
+      {(screenState === 'crt_on' || screenState === 'booting') && (
+        <audio src="/audio/crt_on_sound.mp3" autoPlay />
       )}
 
       {/* CRT OFF VIDEO */}
@@ -63,9 +81,42 @@ export default function Screen({screenState, setScreenState}) {
             objectFit: "fill",
             pointerEvents: "none",
             zIndex: 202,
+            filter: screenFilter,
             clipPath: "inset(5% 10% 22% 0%)"
           }}
         />
+      )}
+
+      {/* CRT OFF AUDIO */}
+      {screenState === 'shutting_down' && (
+        <audio src="/audio/crt_off_sound.mp3" autoPlay />
+      )}
+
+      {/* ILLUMINATE OVERLAY */}
+      {screenState !== 'off' && (
+        <div style={{
+          position: "absolute",
+          top: 0, left: 0,
+          width: "100%", height: "100%",
+          backgroundColor: `rgba(0, 255, 65, ${illuminate * 0.3})`,
+          pointerEvents: "none",
+          clipPath: "inset(5% 10% 22% 0%)",
+          zIndex: 205,
+        }} />
+      )}
+
+      {/* ALIGN SCANLINES */}
+      {screenState !== 'off' && (
+        <div style={{
+          position: "absolute",
+          top: 0, left: 0,
+          width: "100%", height: "100%",
+          backgroundImage: "repeating-linear-gradient(transparent, transparent 2px, rgba(0,0,0,0.3) 2px, rgba(0,0,0,0.3) 4px)",
+          opacity: align,
+          pointerEvents: "none",
+          clipPath: "inset(5% 10% 22% 0%)",
+          zIndex: 206,
+        }} />
       )}
     </>
   )
