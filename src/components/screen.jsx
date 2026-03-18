@@ -1,7 +1,7 @@
 import Desktop from "./desktop"
 import BootScreen from "./bootscreen"
 
-export default function Screen({screenState, setScreenState, luminance, density, clarity, illuminate, align}) {
+export default function Screen({screenState, setScreenState, luminance, density, clarity, illuminate, align, debugLoop, debugLoopTarget}) {
   const screenFilter = screenState !== 'off'
     ? `brightness(${luminance}) contrast(${density}) blur(${clarity}px)`
     : 'none'
@@ -25,7 +25,7 @@ export default function Screen({screenState, setScreenState, luminance, density,
       )}
 
       {/* SCREEN OFF */}
-      {(screenState === 'off' || screenState === 'crt_on') && (
+      {screenState === 'off' && (
         <img src="/screen/screen_off.png" style={{
           position: "absolute",
           top: 0, left: 0,
@@ -38,9 +38,15 @@ export default function Screen({screenState, setScreenState, luminance, density,
       )}
 
       {/* BOOT SCREEN */}
-      {screenState === 'booting' && (
-        <BootScreen onBootComplete={() => setScreenState('on')} />
-      )}
+     {screenState === 'booting' && (
+  <BootScreen
+    key={Date.now()}
+    onBootComplete={() => debugLoop
+      ? setScreenState(debugLoopTarget)
+      : setScreenState('on')
+    }
+  />
+)}
 
       {/* CRT ON VIDEO */}
       {screenState === 'crt_on' && (
@@ -90,6 +96,18 @@ export default function Screen({screenState, setScreenState, luminance, density,
       {/* CRT OFF AUDIO */}
       {screenState === 'shutting_down' && (
         <audio src="/audio/crt_off_sound.mp3" autoPlay />
+      )}
+
+      {/* CRT PHOSPHOR GLOW */}
+      {(screenState === 'crt_on' || screenState === 'booting' || screenState === 'on' || screenState === 'shutting_down') && (
+        <div style={{
+          position: "absolute",
+          top: 0, left: 0,
+          width: "100%", height: "100%",
+          background: "radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,255,65,0.06) 58%, rgba(0,255,65,0.12) 70%, rgba(0,255,65,0.04) 80%, transparent 88%)",
+          pointerEvents: "none",
+          zIndex: 207,
+        }} />
       )}
 
       {/* ILLUMINATE OVERLAY */}

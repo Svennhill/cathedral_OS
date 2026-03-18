@@ -66,10 +66,14 @@ export default function BootScreen({ onBootComplete }) {
     return () => clearInterval(blinkTimerRef.current)
   }, [])
 
+  //typewriter
   useEffect(() => {
     if (phase !== 'text') return
     if (currentLine >= BOOT_LINES.length) {
-      setTimeout(() => setPhase('cathedral'), 1200)
+    const complete = new Audio('/audio/complete.mp3')
+complete.volume = 0.01
+complete.play().catch(() => {})
+setTimeout(() => setPhase('cathedral'), 1200)
       return
     }
     const line = BOOT_LINES[currentLine]
@@ -80,6 +84,7 @@ export default function BootScreen({ onBootComplete }) {
     } else {
       charTimerRef.current = setTimeout(() => {
         setVisibleLines(prev => [...prev, line].slice(-12))
+        playBootSound(line)
         setCurrentLine(prev => prev + 1)
         setCurrentChar(0)
       }, 80)
@@ -90,6 +95,12 @@ export default function BootScreen({ onBootComplete }) {
   useEffect(() => {
     if (phase !== 'cathedral') return
     setCatScanProgress(0)
+    const chime = new Audio('/audio/cathedral_chime.mp3')
+chime.volume = 0.08
+chime.play().catch(() => {})
+    const complete = new Audio('/audio/complete.mp3')
+complete.volume = 0.01
+complete.play().catch(() => {})
     const start = Date.now()
     const duration = 6000
     const tick = () => {
@@ -149,7 +160,30 @@ export default function BootScreen({ onBootComplete }) {
     if (line.includes('NOT FOUND') || line.includes('REJECTED') || line.includes('SKIP')) return '#ffaa00'
     return MID_GREEN
   }
-
+  
+const playBootSound = (line) => {
+  let src = null
+  let vol = 0.1
+  if (line.includes('FAIL') || line.includes('NOT FOUND') || line.includes('REJECTED') || line.includes('ERROR')) {
+    src = '/audio/fail.mp3'
+    vol = 0.01
+  } else if (line.includes('WARN')) {
+    src = '/audio/warn.mp3'
+    vol = 0.01
+  } else if (line.includes('SKIP')) {
+    src = '/audio/skip.mp3'
+    vol = 0.01
+  } else if (line.includes('OK')) {
+    src = '/audio/OK_chime.mp3'
+    vol = 0.01
+  }
+  if (src) {
+    const sfx = new Audio(src)
+    sfx.volume = vol
+    sfx.play().catch(() => {})
+  }
+}
+//the return!
   return (
     <div style={{
       position: "absolute",
@@ -162,7 +196,7 @@ export default function BootScreen({ onBootComplete }) {
     }}>
 
       {/* BOOT BACKGROUND */}
-      <img src="/boot/boot_background.png" style={{
+      <img src="/boot/boot_backgroundzzz.png" style={{
         position: "absolute",
         top: 0, left: 0,
         width: "100%", height: "100%",

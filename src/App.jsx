@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import Bezel from "./components/bezel"
 import Screen from "./components/screen"
+import DebugPanel from "./components/debugpanel"
 
 export default function App() {
   const [screenState, setScreenState] = useState('off')
@@ -16,6 +17,8 @@ export default function App() {
   const [illuminateAngle, setIlluminateAngle] = useState(0)
   const [align, setAlign] = useState(0)
   const [alignAngle, setAlignAngle] = useState(0)
+  const [debugLoop, setDebugLoop] = useState(false)
+  const [debugLoopTarget, setDebugLoopTarget] = useState('booting')
   const audioRef = useRef(null)
   const knobIntervalRef = useRef(null)
   const luminanceIntervalRef = useRef(null)
@@ -64,6 +67,16 @@ export default function App() {
     audioRef.current.volume = volume
   }, [volume])
 
+  useEffect(() => {
+    const unlock = () => {
+      const ctx = new AudioContext()
+      ctx.resume()
+      document.removeEventListener('click', unlock)
+    }
+    document.addEventListener('click', unlock)
+    return () => document.removeEventListener('click', unlock)
+  }, [])
+
   const handleKnobDown = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const isTopHalf = e.clientY - rect.top < rect.height / 2
@@ -96,9 +109,7 @@ export default function App() {
     luminanceIntervalRef.current = setInterval(adjust, 150)
   }
 
-  const handleLuminanceUp = () => {
-    clearInterval(luminanceIntervalRef.current)
-  }
+  const handleLuminanceUp = () => clearInterval(luminanceIntervalRef.current)
 
   const handleDensityDown = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -106,9 +117,7 @@ export default function App() {
     const adjust = () => {
       setDensity(prev => {
         const next = Math.min(2, Math.max(0, isRightHalf ? prev + 0.03 : prev - 0.03))
-        if (next !== prev) {
-          setDensityAngle(a => isRightHalf ? a + 15 : a - 15)
-        }
+        if (next !== prev) setDensityAngle(a => isRightHalf ? a + 15 : a - 15)
         return next
       })
     }
@@ -116,9 +125,7 @@ export default function App() {
     densityIntervalRef.current = setInterval(adjust, 150)
   }
 
-  const handleDensityUp = () => {
-    clearInterval(densityIntervalRef.current)
-  }
+  const handleDensityUp = () => clearInterval(densityIntervalRef.current)
 
   const handleClarityDown = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -126,9 +133,7 @@ export default function App() {
     const adjust = () => {
       setClarity(prev => {
         const next = Math.min(10, Math.max(0, isRightHalf ? prev + 0.2 : prev - 0.2))
-        if (next !== prev) {
-          setClarityAngle(a => isRightHalf ? a + 15 : a - 15)
-        }
+        if (next !== prev) setClarityAngle(a => isRightHalf ? a + 15 : a - 15)
         return next
       })
     }
@@ -136,9 +141,7 @@ export default function App() {
     clarityIntervalRef.current = setInterval(adjust, 150)
   }
 
-  const handleClarityUp = () => {
-    clearInterval(clarityIntervalRef.current)
-  }
+  const handleClarityUp = () => clearInterval(clarityIntervalRef.current)
 
   const handleIlluminateDown = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -146,9 +149,7 @@ export default function App() {
     const adjust = () => {
       setIlluminate(prev => {
         const next = Math.min(1, Math.max(0, isRightHalf ? prev + 0.03 : prev - 0.03))
-        if (next !== prev) {
-          setIlluminateAngle(a => isRightHalf ? a + 15 : a - 15)
-        }
+        if (next !== prev) setIlluminateAngle(a => isRightHalf ? a + 15 : a - 15)
         return next
       })
     }
@@ -156,9 +157,7 @@ export default function App() {
     illuminateIntervalRef.current = setInterval(adjust, 150)
   }
 
-  const handleIlluminateUp = () => {
-    clearInterval(illuminateIntervalRef.current)
-  }
+  const handleIlluminateUp = () => clearInterval(illuminateIntervalRef.current)
 
   const handleAlignDown = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -166,9 +165,7 @@ export default function App() {
     const adjust = () => {
       setAlign(prev => {
         const next = Math.min(1, Math.max(0, isRightHalf ? prev + 0.03 : prev - 0.03))
-        if (next !== prev) {
-          setAlignAngle(a => isRightHalf ? a + 15 : a - 15)
-        }
+        if (next !== prev) setAlignAngle(a => isRightHalf ? a + 15 : a - 15)
         return next
       })
     }
@@ -176,9 +173,7 @@ export default function App() {
     alignIntervalRef.current = setInterval(adjust, 150)
   }
 
-  const handleAlignUp = () => {
-    clearInterval(alignIntervalRef.current)
-  }
+  const handleAlignUp = () => clearInterval(alignIntervalRef.current)
 
   const handlePowerClick = () => {
     if (screenState === 'off') setScreenState('crt_on')
@@ -217,6 +212,8 @@ export default function App() {
             clarity={clarity}
             illuminate={illuminate}
             align={align}
+            debugLoop={debugLoop}
+            debugLoopTarget={debugLoopTarget}
           />
 
           <Bezel
@@ -245,6 +242,17 @@ export default function App() {
 
         </div>
       </div>
+
+      {import.meta.env.DEV && (
+        <DebugPanel
+          screenState={screenState}
+          setScreenState={setScreenState}
+          loop={debugLoop}
+          setLoop={setDebugLoop}
+          loopTarget={debugLoopTarget}
+          setLoopTarget={setDebugLoopTarget}
+        />
+      )}
     </>
   )
 }
