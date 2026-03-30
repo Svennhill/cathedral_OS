@@ -28,15 +28,13 @@ const BOOT_LINES = [
   "flat_earth.mod................. REJECTED",
   "young_earth.exe................ ERROR",
   "finalizing boot sequence.......... OK",
-  "4L8R15F16J23S42K"
-
-
+  "4L8R15F16J23S42K",
 ]
 
 const GREEN = "#00ff41"
 const MID_GREEN = "#00a829"
 
-export default function BootScreen({ onBootComplete }) {
+export default function BootScreen({ onBootComplete, setIlluminate }) {
   const [phase, setPhase] = useState('text')
   const [visibleLines, setVisibleLines] = useState([])
   const [currentLine, setCurrentLine] = useState(0)
@@ -50,6 +48,13 @@ export default function BootScreen({ onBootComplete }) {
   const charTimerRef = useRef(null)
   const blinkTimerRef = useRef(null)
 
+  // Set illuminate to 25% on boot start, clean up on unmount
+  useEffect(() => {
+    setIlluminate(0.25)
+    return () => setIlluminate(0)
+  }, [])
+
+  // Load random quote
   useEffect(() => {
     fetch('/boot/boot_bible_quotes.txt')
       .then(r => r.text())
@@ -61,19 +66,20 @@ export default function BootScreen({ onBootComplete }) {
       .catch(() => setQuote('"and the Word was made flesh" John 1:14'))
   }, [])
 
+  // Blinking cursor
   useEffect(() => {
     blinkTimerRef.current = setInterval(() => setBlink(b => !b), 530)
     return () => clearInterval(blinkTimerRef.current)
   }, [])
 
-  //typewriter
+  // Typewriter
   useEffect(() => {
     if (phase !== 'text') return
     if (currentLine >= BOOT_LINES.length) {
-    const complete = new Audio('/audio/complete.mp3')
-complete.volume = 0.01
-complete.play().catch(() => {})
-setTimeout(() => setPhase('cathedral'), 1200)
+      const complete = new Audio('/audio/complete.mp3')
+      complete.volume = 0.01
+      complete.play().catch(() => {})
+      setTimeout(() => setPhase('cathedral'), 1200)
       return
     }
     const line = BOOT_LINES[currentLine]
@@ -92,15 +98,16 @@ setTimeout(() => setPhase('cathedral'), 1200)
     return () => clearTimeout(charTimerRef.current)
   }, [phase, currentLine, currentChar])
 
+  // Cathedral scan-in
   useEffect(() => {
     if (phase !== 'cathedral') return
     setCatScanProgress(0)
+    setIlluminate(0) // reset illuminate when cathedral begins
+
     const chime = new Audio('/audio/cathedral_chime.mp3')
-chime.volume = 0.08
-chime.play().catch(() => {})
-    const complete = new Audio('/audio/complete.mp3')
-complete.volume = 0.01
-complete.play().catch(() => {})
+    chime.volume = 0.08
+    chime.play().catch(() => {})
+
     const start = Date.now()
     const duration = 6000
     const tick = () => {
@@ -133,6 +140,7 @@ complete.play().catch(() => {})
     return () => clearInterval(splashTimer)
   }, [phase, quote])
 
+  // Wipe to OS
   useEffect(() => {
     if (phase !== 'wipe') return
     setWipeProgress(0)
@@ -160,30 +168,30 @@ complete.play().catch(() => {})
     if (line.includes('NOT FOUND') || line.includes('REJECTED') || line.includes('SKIP')) return '#ffaa00'
     return MID_GREEN
   }
-  
-const playBootSound = (line) => {
-  let src = null
-  let vol = 0.1
-  if (line.includes('FAIL') || line.includes('NOT FOUND') || line.includes('REJECTED') || line.includes('ERROR')) {
-    src = '/audio/fail.mp3'
-    vol = 0.01
-  } else if (line.includes('WARN')) {
-    src = '/audio/warn.mp3'
-    vol = 0.01
-  } else if (line.includes('SKIP')) {
-    src = '/audio/skip.mp3'
-    vol = 0.01
-  } else if (line.includes('OK')) {
-    src = '/audio/OK_chime.mp3'
-    vol = 0.01
+
+  const playBootSound = (line) => {
+    let src = null
+    let vol = 0.1
+    if (line.includes('FAIL') || line.includes('NOT FOUND') || line.includes('REJECTED') || line.includes('ERROR')) {
+      src = '/audio/fail.mp3'
+      vol = 0.01
+    } else if (line.includes('WARN')) {
+      src = '/audio/warn.mp3'
+      vol = 0.01
+    } else if (line.includes('SKIP')) {
+      src = '/audio/skip.mp3'
+      vol = 0.01
+    } else if (line.includes('OK')) {
+      src = '/audio/OK_chime.mp3'
+      vol = 0.01
+    }
+    if (src) {
+      const sfx = new Audio(src)
+      sfx.volume = vol
+      sfx.play().catch(() => {})
+    }
   }
-  if (src) {
-    const sfx = new Audio(src)
-    sfx.volume = vol
-    sfx.play().catch(() => {})
-  }
-}
-//the return!
+
   return (
     <div style={{
       position: "absolute",
@@ -196,7 +204,7 @@ const playBootSound = (line) => {
     }}>
 
       {/* BOOT BACKGROUND */}
-      <img src="/boot/boot_backgroundzzz.png" style={{
+      <img src="/boot/boot_background.png" style={{
         position: "absolute",
         top: 0, left: 0,
         width: "100%", height: "100%",

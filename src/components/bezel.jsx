@@ -1,4 +1,17 @@
+import { useState, } from "react"
+
+
 export default function Bezel({ screenState, volume, knobAngle, handleKnobDown, handleKnobUp, setPowered, luminanceAngle, handleLuminanceDown, handleLuminanceUp, densityAngle, handleDensityDown, handleDensityUp, clarityAngle, handleClarityDown, handleClarityUp, illuminateAngle, handleIlluminateDown, handleIlluminateUp, alignAngle, handleAlignDown, handleAlignUp }) {
+  const [jdzPlugged, setJdzPlugged] = useState(false)
+  const [jdzUnPlugged, setJdzUnPlugged] = useState(false)
+
+const handleJdzClick = () => {
+  const newState = !jdzPlugged
+  setJdzPlugged(newState)
+  const sfx = new Audio(newState ? '/audio/JDZ_wire_sound.mp3' : '/audio/JDZ_wire_sound.mp3')
+  sfx.volume = 0.1
+  sfx.play().catch(() => {})
+}
   return (
     <>
       {/* VOLUME KNOB */}
@@ -150,6 +163,19 @@ export default function Bezel({ screenState, volume, knobAngle, handleKnobDown, 
         zIndex: 300,
       }} />
 
+      {/* JDZ WIRE — shows when plugged in */}
+      {jdzPlugged && (
+        <img src="/bezel/JDZ_wire.png" style={{
+          position: "absolute",
+          top: 1265, left: 740,
+          
+          width: "20%", height: "20%",
+          objectFit: "fill",
+          pointerEvents: "none",
+          zIndex: 301,
+        }} />
+      )}
+
       {/* LED METER */}
       <div style={{
         position: "absolute",
@@ -193,6 +219,20 @@ export default function Bezel({ screenState, volume, knobAngle, handleKnobDown, 
           left: "1%",
           width: "18%",
           height: "12%",
+          cursor: "pointer",
+          zIndex: 316,
+        }}
+      />
+
+      {/* JDZ CLICK ZONE — just right of clarity dial */}
+      <div
+        onClick={handleJdzClick}
+        style={{
+          position: "absolute",
+          bottom: "9%",
+          left: "65%",
+          width: "4%",
+          height: "5%",
           cursor: "pointer",
           zIndex: 316,
         }}

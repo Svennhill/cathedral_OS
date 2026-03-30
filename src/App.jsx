@@ -1,7 +1,13 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react" //import to bring code from another file, {} to bring specific named tools
+//useState-stores a value that can change(screen updates when value is changed)
+//useEffect-runs code when something specific changes
+//useRef-holds 
 import Bezel from "./components/bezel"
+//imports the Bezel tool from the location ./c...etc
 import Screen from "./components/screen"
+//same
 import DebugPanel from "./components/debugpanel"
+//same
 
 export default function App() {
   const [screenState, setScreenState] = useState('off')
@@ -19,6 +25,7 @@ export default function App() {
   const [alignAngle, setAlignAngle] = useState(0)
   const [debugLoop, setDebugLoop] = useState(false)
   const [debugLoopTarget, setDebugLoopTarget] = useState('booting')
+  const [bootKey, setBootKey] = useState(0)
   const audioRef = useRef(null)
   const knobIntervalRef = useRef(null)
   const luminanceIntervalRef = useRef(null)
@@ -27,6 +34,16 @@ export default function App() {
   const illuminateIntervalRef = useRef(null)
   const alignIntervalRef = useRef(null)
   const containerRef = useRef(null)
+  const [openWindows, setOpenWindows] = useState([])
+
+function openWindow(appId, title) {
+  if (openWindows.length > 0) return // one window at a time for now
+  setOpenWindows([{ id: appId, title: title }])
+}
+
+function closeWindow(appId) {
+  setOpenWindows(openWindows.filter(w => w.id !== appId))
+}
 
   const [dimensions, setDimensions] = useState(() => {
     const scale = Math.min(
@@ -64,7 +81,7 @@ export default function App() {
   }, [screenState])
 
   useEffect(() => {
-    audioRef.current.volume = volume
+    audioRef.current.volume = volume * 0.6 // 0.6 = base music volume, adjust here
   }, [volume])
 
   useEffect(() => {
@@ -99,9 +116,7 @@ export default function App() {
     const adjust = () => {
       setLuminance(prev => {
         const next = Math.min(1, Math.max(0, isRightHalf ? prev + 0.03 : prev - 0.03))
-        if (next !== prev) {
-          setLuminanceAngle(a => isRightHalf ? Math.min(0, a + 15) : a - 15)
-        }
+        if (next !== prev) setLuminanceAngle(a => isRightHalf ? Math.min(0, a + 15) : a - 15)
         return next
       })
     }
@@ -176,13 +191,19 @@ export default function App() {
   const handleAlignUp = () => clearInterval(alignIntervalRef.current)
 
   const handlePowerClick = () => {
-    if (screenState === 'off') setScreenState('crt_on')
-    if (screenState === 'on') setScreenState('shutting_down')
+    if (screenState === 'off') {
+      setBootKey(k => k + 1)
+      setScreenState('crt_on')
+    }
+    if (screenState === 'on') {
+      setOpenWindows([])
+      setScreenState('shutting_down')
+    }
   }
 
   return (
     <>
-      <audio ref={audioRef} src="/OS/music_OS.wav" loop />
+      <audio ref={audioRef} src="/OS/music_OSnolongerplaysfornowuntilideletethissection.wav" loop />
       <div ref={containerRef} style={{
         width: "100vw",
         height: "100vh",
@@ -212,8 +233,14 @@ export default function App() {
             clarity={clarity}
             illuminate={illuminate}
             align={align}
+            setIlluminate={setIlluminate}
             debugLoop={debugLoop}
             debugLoopTarget={debugLoopTarget}
+            bootKey={bootKey}
+            setBootKey={setBootKey}
+            openWindows={openWindows}
+            openWindow={openWindow}
+            closeWindow={closeWindow}
           />
 
           <Bezel
