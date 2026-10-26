@@ -1,6 +1,6 @@
 // Desktop — icon layer of the OS
-// Receives openWindow from screen.jsx and passes the call up to App.jsx
-// Each DesktopIcon double-click opens a window via openWindow(appId, title)
+// Lives inside the screen frame div — coordinates are relative to the screen area.
+// Icons positioned below the taskbar (taskbarHeightPct offset).
 
 function DesktopIcon({ label, symbol, onDoubleClick }) {
   return (
@@ -12,37 +12,35 @@ function DesktopIcon({ label, symbol, onDoubleClick }) {
         alignItems: "center",
         gap: 3,
         padding: 6,
-        width: 56,
+        width: 52,
         cursor: "default",
         userSelect: "none",
       }}
     >
-      {/* Icon graphic — placeholder ASCII box, swap for <img> later */}
       <div style={{
-        width: 28,
-        height: 28,
+        width: 26,
+        height: 26,
         border: "1px solid #00ff41",
         backgroundColor: "#0a0a1a",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: 13,
+        fontSize: 12,
         color: "#00ff41",
-        boxShadow: "0 0 4px rgba(0,255,65,0.4)",
+        boxShadow: "0 0 4px rgba(0,255,65,0.35)",
         fontFamily: "monospace",
+        flexShrink: 0,
       }}>
         {symbol}
       </div>
-
-      {/* Icon label */}
       <span style={{
         color: "#00ff41",
         fontSize: 7,
         textAlign: "center",
         fontFamily: "opendyslexic, monospace",
-        textShadow: "0 0 6px rgba(0,255,65,0.9)",
+        textShadow: "0 0 5px rgba(0,255,65,0.8)",
         lineHeight: 1.3,
-        maxWidth: 54,
+        maxWidth: 50,
         wordBreak: "break-word",
       }}>
         {label}
@@ -51,21 +49,23 @@ function DesktopIcon({ label, symbol, onDoubleClick }) {
   )
 }
 
-export default function Desktop({ openWindow }) {
+export default function Desktop({ openWindow, taskbarHeightPct }) {
   return (
     <div style={{
       position: "absolute",
       top: 0, left: 0,
       width: "100%", height: "100%",
+      pointerEvents: "none",  // pass-through by default
     }}>
-      {/* Icon column — top-left of screen area */}
+      {/* Icon column — top-left, below the taskbar */}
       <div style={{
         position: "absolute",
-        top: "10%",
-        left: "2%",
+        top: `${taskbarHeightPct + 1}%`,
+        left: "1%",
         display: "flex",
         flexDirection: "column",
-        gap: 4,
+        gap: 2,
+        pointerEvents: "auto",  // icons are interactive
       }}>
         <DesktopIcon
           label="scripted.exe"

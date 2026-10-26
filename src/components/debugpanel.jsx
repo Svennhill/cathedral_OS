@@ -1,12 +1,45 @@
+import { useState } from "react"
+
 export default function DebugPanel({ screenState, setScreenState, loop, setLoop, loopTarget, setLoopTarget }) {
+  const [collapsed, setCollapsed] = useState(false)
+
+  // ── COLLAPSED STATE ── shows as a small + button in the corner
+  if (collapsed) {
+    return (
+      <div
+        onClick={() => setCollapsed(false)}
+        title="Expand debug panel"
+        style={{
+          position: "fixed",
+          bottom: 10, right: 10,
+          width: 18, height: 18,
+          background: "rgba(0,0,0,0.9)",
+          border: "1px solid #00ff41",
+          color: "#00ff41",
+          fontFamily: "monospace",
+          fontSize: 14,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          zIndex: 99999,
+          userSelect: "none",
+          lineHeight: 1,
+        }}
+      >
+        +
+      </div>
+    )
+  }
+
+  // ── EXPANDED STATE ──
   return (
     <div style={{
       position: "fixed",
-      bottom: 10,
-      right: 10,
+      bottom: 10, right: 10,
       background: "rgba(0,0,0,0.9)",
       border: "1px solid #00ff41",
-      padding: "10px",
+      padding: "8px 10px",
       zIndex: 99999,
       fontFamily: "monospace",
       fontSize: "11px",
@@ -16,8 +49,28 @@ export default function DebugPanel({ screenState, setScreenState, loop, setLoop,
       gap: "4px",
       minWidth: "160px",
     }}>
-      <div style={{ marginBottom: "4px", letterSpacing: "0.1em" }}>DEBUG</div>
-      <div style={{ color: "#00a829", marginBottom: "6px" }}>state: {screenState}</div>
+      {/* Header row with minimize button */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
+        <span style={{ letterSpacing: "0.1em" }}>DEBUG</span>
+        <button
+          onClick={() => setCollapsed(true)}
+          title="Collapse debug panel"
+          style={{
+            background: "transparent",
+            border: "1px solid #00ff41",
+            color: "#00ff41",
+            fontFamily: "monospace",
+            fontSize: "10px",
+            cursor: "pointer",
+            padding: "0 4px",
+            lineHeight: 1.4,
+          }}
+        >
+          _
+        </button>
+      </div>
+
+      <div style={{ color: "#00a829", marginBottom: "4px" }}>state: {screenState}</div>
 
       {['off', 'crt_on', 'booting', 'on', 'shutting_down'].map(s => (
         <button key={s} onClick={() => setScreenState(s)} style={{

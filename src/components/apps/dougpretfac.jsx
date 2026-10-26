@@ -9,7 +9,8 @@ export default function DougPretFac() {
       lineHeight: 1.6,
     }}>
       <div style={{ marginBottom: 6, opacity: 0.5 }}>// doug's pretzel factory v0.1</div>
-      <div>_ loading inventory...</div>
+      <div style={{ opacity: 0.6 }}>_ details not found</div>
+      <div style={{ opacity: 0.3, marginTop: 4 }}>// coming soon</div>
     </div>
   )
 }
