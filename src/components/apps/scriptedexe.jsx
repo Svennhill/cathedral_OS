@@ -1,7 +1,9 @@
-// scripted.exe — command-line automation engine for cathedral_OS
-// Framework skeleton: terminal interface, command registry, history navigation
+// scripted.exe — Biblical logic analyser for cathedral_OS
+// Two views: the click-driven case analyser (default) and the terminal
 
 import { useState, useRef, useEffect } from "react"
+import CasePanel from "./scripted/casepanel"
+import { PASSAGES } from "../the_bible/passages"
 
 const GREEN  = "#00ff41"
 const DIM    = "#004d1a"
@@ -63,11 +65,65 @@ const COMMANDS = {
   log: () => [`// execution log empty  [stub]`],
 }
 
-// ── TERMINAL COMPONENT ────────────────────────────────────────────────────
+// ── APP SHELL ─────────────────────────────────────────────────────────────
+// Both views stay mounted so switching tabs never loses terminal history or
+// case progress.
+const TABS = [
+  { id: 'analyser', label: 'Case analyser' },
+  { id: 'terminal', label: 'Terminal' },
+]
+
 export default function ScriptedExe() {
+  const [view, setView] = useState('analyser')
+
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      <div role="tablist" style={{
+        display: "flex", gap: 4, flexShrink: 0,
+        paddingBottom: 4, marginBottom: 4, borderBottom: `1px solid ${DIM}`,
+      }}>
+        {TABS.map(t => (
+          <button
+            key={t.id}
+            role="tab"
+            aria-selected={view === t.id}
+            onClick={() => setView(t.id)}
+            style={tabStyle(view === t.id)}
+          >{t.label}</button>
+        ))}
+      </div>
+
+      <div style={{ flex: 1, minHeight: 0, display: view === 'analyser' ? 'block' : 'none' }}>
+        <CasePanel caseData={PASSAGES[0]} />
+      </div>
+      <div style={{ flex: 1, minHeight: 0, display: view === 'terminal' ? 'block' : 'none' }}>
+        <Terminal active={view === 'terminal'} />
+      </div>
+    </div>
+  )
+}
+
+function tabStyle(active) {
+  return {
+    fontFamily: "opendyslexic, monospace",
+    fontSize: 10,
+    fontWeight: "bold",
+    lineHeight: 1.3,
+    padding: "2px 8px",
+    borderRadius: 0,
+    border: `1px solid ${active ? GREEN : DIM}`,
+    background: active ? "rgba(0,255,65,0.14)" : "transparent",
+    color: active ? GREEN : DIMMED,
+    cursor: "pointer",
+  }
+}
+
+// ── TERMINAL COMPONENT ────────────────────────────────────────────────────
+function Terminal({ active }) {
   const [lines, setLines] = useState([
     { type: 'sys',    text: '// scripted.exe v0.1' },
     { type: 'sys',    text: '// type "help" to begin' },
+    { type: 'sys',    text: '// or click "Case analyser" above to open a case' },
     { type: 'blank',  text: '' },
   ])
   const [input, setInput]         = useState('')
@@ -75,6 +131,11 @@ export default function ScriptedExe() {
   const [histIdx,  setHistIdx]    = useState(-1)  // -1 = no history selected
   const bottomRef = useRef(null)
   const inputRef  = useRef(null)
+
+  // Focus the prompt whenever the terminal tab is shown
+  useEffect(() => {
+    if (active) inputRef.current?.focus()
+  }, [active])
 
   // Auto-scroll to bottom on new output
   useEffect(() => {
@@ -200,7 +261,6 @@ export default function ScriptedExe() {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          autoFocus
           spellCheck={false}
           autoComplete="off"
           style={{
