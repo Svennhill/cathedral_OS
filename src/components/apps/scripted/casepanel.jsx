@@ -275,7 +275,7 @@ function PassageCard({ tc, caseData, text, isTested, animate, ruleLabel }) {
 
       {!isTested ? (
         <button className="cs-btn primary" onClick={() => caseActions.test(tc.id)}>
-          Test this passage
+          Test it against the rule
         </button>
       ) : (
         <ol className="cs-steps" aria-live="polite">
