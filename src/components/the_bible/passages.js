@@ -1,10 +1,38 @@
 // src/components/the_bible/passages.js
+//
+// The analyser's cases. Each entry is one complete case; scripted.exe renders
+// whatever is listed here, so adding a case is a data-only change — append an
+// entry in this shape (checked by validateCase in caseschema.js):
+//
+//   id            unique string, also the localStorage progress key
+//   title         case name shown on its card
+//   summary       one plain sentence for the case card
+//   ruleVerse     { book, chapter, verse, reference } — the verse being tested
+//   rulesItDefines[]
+//     id          unique within the case
+//     statement   the rule, formally
+//     plain       the rule in everyday words ("In plain terms: …")
+//   testCases[]
+//     id          unique within the case
+//     entityId    key in ENTITIES (entities.js) — names the passage card
+//     verse       { book, chapter, verse, reference }
+//     violatesRule  a rule id, or null if the passage keeps every rule
+//     violationExplanation  why it breaks that rule (when violatesRule is set)
+//     severity    level in SEVERITY (severity.js) (when violatesRule is set)
+//     verdict     one-line result for this passage
+//   severity      overall level in SEVERITY
+//   verdict       the full case verdict sentence
+//   scoreImpact   overall impact (informational — scores are computed from
+//                 the tested passages, see apps/scripted/scoring.js)
+//
+// Verse text is never stored here: it is read from the BSB store by reference.
 
 export const PASSAGES = [
   {
     id: "ascension_problem",
     title: "The Ascension Problem",
-    
+    summary: "Checks John 3:13's claim that no one has gone up to heaven against passages where someone does.",
+
     // The rule-setting verse
     ruleVerse: {
       book: "John",
@@ -18,6 +46,7 @@ export const PASSAGES = [
       {
         id: "rule_no_ascent",
         statement: "No human has ascended to heaven.",
+        plain: "Nobody has ever gone up into heaven — no person, at any time.",
         subject: "human",
         action: "ascend",
         target: "heaven",
@@ -26,6 +55,7 @@ export const PASSAGES = [
       {
         id: "rule_only_descent",
         statement: "The only one who has been in heaven is the one who descended from it.",
+        plain: "The only one who has been in heaven is the Son of Man (Jesus), who came down from it.",
         subject: "jesus",
         action: "descend",
         target: "heaven",
