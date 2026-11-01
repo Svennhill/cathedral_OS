@@ -75,6 +75,10 @@ export const PANEL_CSS = `
 .cs-card-cta   { margin-top: 4px; font-size: 11px; font-weight: bold; }
 .cs-cardwrap   { margin-bottom: 6px; }
 .cs-cardwrap .cs-btn.subtle { margin-top: 4px; }
+.cs-root .cs-card.reader { border-style: dashed; background: transparent; padding: 5px 12px 6px; gap: 0; }
+.cs-card-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.cs-card.reader .cs-card-title { font-size: 12px; }
+.cs-card.reader .cs-card-cta { margin-top: 0; }
 
 .cs-confirm {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px;

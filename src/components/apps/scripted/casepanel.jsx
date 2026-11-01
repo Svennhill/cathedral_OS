@@ -14,6 +14,7 @@ import { SEVERITY } from "../../the_bible/severity"
 import { getVerse } from "../../the_bible/bible"
 import { TRANSLATION } from "../../../data/bsb"
 import { caseActions, useCaseState } from "./casestore"
+import { readerActions } from "./readerstore"
 import { PANEL_CSS } from "./panelstyle"
 import {
   computeScores, fmtScore, fmtImpact, fmtCount,
@@ -123,7 +124,7 @@ export default function CasePanel({ cases }) {
 }
 
 // ── STAGE 0 — CASE SELECT ────────────────────────────────────────────────
-// One card per case
+// One card per case (cases come first), then the entry to the Bible reader
 function StageSelect({ cases, testedByCase }) {
   return (
     <>
@@ -131,6 +132,14 @@ function StageSelect({ cases, testedByCase }) {
       {cases.map(c => (
         <CaseCard key={c.id} caseData={c} tested={testedByCase[c.id] ?? []} />
       ))}
+
+      <button className="cs-card reader" onClick={() => readerActions.open()}>
+        <span className="cs-card-row">
+          <span className="cs-card-title">Read the Bible</span>
+          <span className="cs-card-cta">Open →</span>
+        </span>
+        <span className="cs-card-meta">The full {TRANSLATION} text the cases are tested against.</span>
+      </button>
     </>
   )
 }

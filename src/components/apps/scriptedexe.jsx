@@ -1,8 +1,11 @@
 // scripted.exe — Biblical logic analyser for cathedral_OS
-// Two views: the click-driven case analyser (default) and the terminal
+// Two views: the click-driven case analyser (default) and the terminal.
+// The analyser view also hosts the BSB reader, opened from the case list.
 
 import { useState, useRef, useEffect } from "react"
 import CasePanel from "./scripted/casepanel"
+import BibleReader from "./scripted/biblereader"
+import { useReaderState } from "./scripted/readerstore"
 import { PASSAGES } from "../the_bible/passages"
 import { validateCases } from "../the_bible/caseschema"
 
@@ -82,6 +85,7 @@ const TABS = [
 
 export default function ScriptedExe() {
   const [view, setView] = useState('analyser')
+  const { open: readerOpen } = useReaderState()
 
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -101,7 +105,7 @@ export default function ScriptedExe() {
       </div>
 
       <div style={{ flex: 1, minHeight: 0, display: view === 'analyser' ? 'block' : 'none' }}>
-        <CasePanel cases={PASSAGES} />
+        {readerOpen ? <BibleReader /> : <CasePanel cases={PASSAGES} />}
       </div>
       <div style={{ flex: 1, minHeight: 0, display: view === 'terminal' ? 'block' : 'none' }}>
         <Terminal active={view === 'terminal'} />
