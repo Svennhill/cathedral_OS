@@ -4,6 +4,13 @@
 import { useState, useRef, useEffect } from "react"
 import CasePanel from "./scripted/casepanel"
 import { PASSAGES } from "../the_bible/passages"
+import { validateCases } from "../the_bible/caseschema"
+
+// A malformed case entry is a data bug — say so loudly while developing
+if (import.meta.env.DEV) {
+  const problems = validateCases(PASSAGES)
+  if (problems.length) console.error("scripted.exe: case data problems\n" + problems.join("\n"))
+}
 
 const GREEN  = "#00ff41"
 const DIM    = "#004d1a"
@@ -94,7 +101,7 @@ export default function ScriptedExe() {
       </div>
 
       <div style={{ flex: 1, minHeight: 0, display: view === 'analyser' ? 'block' : 'none' }}>
-        <CasePanel caseData={PASSAGES[0]} />
+        <CasePanel cases={PASSAGES} />
       </div>
       <div style={{ flex: 1, minHeight: 0, display: view === 'terminal' ? 'block' : 'none' }}>
         <Terminal active={view === 'terminal'} />

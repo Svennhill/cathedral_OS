@@ -2,8 +2,11 @@
 //
 // Four stages, always with "Step n of 4" and Back/Next on screen:
 //   0 Case select · 1 The Rule · 2 Test · 3 Verdict
-// Progress lives in casestore.js, so stepping back and forth (or minimizing
-// the window) never loses a result or re-applies a score.
+// Progress lives in casestore.js, so stepping back and forth, minimizing the
+// window or reloading the page never loses a result or re-applies a score.
+//
+// Everything case-specific comes from the case entry in passages.js — this
+// file holds no per-case text, so a new case needs no changes here.
 
 import { useEffect, useRef, useState } from "react"
 import { ENTITIES } from "../../the_bible/entities"
@@ -11,25 +14,13 @@ import { SEVERITY } from "../../the_bible/severity"
 import { getVerse } from "../../the_bible/bible"
 import { TRANSLATION } from "../../../data/bsb"
 import { caseActions, useCaseState } from "./casestore"
+import { PANEL_CSS } from "./panelstyle"
 import {
   computeScores, fmtScore, fmtImpact, fmtCount,
   LOGIC_INTEGRITY_START, TOTAL_VERSES,
 } from "./scoring"
 
-const GREEN  = "#00ff41"
-const DIM    = "#004d1a"
-const DIMMED = "rgba(0,255,65,0.55)"
-const RED    = "#ff4444"
-const BG     = "#0a0a1a"
-const FONT   = "opendyslexic, monospace"
-
 const STAGES = ["Choose a case", "The rule", "Test the passages", "Verdict"]
-
-// One plain sentence per rule, keyed by rule id from passages.js
-const RULE_MEANINGS = {
-  rule_no_ascent:    "Nobody has ever gone up into heaven — no person, at any time.",
-  rule_only_descent: "The only one who has been in heaven is the Son of Man (Jesus), who came down from it.",
-}
 
 // Formal terms, each explained in one plain sentence
 const TERMS = {
@@ -40,14 +31,13 @@ const TERMS = {
   truthIndex:    "The share of verses tested here that were not caught in a contradiction.",
 }
 
-const CASE_SUMMARY = {
-  ascension_problem: "Checks John 3:13's claim that no one has gone up to heaven against passages where someone does.",
-}
-
-export default function CasePanel({ caseData }) {
-  const { stage, tested, fresh } = useCaseState()
-  const verses = useCaseVerses(caseData)
-  const scores = computeScores(caseData, tested)
+export default function CasePanel({ cases }) {
+  const { stage, caseId, tested: testedByCase, fresh } = useCaseState()
+  const caseData = (stage > 0 && cases.find(c => c.id === caseId)) || null
+  const tested   = (caseData && testedByCase[caseData.id]) || []
+  const verses   = useCaseVerses(caseData)
+  const scores   = caseData && computeScores(caseData, tested)
+  const shown    = caseData ? stage : 0   // stage on screen
 
   const bodyRef    = useRef(null)
   const headingRef = useRef(null)
@@ -56,50 +46,57 @@ export default function CasePanel({ caseData }) {
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 })
     headingRef.current?.focus({ preventScroll: true })
-  }, [stage])
+  }, [shown])
 
   const ruleLabel = (ruleId) => {
-    const i = caseData.rulesItDefines.findIndex(r => r.id === ruleId)
+    const i = caseData?.rulesItDefines.findIndex(r => r.id === ruleId) ?? -1
     return `Rule ${i + 1}`
   }
 
-  const canNext = stage < 3 && (stage !== 2 || tested.length > 0)
+  // On the select stage Next opens the case when there is only one to open;
+  // with several, the user picks a card
+  const onlyCase = cases.length === 1 ? cases[0] : null
+  const canNext  =
+    shown === 0 ? Boolean(onlyCase) :
+    shown < 3 && (shown !== 2 || tested.length > 0)
+  const next = () => shown === 0 ? caseActions.open(onlyCase.id) : caseActions.goTo(shown + 1)
   const nextHint =
-    stage === 2 && !tested.length ? "Test at least one passage to see the verdict." :
-    stage === 3                   ? "This is the last step."                        : null
+    shown === 0 && !onlyCase      ? "Pick a case to open it."                       :
+    shown === 2 && !tested.length ? "Test at least one passage to see the verdict." :
+    shown === 3                   ? "This is the last step."                        : null
 
   return (
     <div className="cs-root">
-      <style>{CSS}</style>
+      <style>{PANEL_CSS}</style>
 
       {/* ── STEP INDICATOR ─────────────────────────────────────────── */}
       <div className="cs-head">
-        <span className="cs-step-count">Step {stage + 1} of 4</span>
-        <span className="cs-step-name">{STAGES[stage]}</span>
+        <span className="cs-step-count">Step {shown + 1} of 4</span>
+        <span className="cs-step-name">{STAGES[shown]}</span>
         <span className="cs-dots" aria-hidden="true">
           {STAGES.map((_, i) => (
-            <span key={i} className={"cs-dot" + (i <= stage ? " on" : "")} />
+            <span key={i} className={"cs-dot" + (i <= shown ? " on" : "")} />
           ))}
         </span>
       </div>
 
       {/* ── STAGE BODY ─────────────────────────────────────────────── */}
       <div className="cs-body" ref={bodyRef}>
-        <h2 className="cs-h" tabIndex={-1} ref={headingRef}>{STAGES[stage]}</h2>
+        <h2 className="cs-h" tabIndex={-1} ref={headingRef}>{STAGES[shown]}</h2>
 
-        {stage === 0 && (
-          <StageSelect caseData={caseData} tested={tested} />
+        {!caseData && (
+          <StageSelect cases={cases} testedByCase={testedByCase} />
         )}
-        {stage === 1 && (
+        {caseData && stage === 1 && (
           <StageRule caseData={caseData} verses={verses} />
         )}
-        {stage === 2 && (
+        {caseData && stage === 2 && (
           <StageTest
             caseData={caseData} verses={verses} tested={tested}
             fresh={fresh} scores={scores} ruleLabel={ruleLabel}
           />
         )}
-        {stage === 3 && (
+        {caseData && stage === 3 && (
           <StageVerdict
             caseData={caseData} verses={verses} tested={tested}
             scores={scores}
@@ -111,14 +108,14 @@ export default function CasePanel({ caseData }) {
       <div className="cs-foot">
         <button
           className="cs-btn"
-          disabled={stage === 0}
-          onClick={() => caseActions.goTo(stage - 1)}
+          disabled={shown === 0}
+          onClick={() => caseActions.goTo(shown - 1)}
         >← Back</button>
         <span className="cs-hint" aria-live="polite">{nextHint}</span>
         <button
           className="cs-btn primary"
           disabled={!canNext}
-          onClick={() => caseActions.goTo(stage + 1)}
+          onClick={next}
         >Next →</button>
       </div>
     </div>
@@ -126,7 +123,19 @@ export default function CasePanel({ caseData }) {
 }
 
 // ── STAGE 0 — CASE SELECT ────────────────────────────────────────────────
-function StageSelect({ caseData, tested }) {
+// One card per case
+function StageSelect({ cases, testedByCase }) {
+  return (
+    <>
+      <p className="cs-p">Pick a case to open it.</p>
+      {cases.map(c => (
+        <CaseCard key={c.id} caseData={c} tested={testedByCase[c.id] ?? []} />
+      ))}
+    </>
+  )
+}
+
+function CaseCard({ caseData, tested }) {
   const total = caseData.testCases.length
   const status =
     tested.length === 0     ? "Not started" :
@@ -134,17 +143,46 @@ function StageSelect({ caseData, tested }) {
                               `Complete — ${total} of ${total} passages tested`
 
   return (
-    <>
-      <p className="cs-p">Pick a case to open it.</p>
-      <button className="cs-card" onClick={() => caseActions.goTo(1)}>
+    <div className="cs-cardwrap">
+      <button className="cs-card" onClick={() => caseActions.open(caseData.id)}>
         <span className="cs-card-title">{caseData.title}</span>
-        <span className="cs-card-line">{CASE_SUMMARY[caseData.id]}</span>
+        <span className="cs-card-line">{caseData.summary}</span>
         <span className="cs-card-meta">Rule verse: {caseData.ruleVerse.reference}</span>
         <span className="cs-card-meta">{status}</span>
-        <span className="cs-card-cta">Open case →</span>
+        <span className="cs-card-cta">{tested.length ? "Continue case →" : "Open case →"}</span>
       </button>
-    </>
+      {tested.length > 0 && <StartOver caseId={caseData.id} />}
+    </div>
   )
+}
+
+// "Start the case over" — asks once before clearing, so a stray click
+// can't wipe a finished case
+function StartOver({ caseId }) {
+  const [asking, setAsking] = useState(false)
+  if (!asking) {
+    return (
+      <button className="cs-btn subtle" onClick={() => setAsking(true)}>
+        Start the case over
+      </button>
+    )
+  }
+  return (
+    <div className="cs-confirm" role="group" aria-label="Start the case over?">
+      <span>Clear every passage you've tested in this case and start again?</span>
+      <span className="cs-confirm-btns">
+        <button className="cs-btn" autoFocus onClick={() => setAsking(false)}>Keep my progress</button>
+        <button className="cs-btn primary" onClick={() => caseActions.reset(caseId)}>
+          Yes, start over
+        </button>
+      </span>
+    </div>
+  )
+}
+
+const ruleCount = (c) => {
+  const n = c.rulesItDefines.length
+  return n === 1 ? "the rule" : n === 2 ? "both rules" : `all ${n} rules`
 }
 
 // ── STAGE 1 — THE RULE ───────────────────────────────────────────────────
@@ -159,13 +197,16 @@ function StageRule({ caseData, verses }) {
         <cite>— {ref} ({TRANSLATION})</cite>
       </blockquote>
 
-      <p className="cs-p">This verse sets {caseData.rulesItDefines.length} rules:</p>
+      <p className="cs-p">
+        This verse sets {caseData.rulesItDefines.length}{" "}
+        {caseData.rulesItDefines.length === 1 ? "rule" : "rules"}:
+      </p>
       <ol className="cs-rules">
         {caseData.rulesItDefines.map((rule, i) => (
           <li key={rule.id} className="cs-rule">
             <span className="cs-rule-n">Rule {i + 1}</span>
             <span className="cs-rule-s">{rule.statement}</span>
-            <span className="cs-rule-m">In plain terms: {RULE_MEANINGS[rule.id]}</span>
+            <span className="cs-rule-m">In plain terms: {rule.plain}</span>
           </li>
         ))}
       </ol>
@@ -183,7 +224,7 @@ function StageTest({ caseData, verses, tested, fresh, scores, ruleLabel }) {
   return (
     <>
       <p className="cs-p">
-        Each passage is checked against both rules from {caseData.ruleVerse.reference}.
+        Each passage is checked against {ruleCount(caseData)} from {caseData.ruleVerse.reference}.
         A passage that disagrees with a rule is a <b>CONTRADICTION</b>.
       </p>
       <p className="cs-term"><b>Contradiction:</b> {TERMS.contradiction}</p>
@@ -219,7 +260,7 @@ function StageTest({ caseData, verses, tested, fresh, scores, ruleLabel }) {
 
 function PassageCard({ tc, caseData, text, isTested, animate, ruleLabel }) {
   const entity = ENTITIES[tc.entityId]
-  const sev    = SEVERITY[tc.severity]
+  const sev    = SEVERITY[tc.severity]   // undefined for a passage that breaks no rule
   const cardRef = useRef(null)
 
   // Just tested: bring the card's results into view inside the stage body
@@ -229,6 +270,8 @@ function PassageCard({ tc, caseData, text, isTested, animate, ruleLabel }) {
     const body = card?.closest(".cs-body")
     if (body) body.scrollTo({ top: card.offsetTop - 4, behavior: "smooth" })
   }, [animate])
+
+  const breaks = Boolean(tc.violatesRule)
 
   const steps = [
     {
@@ -240,21 +283,27 @@ function PassageCard({ tc, caseData, text, isTested, animate, ruleLabel }) {
       label: `Check ${ruleLabel(rule.id)}: ${rule.statement}`,
       status: "BROKEN", tone: "bad",
       body: tc.violationExplanation,
-    } : {
+    } : breaks ? {
       label: `Check ${ruleLabel(rule.id)}: ${rule.statement}`,
       status: "NOT COUNTED", tone: "dim",
       body: `This case records the break against ${ruleLabel(tc.violatesRule)} only, so this rule adds nothing to the score.`,
+    } : {
+      label: `Check ${ruleLabel(rule.id)}: ${rule.statement}`,
+      status: "KEPT", tone: "ok",
+      body: "This passage agrees with the rule.",
     }),
-    {
-      label: "Severity",
-      chip: sev,
-      body: TERMS.severity,
-    },
-    {
-      label: "Score",
-      status: fmtImpact(sev.scoreImpact), tone: "bad",
-      body: `Taken off the Logic Integrity Score once for this passage.`,
-    },
+    ...(breaks ? [
+      {
+        label: "Severity",
+        chip: sev,
+        body: TERMS.severity,
+      },
+      {
+        label: "Score",
+        status: fmtImpact(sev.scoreImpact), tone: "bad",
+        body: `Taken off the Logic Integrity Score once for this passage.`,
+      },
+    ] : []),
     {
       label: "Result",
       verdict: tc.verdict,
@@ -262,7 +311,7 @@ function PassageCard({ tc, caseData, text, isTested, animate, ruleLabel }) {
   ]
 
   return (
-    <section ref={cardRef} className={"cs-passage" + (isTested ? " tested" : "")}>
+    <section ref={cardRef} className={"cs-passage" + (isTested ? (breaks ? " tested" : " kept") : "")}>
       <div className="cs-passage-head">
         <span className="cs-passage-title">{entity?.name ?? tc.id}</span>
         <span className="cs-passage-ref">{tc.verse.reference} ({TRANSLATION})</span>
@@ -293,7 +342,7 @@ function PassageCard({ tc, caseData, text, isTested, animate, ruleLabel }) {
                 </div>
                 {s.chip    && <SeverityChip sev={s.chip} />}
                 {s.body    && <p className="cs-stepline-body">{s.body}</p>}
-                {s.verdict && <p className="cs-verdict-line">{s.verdict}</p>}
+                {s.verdict && <p className={"cs-verdict-line" + (breaks ? "" : " ok")}>{s.verdict}</p>}
               </div>
             </li>
           ))}
@@ -388,9 +437,7 @@ function StageVerdict({ caseData, verses, tested, scores }) {
         </div>
       )}
 
-      <button className="cs-btn subtle" onClick={() => caseActions.reset()}>
-        Start this case over
-      </button>
+      <StartOver caseId={caseData.id} />
     </>
   )
 }
@@ -410,9 +457,12 @@ function useCaseVerses(caseData) {
   const [verses, setVerses] = useState({})
 
   useEffect(() => {
+    if (!caseData) return
     let live = true
     const refs = [caseData.ruleVerse, ...caseData.testCases.map(tc => tc.verse)]
-    Promise.all(refs.map(v => getVerse(v.book, v.chapter, v.verse).then(text => [v.reference, text])))
+    Promise.all(refs.map(v => getVerse(v.book, v.chapter, v.verse)
+      .catch(() => null)
+      .then(text => [v.reference, text])))
       .then(entries => {
         if (!live) return
         setVerses(Object.fromEntries(entries.map(([ref, text]) => [ref, text ?? "[verse text unavailable]"])))
@@ -422,154 +472,3 @@ function useCaseVerses(caseData) {
 
   return verses
 }
-
-// ── STYLES ───────────────────────────────────────────────────────────────
-// Phosphor-green skin to match the rest of cathedral_OS. Class-based so hover,
-// focus and disabled states work; every rule is scoped under .cs-root.
-const CSS = `
-.cs-root {
-  height: 100%; display: flex; flex-direction: column; overflow: hidden;
-  font-family: ${FONT}; font-size: 11px; line-height: 1.55; color: ${GREEN};
-  text-align: left; cursor: default; user-select: text;
-}
-.cs-root * { box-sizing: border-box; }
-.cs-root b { font-weight: bold; }
-
-.cs-head {
-  flex-shrink: 0; display: flex; align-items: center; gap: 8px;
-  padding: 3px 6px; border-bottom: 1px solid ${DIM};
-}
-.cs-step-count { font-weight: bold; letter-spacing: 0.04em; }
-.cs-step-name  { color: ${DIMMED}; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cs-dots { display: flex; gap: 3px; }
-.cs-dot  { width: 12px; height: 4px; border: 1px solid ${GREEN}; opacity: 0.45; }
-.cs-dot.on { background: ${GREEN}; opacity: 1; box-shadow: 0 0 4px ${GREEN}; }
-
-.cs-body {
-  position: relative; flex: 1; overflow-y: auto; padding: 6px 8px 10px;
-  scrollbar-width: thin; scrollbar-color: ${DIM} transparent;
-}
-.cs-h {
-  margin: 0 0 6px; font-size: 13px; font-weight: bold; letter-spacing: 0.06em;
-  text-transform: uppercase; text-shadow: 0 0 6px rgba(0,255,65,0.5); outline: none;
-}
-.cs-p    { margin: 0 0 8px; }
-.cs-term { margin: 0 0 8px; color: ${DIMMED}; font-size: 10px; }
-.cs-term b { color: ${GREEN}; }
-
-.cs-foot {
-  flex-shrink: 0; display: flex; align-items: center; gap: 8px;
-  padding: 4px 6px; border-top: 1px solid ${DIM}; background: ${BG};
-}
-.cs-hint { flex: 1; text-align: center; color: ${DIMMED}; font-size: 10px; }
-
-/* buttons — override the global index.css button rules */
-.cs-root .cs-btn {
-  font-family: ${FONT}; font-size: 11px; font-weight: bold; line-height: 1.3;
-  color: ${GREEN}; background: transparent; border: 1px solid ${GREEN}; border-radius: 0;
-  padding: 4px 10px; cursor: pointer; transition: background 120ms, box-shadow 120ms;
-}
-.cs-root .cs-btn:hover:not(:disabled) { background: rgba(0,255,65,0.14); box-shadow: 0 0 6px rgba(0,255,65,0.45); border-color: ${GREEN}; }
-.cs-root .cs-btn:focus-visible, .cs-root .cs-card:focus-visible { outline: 2px solid ${GREEN}; outline-offset: 2px; }
-.cs-root .cs-btn:disabled { color: ${DIM}; border-color: ${DIM}; cursor: not-allowed; }
-.cs-root .cs-btn.primary:not(:disabled) { background: rgba(0,255,65,0.08); }
-.cs-root .cs-btn.wide   { display: block; width: 100%; margin-top: 10px; padding: 6px 10px; }
-.cs-root .cs-btn.subtle { margin-top: 12px; border-color: ${DIM}; color: ${DIMMED}; font-weight: normal; }
-
-/* stage 0 — case card */
-.cs-root .cs-card {
-  display: flex; flex-direction: column; gap: 3px; width: 100%; text-align: left;
-  font-family: ${FONT}; color: ${GREEN}; background: rgba(0,255,65,0.04);
-  border: 1px solid ${GREEN}; border-radius: 0; padding: 10px 12px; cursor: pointer;
-  box-shadow: inset 0 0 12px rgba(0,255,65,0.08); transition: background 120ms, box-shadow 120ms;
-}
-.cs-root .cs-card:hover { background: rgba(0,255,65,0.12); box-shadow: 0 0 8px rgba(0,255,65,0.4), inset 0 0 12px rgba(0,255,65,0.12); border-color: ${GREEN}; }
-.cs-card-title { font-size: 14px; font-weight: bold; letter-spacing: 0.04em; text-shadow: 0 0 6px rgba(0,255,65,0.5); }
-.cs-card-line  { font-size: 11px; }
-.cs-card-meta  { font-size: 10px; color: ${DIMMED}; }
-.cs-card-cta   { margin-top: 4px; font-size: 11px; font-weight: bold; }
-
-/* verses */
-.cs-verse {
-  margin: 0 0 10px; padding: 6px 10px; border-left: 2px solid ${GREEN};
-  background: rgba(0,255,65,0.05); font-size: 12px;
-}
-.cs-verse.big { font-size: 15px; line-height: 1.5; padding: 10px 12px; text-shadow: 0 0 5px rgba(0,255,65,0.35); }
-.cs-verse cite { display: block; margin-top: 4px; font-size: 10px; font-style: normal; color: ${DIMMED}; }
-
-/* stage 1 — rules */
-.cs-rules { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.cs-rule  { display: flex; flex-direction: column; gap: 1px; padding: 6px 8px; border: 1px solid ${DIM}; }
-.cs-rule-n { font-size: 10px; color: ${DIMMED}; text-transform: uppercase; letter-spacing: 0.06em; }
-.cs-rule-s { font-weight: bold; }
-.cs-rule-m { color: ${DIMMED}; font-size: 10px; }
-
-/* stage 2 — passages */
-.cs-scorebar {
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px;
-  margin: 0 0 8px; padding: 4px 8px; border: 1px dashed ${DIM}; font-size: 10px;
-}
-.cs-passage { margin: 0 0 10px; padding: 8px; border: 1px solid ${GREEN}; }
-.cs-passage.tested { border-color: ${RED}; box-shadow: 0 0 6px rgba(255,68,68,0.25); }
-.cs-passage-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 8px; margin-bottom: 6px; }
-.cs-passage-title { font-size: 13px; font-weight: bold; }
-.cs-passage-ref   { color: ${DIMMED}; font-size: 10px; }
-
-.cs-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
-.cs-stepline { display: flex; gap: 6px; padding-top: 5px; border-top: 1px dotted ${DIM}; }
-.cs-stepline-n {
-  flex-shrink: 0; width: 15px; height: 15px; display: flex; align-items: center; justify-content: center;
-  border: 1px solid ${DIMMED}; font-size: 9px; color: ${DIMMED};
-}
-.cs-stepline-main { flex: 1; min-width: 0; }
-.cs-stepline-top  { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 8px; }
-.cs-stepline-label { font-weight: bold; }
-.cs-stepline-body  { margin: 2px 0 0; font-size: 10px; color: ${DIMMED}; }
-.cs-verdict-line   { margin: 2px 0 0; color: ${RED}; font-weight: bold; }
-
-.cs-tag { font-size: 10px; font-weight: bold; padding: 0 5px; border: 1px solid currentColor; white-space: nowrap; }
-.cs-tag.ok  { color: ${GREEN}; }
-.cs-tag.bad { color: ${RED}; }
-.cs-tag.dim { color: ${DIMMED}; }
-
-.cs-chip {
-  display: inline-block; margin-top: 3px; padding: 1px 6px; border: 1px solid;
-  font-size: 10px; font-weight: bold; background: rgba(255,68,68,0.08);
-}
-
-.cs-stepline.fresh { animation: cs-in 320ms ease-out both; }
-@keyframes cs-in { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .cs-stepline.fresh { animation: none; } }
-
-/* stage 3 — verdict */
-.cs-summary { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
-.cs-row   { display: flex; flex-direction: column; gap: 2px; }
-.cs-row-k { font-size: 10px; color: ${DIMMED}; text-transform: uppercase; letter-spacing: 0.06em; }
-.cs-row-v .cs-verse { margin-bottom: 0; }
-.cs-testlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
-.cs-testrow  { padding: 4px 6px; border: 1px solid ${DIM}; }
-
-.cs-verdict {
-  display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center;
-  margin: 0 0 10px; padding: 10px; border: 2px solid ${RED}; color: ${RED};
-  background: rgba(255,68,68,0.06); box-shadow: 0 0 10px rgba(255,68,68,0.3);
-}
-.cs-verdict.clear { border-color: ${GREEN}; color: ${GREEN}; background: rgba(0,255,65,0.05); box-shadow: none; }
-.cs-verdict-k      { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8; }
-.cs-verdict-v      { font-size: 20px; font-weight: bold; letter-spacing: 0.08em; text-shadow: 0 0 8px currentColor; }
-.cs-verdict-plain  { font-size: 11px; }
-.cs-verdict-detail { margin-top: 4px; font-size: 10px; opacity: 0.85; }
-
-.cs-scores { display: flex; flex-wrap: wrap; gap: 8px; }
-.cs-score  { flex: 1 1 140px; display: flex; flex-direction: column; gap: 1px; padding: 6px 8px; border: 1px solid ${GREEN}; }
-.cs-score-k { font-size: 10px; color: ${DIMMED}; text-transform: uppercase; letter-spacing: 0.06em; }
-.cs-score-v { font-size: 18px; font-weight: bold; text-shadow: 0 0 6px rgba(0,255,65,0.5); }
-.cs-score-plain { font-size: 10px; color: ${DIMMED}; }
-.cs-basis { margin: 6px 0 0; font-size: 11px; }
-.cs-basis span { color: ${DIMMED}; font-size: 10px; }
-
-.cs-notice {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px;
-  margin-top: 10px; padding: 6px 8px; border: 1px dashed ${GREEN}; font-size: 10px;
-}
-`
