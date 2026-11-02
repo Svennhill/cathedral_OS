@@ -729,4 +729,45 @@ export const PASSAGES = [{
     "verdict": "One cross, one posted charge, four Gospels quoting it — and no two quotations match. Matthew: THIS IS JESUS, THE KING OF THE JEWS. Mark: THE KING OF THE JEWS. Luke: THIS IS THE KING OF THE JEWS. John: JESUS OF NAZARETH, THE KING OF THE JEWS. The most public text in the story is the one its recorders cannot reproduce twice the same way.",
     "scoreImpact": -0.1
   },
+{
+    "id": "crucifixion_hour",
+    "title": "The Hour of the Crucifixion",
+    "summary": "Checks Mark 15:25 \u2014 it was the third hour when they crucified Him \u2014 against John 19:14, where at about the sixth hour Jesus is still standing before Pilate.",
+    "ruleVerse": {
+      "book": "Mark",
+      "chapter": 15,
+      "verse": 25,
+      "reference": "Mark 15:25"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_third_hour",
+        "statement": "Jesus was crucified at the third hour.",
+        "plain": "Mark timestamps the crucifixion itself: 'It was the third hour when they crucified Him.'",
+        "subject": "jesus",
+        "action": "crucify",
+        "target": "third_hour",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "john_sixth_hour",
+        "entityId": "jesus",
+        "verse": {
+          "book": "John",
+          "chapter": 19,
+          "verse": 14,
+          "reference": "John 19:14"
+        },
+        "violatesRule": "rule_third_hour",
+        "violationExplanation": "John timestamps the trial's climax three hours later: 'It was the day of Preparation for the Passover, about the sixth hour. And Pilate said to the Jews, \"Here is your King!\"' The handover and the road to Golgotha still follow in John's account. At the hour Mark already has Jesus on the cross, John has Him not yet sentenced.",
+        "severity": 2,
+        "verdict": "CONTRADICTION \u2014 At John's sixth hour the trial is still running; at Mark's third hour the crucifixion is done."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Mark puts the crucifixion at the third hour. John's narrative reaches the sixth hour with Pilate still presenting Jesus to the crowd \u2014 the sentencing, the handover, and the procession all still to come. The two timelines overlap by three hours at the one moment both claim to clock.",
+    "scoreImpact": -0.5
+  },
 ]
