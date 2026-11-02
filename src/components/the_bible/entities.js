@@ -215,4 +215,14 @@ stephen: {
     "description": "The first Christian martyr, whose speech to the Sanhedrin in Acts 7 retells Israel's history — with details the Old Testament itself records differently.",
     "visualType": "person"
   },
+jairus: {
+    "id": "jairus",
+    "name": "Jairus",
+    "aka": [
+      "synagogue leader"
+    ],
+    "type": "person",
+    "description": "A synagogue leader who came to Jesus about his daughter. Whether she had just died or was still dying depends on which Gospel is telling it.",
+    "visualType": "person"
+  },
 }

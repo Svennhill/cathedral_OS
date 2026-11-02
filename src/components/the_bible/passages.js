@@ -1312,4 +1312,59 @@ export const PASSAGES = [{
     "verdict": "Genesis renames Jacob to Israel at Peniel, keeps calling him Jacob, then at Bethel has God rename him to Israel again with the original formula — 'you will no longer be called Jacob' — and keeps calling him Jacob afterward anyway. One renaming, delivered twice, honored in neither.",
     "scoreImpact": -0.5
   },
+{
+    "id": "jairus_daughter",
+    "title": "Dead, or Dying?",
+    "summary": "Checks Matthew 9:18 — 'My daughter has just died' — against Mark 5:23 and Luke 8:42, where Jairus's daughter is still dying when he makes the same request.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 9,
+      "verse": 18,
+      "reference": "Matthew 9:18"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_already_dead",
+        "statement": "Jairus's daughter had already died when he came to Jesus.",
+        "plain": "Matthew quotes the request itself: a synagogue leader knelt and said, 'My daughter has just died. But come and place Your hand on her, and she will live.'",
+        "subject": "jairus",
+        "action": "request",
+        "target": "jesus",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_near_death",
+        "entityId": "jairus",
+        "verse": {
+          "book": "Mark",
+          "chapter": 5,
+          "verse": 23,
+          "reference": "Mark 5:23"
+        },
+        "violatesRule": "rule_already_dead",
+        "violationExplanation": "Mark quotes the same request in the opposite state: 'My little daughter is near death. Please come and place Your hands on her, so that she will be healed and live.' In Mark she dies later, on the road — messengers arrive in verse 35 to say so. A girl who has just died cannot also be a girl who is about to.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — In Mark the daughter is dying, not dead, when Jairus asks."
+      },
+      {
+        "id": "luke_dying",
+        "entityId": "jairus",
+        "verse": {
+          "book": "Luke",
+          "chapter": 8,
+          "verse": 42,
+          "reference": "Luke 8:42"
+        },
+        "violatesRule": "rule_already_dead",
+        "violationExplanation": "Luke's narrator states her condition as Jesus sets out: his only daughter 'was dying.' As in Mark, the death is reported afterward (verse 49), while Jesus is still on the way.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Luke also has her dying when the request is made."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Matthew's Jairus comes to Jesus because his daughter has just died, asking for her life back. Mark's and Luke's Jairus comes because she is dying, asking for her healing — and in both, she dies while Jesus is on the way. The errand that starts the story is a different errand in Matthew than in the other two.",
+    "scoreImpact": -0.5
+  },
 ]
