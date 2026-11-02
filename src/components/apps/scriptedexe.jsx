@@ -1,11 +1,17 @@
 // scripted.exe — Biblical logic analyser for cathedral_OS
 // Two views: the click-driven case analyser (default) and the terminal.
 // The analyser view also hosts the BSB reader, opened from the case list.
+// An open case can be switched between the panel and, where the case data
+// supports one, the visual drag-and-drop scene for its Test step.
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import CasePanel from "./scripted/casepanel"
+import CaseScene from "./scripted/casescene"
 import BibleReader from "./scripted/biblereader"
 import { useReaderState } from "./scripted/readerstore"
+import { caseActions, useCaseState } from "./scripted/casestore"
+import { useCaseView, viewActions } from "./scripted/viewstore"
+import { deriveScene } from "./scripted/derivescene"
 import { PASSAGES } from "../the_bible/passages"
 import { validateCases } from "../the_bible/caseschema"
 
@@ -105,10 +111,56 @@ export default function ScriptedExe() {
       </div>
 
       <div style={{ flex: 1, minHeight: 0, display: view === 'analyser' ? 'block' : 'none' }}>
-        {readerOpen ? <BibleReader /> : <CasePanel cases={PASSAGES} />}
+        {readerOpen ? <BibleReader /> : <Analyser />}
       </div>
       <div style={{ flex: 1, minHeight: 0, display: view === 'terminal' ? 'block' : 'none' }}>
         <Terminal active={view === 'terminal'} />
+      </div>
+    </div>
+  )
+}
+
+// ── CASE ANALYZER: PANEL OR VISUAL ────────────────────────────────────────
+// The panel runs every step of every case. When the open case can be staged
+// (deriveScene), a switch offers the visual view, which stands in for the
+// panel's Test step only; both read and write the same casestore record.
+function Analyser() {
+  const { stage, caseId } = useCaseState()
+  const mode = useCaseView()
+  const caseData = stage > 0 ? PASSAGES.find(c => c.id === caseId) ?? null : null
+  const scene = useMemo(() => deriveScene(caseData), [caseData])
+  const visual = Boolean(scene) && mode === 'visual' && stage === 2
+
+  const choose = (next) => {
+    viewActions.set(next)
+    // The visual view is the Test step: picking it elsewhere goes there
+    if (next === 'visual' && stage !== 2) caseActions.goTo(2)
+  }
+
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      {scene && (
+        <div role="group" aria-label="Case view" style={{
+          display: "flex", flexWrap: "wrap", alignItems: "center", gap: 4,
+          flexShrink: 0, paddingBottom: 3, marginBottom: 3, borderBottom: `1px dashed ${DIM}`,
+          fontFamily: "opendyslexic, monospace", fontSize: 10, color: DIMMED,
+        }}>
+          <span>View:</span>
+          {[['panel', 'Panel view'], ['visual', 'Visual view']].map(([id, label]) => (
+            <button
+              key={id}
+              aria-pressed={mode === id}
+              title="Same case, same progress and score in either view"
+              onClick={() => choose(id)}
+              style={tabStyle(mode === id)}
+            >{label}</button>
+          ))}
+        </div>
+      )}
+      <div style={{ flex: 1, minHeight: 0 }}>
+        {visual
+          ? <CaseScene key={caseData.id} caseData={caseData} scene={scene} />
+          : <CasePanel cases={PASSAGES} />}
       </div>
     </div>
   )
