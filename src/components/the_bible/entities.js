@@ -41,4 +41,16 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  angel: {
+    "id": "angel",
+    "name": "Angel",
+    "aka": [
+      "angel of the Lord",
+      "men in radiant apparel",
+      "young man in white"
+    ],
+    "type": "person",
+    "description": "The figure or figures at the empty tomb on resurrection morning — one or two of them, angel or man, depending on which Gospel is counting.",
+    "visualType": "person"
+  },
 }
