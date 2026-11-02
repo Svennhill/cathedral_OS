@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  josiah: {
+    "id": "josiah",
+    "name": "Josiah",
+    "aka": [
+      "king of Judah"
+    ],
+    "type": "person",
+    "description": "The reforming king who found the Book of the Law — and was promised a peaceful grave by the prophetess who authenticated it.",
+    "visualType": "person"
+  },
 }
