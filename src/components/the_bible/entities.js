@@ -235,4 +235,14 @@ bartimaeus: {
     "description": "The blind beggar of Jericho — the only one Mark and Luke put beside the road, where Matthew puts two.",
     "visualType": "person"
   },
+john_the_baptist: {
+    "id": "john_the_baptist",
+    "name": "John the Baptist",
+    "aka": [
+      "the forerunner"
+    ],
+    "type": "person",
+    "description": "The prophet in the wilderness who baptized Jesus. Asked directly if he was Elijah, he said he was not; Jesus said he was.",
+    "visualType": "person"
+  },
 }

@@ -1463,4 +1463,45 @@ export const PASSAGES = [{
     "verdict": "Samuel introduces David as the youngest of Jesse's eight sons. Chronicles gives the family in birth order and stops at seven names, with David seventh. One son exists in one book's count and not the other's list.",
     "scoreImpact": -0.1
   },
+{
+    "id": "john_elijah",
+    "title": "Was John Elijah?",
+    "summary": "Checks John 1:21 — asked 'Are you Elijah?', John answers 'I am not' — against Matthew 11:14, where Jesus says of John: he is the Elijah who was to come.",
+    "ruleVerse": {
+      "book": "John",
+      "chapter": 1,
+      "verse": 21,
+      "reference": "John 1:21"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_john_not_elijah",
+        "statement": "John is not Elijah.",
+        "plain": "The delegation from Jerusalem puts the question directly and John answers it directly, twice in one verse: '“Are you Elijah?” He said, “I am not.”'",
+        "subject": "john_the_baptist",
+        "action": "be",
+        "target": "elijah",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "jesus_says_elijah",
+        "entityId": "john_the_baptist",
+        "verse": {
+          "book": "Matthew",
+          "chapter": 11,
+          "verse": 14,
+          "reference": "Matthew 11:14"
+        },
+        "violatesRule": "rule_john_not_elijah",
+        "violationExplanation": "Jesus identifies the same man for the crowds: 'And if you are willing to accept it, he is the Elijah who was to come.' Not a resemblance or a spirit of Elijah — he is the Elijah. The subject of the claim denies it; Jesus asserts it.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Jesus says John is Elijah; John says he is not."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Asked to his face whether he is Elijah, John the Baptist says he is not. Jesus, preaching about John, says he is the Elijah who was to come. One of the two men in the exchange is wrong about the other's identity — and the text gives no third account to settle it.",
+    "scoreImpact": -0.5
+  },
 ]
