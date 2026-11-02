@@ -1136,4 +1136,57 @@ export const PASSAGES = [{
     "verdict": "The rule is stated twice, in Numbers and again in 1 Samuel 15:29. The regret is also recorded twice — once before the flood, and once in 1 Samuel 15:35, in the same chapter that restates the rule.",
     "scoreImpact": -2.0
   },
+{
+    "id": "how_many_donkeys",
+    "title": "How Many Donkeys?",
+    "summary": "Checks Mark 11:7 \u2014 one colt, and Jesus sat on it \u2014 against Matthew 21:7, where the disciples bring a donkey and a colt, spread cloaks on both, and Jesus sat on them.",
+    "ruleVerse": {
+      "book": "Mark",
+      "chapter": 11,
+      "verse": 7,
+      "reference": "Mark 11:7"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_one_colt",
+        "statement": "Jesus rode one animal into Jerusalem: a colt.",
+        "plain": "Mark is singular throughout: 'they led the colt to Jesus and threw their cloaks over it, and He sat on it.'",
+        "subject": "jesus",
+        "action": "ride",
+        "target": "colt",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "matthew_two",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Matthew",
+          "chapter": 21,
+          "verse": 7,
+          "reference": "Matthew 21:7"
+        },
+        "violatesRule": "rule_one_colt",
+        "violationExplanation": "Matthew's disciples fetch two animals: 'They brought the donkey and the colt and laid their cloaks on them, and Jesus sat on them.' Cloaks on both, and the pronoun is plural \u2014 Jesus sits on 'them.' Matthew's entry has one more animal than Mark's, and Jesus mounted on the pair.",
+        "severity": 2,
+        "verdict": "CONTRADICTION \u2014 Matthew seats Jesus on two animals."
+      },
+      {
+        "id": "luke_one_colt",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Luke",
+          "chapter": 19,
+          "verse": 35,
+          "reference": "Luke 19:35"
+        },
+        "violatesRule": null,
+        "verdict": "CONSISTENT \u2014 Luke agrees with Mark: one colt, cloaks thrown over it, and they put Jesus on it."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Mark and Luke bring Jesus one colt for the entry into Jerusalem. Matthew brings a donkey and her colt, spreads the cloaks across both, and seats Jesus on 'them.' The most staged arrival in the Gospels cannot agree on how many animals were under Him.",
+    "scoreImpact": -0.5
+  },
 ]
