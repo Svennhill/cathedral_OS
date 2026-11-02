@@ -235,4 +235,45 @@ export const PASSAGES = [{
     "verdict": "The same book, the same man. Chapter 14 records three sons born to Absalom. Chapter 18 records Absalom explaining his monument on the ground that he has no son at all. Nothing in the text records the sons dying, or the statement being mistaken.",
     "scoreImpact": -0.5
   },
+{
+    "id": "anger_forever",
+    "title": "Forever, or Not Forever?",
+    "summary": "Checks Micah 7:18 \u2014 God does not retain His anger forever \u2014 against Jeremiah 17:4, where God says of Judah: you have kindled My anger; it will burn forever.",
+    "ruleVerse": {
+      "book": "Micah",
+      "chapter": 7,
+      "verse": 18,
+      "reference": "Micah 7:18"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_anger_not_forever",
+        "statement": "God does not retain His anger forever.",
+        "plain": "Micah grounds it in God's character: He 'does not retain His anger forever, because He delights in loving devotion.' Forever-retained anger is excluded by what God is like.",
+        "subject": "god",
+        "action": "retain_anger",
+        "target": "forever",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "jeremiah_burn_forever",
+        "entityId": "god",
+        "verse": {
+          "book": "Jeremiah",
+          "chapter": 17,
+          "verse": 4,
+          "reference": "Jeremiah 17:4"
+        },
+        "violatesRule": "rule_anger_not_forever",
+        "violationExplanation": "Jeremiah records God sentencing Judah in His own voice: 'for you have kindled My anger; it will burn forever.' Not anger that feels endless, or anger for an age \u2014 an anger stated to burn forever, by the God Micah says does not retain anger forever.",
+        "severity": 3,
+        "verdict": "CONTRADICTION \u2014 Jeremiah's anger burns forever; Micah's cannot."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Micah defines God by the limit on His anger: He does not retain it forever, because He delights in mercy. Jeremiah quotes God promising Judah an anger that will burn forever. The attribute and the sentence cannot both be true of the same anger.",
+    "scoreImpact": -2.0
+  },
 ]

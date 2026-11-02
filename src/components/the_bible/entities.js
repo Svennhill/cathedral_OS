@@ -70,4 +70,15 @@ absalom: {
     "description": "David's son, who raised a monument to his own name. The book that records his family also records him saying he has no son to carry it.",
     "visualType": "person"
   },
+god: {
+    "id": "god",
+    "name": "God",
+    "aka": [
+      "the LORD",
+      "Yahweh"
+    ],
+    "type": "person",
+    "description": "God as speaker and actor throughout both testaments. His statements about Himself are the rules other passages are tested against.",
+    "visualType": "person"
+  },
 }
