@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  saul: {
+    "id": "saul",
+    "name": "Saul",
+    "aka": [
+      "King Saul"
+    ],
+    "type": "person",
+    "description": "First king of Israel. Two books report his death on Mount Gilboa — and the two reports cannot both be the way it happened.",
+    "visualType": "person"
+  },
 }
