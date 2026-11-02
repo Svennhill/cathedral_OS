@@ -101,4 +101,57 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "faith_vs_works",
+    "title": "Faith vs. Works",
+    "summary": "Checks Romans 3:28 — justified by faith apart from works — against James 2:24, which answers in the same terms: not by faith alone.",
+    "ruleVerse": {
+      "book": "Romans",
+      "chapter": 3,
+      "verse": 28,
+      "reference": "Romans 3:28"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_faith_apart",
+        "statement": "A man is justified by faith apart from works of the law.",
+        "plain": "Faith justifies; works of the law are expressly excluded from the transaction.",
+        "subject": "human",
+        "action": "justified_by",
+        "target": "faith",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "james_not_faith_alone",
+        "entityId": "james",
+        "verse": {
+          "book": "James",
+          "chapter": 2,
+          "verse": 24,
+          "reference": "James 2:24"
+        },
+        "violatesRule": "rule_faith_apart",
+        "violationExplanation": "James draws the conclusion Paul excludes: 'a man is justified by his deeds and not by faith alone.' Same verb, same subject, opposite finding — stated as a general rule, not a comment on one case.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — James justifies by deeds, and not by faith alone."
+      },
+      {
+        "id": "galatians_agrees",
+        "entityId": "paul",
+        "verse": {
+          "book": "Galatians",
+          "chapter": 2,
+          "verse": 16,
+          "reference": "Galatians 2:16"
+        },
+        "violatesRule": null,
+        "verdict": "CONSISTENT — Paul restates his own rule: justified by faith in Christ, 'because by works of the law no one will be justified.'"
+      }
+    ],
+    "severity": 3,
+    "verdict": "Paul and James use the same word — justified — and reach opposite conclusions about the same transaction, each stated as a standing rule. The contradiction is doctrinal, and it is exact.",
+    "scoreImpact": -2.0
+  },
 ]
