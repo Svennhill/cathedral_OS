@@ -101,4 +101,59 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "noah_animals",
+    "title": "Two of Every Kind?",
+    "summary": "Checks Genesis 6:19 — two of every living creature into the ark — against Genesis 7:2-3, where the clean animals and birds board seven pairs at a time.",
+    "ruleVerse": {
+      "book": "Genesis",
+      "chapter": 6,
+      "verse": 19,
+      "reference": "Genesis 6:19"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_two_of_every",
+        "statement": "Two of every living creature — male and female — are to be brought into the ark.",
+        "plain": "The manifest as first given: two of everything, a pair of each kind.",
+        "subject": "noah",
+        "action": "bring",
+        "target": "human",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "seven_pairs_clean",
+        "entityId": "noah",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 7,
+          "verse": 2,
+          "reference": "Genesis 7:2"
+        },
+        "violatesRule": "rule_two_of_every",
+        "violationExplanation": "One chapter later the manifest is rewritten: 'seven pairs of every kind of clean animal, a male and its mate; a pair of every kind of unclean animal.' For clean animals the count is seven pairs, not the two of every kind the first instruction set.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — clean animals board seven pairs at a time, not two."
+      },
+      {
+        "id": "seven_pairs_birds",
+        "entityId": "noah",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 7,
+          "verse": 3,
+          "reference": "Genesis 7:3"
+        },
+        "violatesRule": "rule_two_of_every",
+        "violationExplanation": "The revision extends to the birds: 'seven pairs of every kind of bird of the air, male and female' — again seven pairs where the original manifest allowed two.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — the birds also board seven pairs at a time."
+      }
+    ],
+    "severity": 2,
+    "verdict": "The ark's manifest is issued twice. The first version admits two of every living creature; the second admits seven pairs of the clean animals and the birds. Both instructions come from the same speaker, one chapter apart.",
+    "scoreImpact": -0.5
+  },
 ]

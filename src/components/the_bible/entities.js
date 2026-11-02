@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  noah: {
+    "id": "noah",
+    "name": "Noah",
+    "aka": [
+      "the patriarch"
+    ],
+    "type": "person",
+    "description": "Builder of the ark, given the animal manifest twice in two chapters — and the numbers change between the tellings.",
+    "visualType": "person"
+  },
 }
