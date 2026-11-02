@@ -2027,4 +2027,57 @@ export const PASSAGES = [{
     "verdict": "Samuel's account of the consecrated bread names Ahimelech as the priest at Nob, in the first verse of the episode. Jesus's retelling of the same episode in Mark places it under Ahimelech's son Abiathar \u2014 who was not priest yet, and whose flight to David came after his father's death over this very visit.",
     "scoreImpact": -0.5
   },
+{
+    "id": "saul_inquired",
+    "title": "Did Saul Ask God?",
+    "summary": "Checks 1 Samuel 28:6 — Saul inquired of the LORD, but the LORD did not answer him — against 1 Chronicles 10:14: he failed to inquire of the LORD, so the LORD put him to death.",
+    "ruleVerse": {
+      "book": "1 Samuel",
+      "chapter": 28,
+      "verse": 6,
+      "reference": "1 Samuel 28:6"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_saul_inquired",
+        "statement": "Saul inquired of the LORD.",
+        "plain": "1 Samuel states it before the visit to the medium: 'He inquired of the LORD, but the LORD did not answer him by dreams or Urim or prophets.' The silence is why Saul went to Endor.",
+        "subject": "saul",
+        "action": "inquire",
+        "target": "god",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "chronicles_failed",
+        "entityId": "saul",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 10,
+          "verse": 14,
+          "reference": "1 Chronicles 10:14"
+        },
+        "violatesRule": "rule_saul_inquired",
+        "violationExplanation": "Chronicles gives Saul's death its official cause: 'and he failed to inquire of the LORD. So the LORD put him to death and turned the kingdom over to David.' Not 'he inquired and was not answered' — he failed to inquire, and died for the failure.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Chronicles says Saul died for failing to do what Samuel says he did."
+      },
+      {
+        "id": "chronicles_medium",
+        "entityId": "saul",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 10,
+          "verse": 13,
+          "reference": "1 Chronicles 10:13"
+        },
+        "violatesRule": null,
+        "verdict": "CONSISTENT — Chronicles agrees with Samuel on the medium: Saul died 'because he did not keep the word of the LORD and even consulted a medium for guidance.' The visit to Endor is common ground; the inquiry to the LORD is not."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Samuel records that Saul inquired of the LORD and received silence — the silence that drove him to a medium. Chronicles records the medium too, then gives the inquiry's absence as the reason God put Saul to death. He cannot have died for failing to inquire if he inquired.",
+    "scoreImpact": -0.5
+  },
 ]

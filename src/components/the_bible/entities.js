@@ -316,4 +316,14 @@ ahimelech: {
     "description": "The priest at Nob who gave David the consecrated bread and Goliath's sword \u2014 and was killed by Saul for it. Mark's Gospel assigns the episode to his son Abiathar's priesthood.",
     "visualType": "person"
   },
+saul: {
+    "id": "saul",
+    "name": "Saul",
+    "aka": [
+      "King Saul"
+    ],
+    "type": "person",
+    "description": "First king of Israel. Two books report his death on Mount Gilboa — and the two reports cannot both be the way it happened.",
+    "visualType": "person"
+  },
 }
