@@ -1,17 +1,37 @@
 // AccessibilityTab — pull-out card at the right edge of the screen
 //
+// Geometry (all measured against the live screen rect, so it holds in both
+// normal and Screen Only modes, at any window size):
+//   - The card is sized to fit inside the screen area (height ≤ 64% of the
+//     screen, width ≤ 90% of it) and anchored to the screen's right edge.
+//   - CLOSED: only the triangular tab shows. Normal mode: the tab pokes out
+//     onto the bezel rim just right of the screen. Screen Only mode (no rim):
+//     the tab sits just inside the screen's right edge.
+//   - OPEN: the whole card slides in and sits fully inside the screen, its
+//     right edge on the screen's right edge. The tab stays visible at its
+//     top-left and closes the card again.
+//   - A clip box (screen area, plus one tab-width of rim in normal mode)
+//     hides and de-activates everything that is not on screen, so the card
+//     can never cover the hardware panel or knobs below the screen.
+//
 // Pointer event model:
-//   CLOSED: only the triangular tab strip (left ~22% of the image) is clickable.
-//           Everything else is pointer-events:none so underlying UI (knobs, etc.) is unblocked.
-//   OPEN:   the full card body acts as a "click to close" zone.
-//           The content overlay (checkboxes) stops propagation so it doesn't close the card.
+//   Tab zone: exactly the tab triangle — toggles open/closed.
+//   OPEN only: the card body is a "click to close" zone; the checkbox
+//   overlay stops propagation so it doesn't close the card.
 
 import { useState, useRef, useLayoutEffect } from "react"
 
 const FONT  = "opendyslexic, monospace"
 const BLACK = "#1a1a1a"
 const DIM   = "#888"
-const TAB_WIDTH_PCT = 22  // % of card image width that is the tab triangular area
+// aCardTab.png is 640×855: tab triangle in the top-left 114×100 px,
+// card body from x=114 to the right edge.
+const CARD_ASPECT    = 640 / 855   // width / height
+const TAB_WIDTH_PCT  = 18          // % of card width covered by the tab
+const TAB_HEIGHT_PCT = 12          // % of card height covered by the tab
+const CARD_MAX_H     = 0.64        // card height, max fraction of screen height
+const CARD_MAX_W     = 0.90        // card width, max fraction of screen width
+const CARD_TOP       = 0.30        // preferred top, fraction of screen height
 
 function AccOption({ label, checked, onChange }) {
   return (
@@ -44,53 +64,71 @@ export default function AccessibilityTab({
   greyscale,  setGreyscale,
   activePCT,
 }) {
-  const [open, setOpen]           = useState(false)
-  const cardRef                   = useRef(null)
-  const [slideAmount, setSlideAmount] = useState(0)
-  const [cardWidth, setCardWidth]     = useState(0)
+  const [open, setOpen] = useState(false)
+  const anchorRef       = useRef(null)
+  const [screen, setScreen] = useState({ w: 0, h: 0 })
 
+  // Track the screen area's rendered size (changes with window size and mode)
   useLayoutEffect(() => {
-    if (cardRef.current) {
-      const w = cardRef.current.offsetWidth
-      setCardWidth(w)
-      setSlideAmount(Math.round(w * 0.8))
-    }
-  })
+    const el = anchorRef.current
+    if (!el) return
+    const measure = () => setScreen({ w: el.offsetWidth, h: el.offsetHeight })
+    measure()
+    const obs = new ResizeObserver(measure)
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
-  const tabZoneWidth = Math.round(cardWidth * (TAB_WIDTH_PCT / 100))
+  const { w: W, h: H } = screen
+  const cardH = Math.min(H * CARD_MAX_H, (W * CARD_MAX_W) / CARD_ASPECT)
+  const cardW = cardH * CARD_ASPECT
+  const tabW  = cardW * (TAB_WIDTH_PCT / 100)
+  const cardTop = Math.max(0, Math.min(H * CARD_TOP, H - cardH - H * 0.03))
 
-  const wrapperStyle = {
-    position: "absolute",
-    left:   `${(activePCT.left + activePCT.width) * 100}%`,
-    top:    `${(activePCT.top + activePCT.height * 0.30) * 100}%`,
-    transform: open ? `translateX(-${slideAmount}px)` : 'translateX(0)',
-    transition: 'transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)',
-    zIndex: 400,
-    display: "flex",
-    alignItems: "flex-start",
-    // Wrapper itself has no pointer events — we use explicit zones below
-    pointerEvents: "none",
-  }
-
-  const cardHeightPct = `${activePCT.height * 52}%`
+  const closedLeft = screenOnly ? W - tabW : W   // tab only: inside edge (SO) / on rim
+  const openLeft   = W - cardW                   // whole card inside the screen
 
   return (
-    <div style={wrapperStyle}>
+    <div
+      ref={anchorRef}
+      style={{
+        // Exactly the screen area
+        position: "absolute",
+        left:   `${activePCT.left   * 100}%`,
+        top:    `${activePCT.top    * 100}%`,
+        width:  `${activePCT.width  * 100}%`,
+        height: `${activePCT.height * 100}%`,
+        zIndex: 400,
+        pointerEvents: "none",
+      }}
+    >
+      {/* Clip box — screen area (+ one tab-width of bezel rim in normal mode) */}
+      <div style={{
+        position: "absolute",
+        top: 0, left: 0,
+        width: W + (screenOnly ? 0 : tabW),
+        height: "100%",
+        overflow: "hidden",
+        pointerEvents: "none",
+      }}>
       <div
-        ref={cardRef}
         style={{
-          position: "relative",
-          height: cardHeightPct,
-          flexShrink: 0,
+          position: "absolute",
+          top: cardTop,
+          left: open ? openLeft : closedLeft,
+          width: cardW,
+          height: cardH,
+          transition: "left 0.38s cubic-bezier(0.4, 0, 0.2, 1)",
           pointerEvents: "none",
+          visibility: W ? "visible" : "hidden",
         }}
       >
         {/* Base card+tab image */}
         <img
           src="/screen/aCardTab.png"
           style={{
+            width: "100%",
             height: "100%",
-            width: "auto",
             display: "block",
             pointerEvents: "none",
             userSelect: "none",
@@ -99,16 +137,17 @@ export default function AccessibilityTab({
         />
 
         {/* ── TAB CLICK ZONE ───────────────────────────────────
-            Always active — narrow strip covering just the triangular tab.
-            Clicking opens the card.
+            Always active and always on screen — covers just the
+            triangular tab. Opens the card, or closes it when open.
         ─────────────────────────────────────────────────────── */}
         <div
           onClick={() => setOpen(o => !o)}
+          title={open ? "Close accessibility" : "Accessibility"}
           style={{
             position: "absolute",
             top: 0, left: 0,
-            width: tabZoneWidth || `${TAB_WIDTH_PCT}%`,
-            height: "100%",
+            width: `${TAB_WIDTH_PCT}%`,
+            height: `${TAB_HEIGHT_PCT}%`,
             cursor: "pointer",
             zIndex: 3,
             pointerEvents: "auto",
@@ -127,7 +166,7 @@ export default function AccessibilityTab({
             style={{
               position: "absolute",
               top: 0,
-              left: tabZoneWidth || `${TAB_WIDTH_PCT}%`,
+              left: `${TAB_WIDTH_PCT}%`,
               right: 0,
               height: "100%",
               cursor: "pointer",
@@ -149,7 +188,7 @@ export default function AccessibilityTab({
             left: `${TAB_WIDTH_PCT + 2}%`,
             right: "2%",
             bottom: "2%",
-            overflow: "hidden",
+            overflow: "auto",
             pointerEvents: open ? "auto" : "none",
             zIndex: 4,
           }}
@@ -216,6 +255,7 @@ export default function AccessibilityTab({
           </div>
         </div>
 
+      </div>
       </div>
     </div>
   )

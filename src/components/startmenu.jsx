@@ -2,6 +2,7 @@
 // Sections: APPS (open windows), SETTINGS (accessibility + debug passcode)
 
 import { useState, useRef, useEffect } from "react"
+import { ZOOM_STEPS } from "../utils/screenConstants"
 
 const GREEN  = "#00ff41"
 const TEAL   = "#009191"
@@ -98,6 +99,54 @@ function SettingToggle({ label, checked, onChange, locked, lockNote }) {
         />
       )}
     </label>
+  )
+}
+
+// − 100% + stepper over ZOOM_STEPS
+function ZoomSetting({ label, value, onChange }) {
+  const idx = ZOOM_STEPS.indexOf(value)
+  const i = idx === -1 ? ZOOM_STEPS.indexOf(1) : idx
+  const stepBtn = (disabled) => ({
+    background: "transparent",
+    border: `1px solid ${disabled ? DIM : TEAL}`,
+    borderRadius: 0,
+    color: disabled ? DIM : GREEN,
+    cursor: disabled ? "default" : "pointer",
+    fontFamily: FONT,
+    fontSize: "100%",
+    lineHeight: 1,
+    width: 14, height: 14,
+    padding: 0,
+  })
+  return (
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "2px 12px",
+      fontFamily: FONT,
+      fontSize: "72%",
+      color: `rgba(0,255,65,0.8)`,
+      userSelect: "none",
+      gap: 6,
+    }}>
+      <span>{label}</span>
+      <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+        <button
+          aria-label={`${label} out`}
+          disabled={i === 0}
+          onClick={() => onChange(ZOOM_STEPS[i - 1])}
+          style={stepBtn(i === 0)}
+        >−</button>
+        <span style={{ minWidth: 30, textAlign: "center" }}>{Math.round(ZOOM_STEPS[i] * 100)}%</span>
+        <button
+          aria-label={`${label} in`}
+          disabled={i === ZOOM_STEPS.length - 1}
+          onClick={() => onChange(ZOOM_STEPS[i + 1])}
+          style={stepBtn(i === ZOOM_STEPS.length - 1)}
+        >+</button>
+      </span>
+    </div>
   )
 }
 
@@ -206,6 +255,8 @@ export default function StartMenu({
   alwaysScreenOnly, setAlwaysScreenOnly,
   greyscale,     setGreyscale,
   debugEnabled,  setDebugEnabled,
+  desktopZoom,   setDesktopZoom,
+  windowZoom,    setWindowZoom,
   taskbarHeightPct,
 }) {
   const [appsOpen,     setAppsOpen]     = useState(true)
@@ -307,12 +358,15 @@ export default function StartMenu({
             checked={greyscale}
             onChange={setGreyscale}
           />
-          <SettingToggle
-            label="Increase Size"
-            checked={false}
-            onChange={() => {}}
-            locked
-            lockNote="coming soon"
+          <ZoomSetting
+            label="Desktop zoom"
+            value={desktopZoom}
+            onChange={setDesktopZoom}
+          />
+          <ZoomSetting
+            label="Window zoom"
+            value={windowZoom}
+            onChange={setWindowZoom}
           />
 
           <Divider />

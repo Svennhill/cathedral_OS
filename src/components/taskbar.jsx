@@ -114,6 +114,7 @@ export default function Taskbar({
   onStartClick,       // toggle callback from Screen
 }) {
   const [mixerOpen, setMixerOpen] = useState(false)
+  const [cosKeyFocus, setCosKeyFocus] = useState(false)  // keyboard focus on COS
 
   const tbStyle = {
     position: "absolute",
@@ -138,14 +139,23 @@ export default function Taskbar({
     <div style={tbStyle}>
 
       {/* ── START BUTTON (left) ──────────────────────────── */}
+      {/* One element: the boxed COS mark. The button itself is invisible
+          chrome (square, no fill, no border, no rounded focus ring) — the
+          global button styles in index.css would otherwise draw a stray pill
+          beside the mark. Open state fills the mark; keyboard focus gets a
+          square outline on the mark itself. */}
       <button
         onClick={onStartClick}
+        aria-expanded={startOpen}
+        title="COS menu"
+        onFocus={e => setCosKeyFocus(e.currentTarget.matches(':focus-visible'))}
+        onBlur={() => setCosKeyFocus(false)}
         style={{
           ...BTN,
-          background: startOpen ? GREEN : BG,
-          color:      startOpen ? BG    : GREEN,
-          borderRight: `1px solid ${TEAL}`,
-          padding: "0 8px",
+          background: "transparent",
+          borderRadius: 0,
+          outline: "none",
+          padding: "0 6px",
           fontWeight: "bold",
           letterSpacing: "0.1em",
           height: "100%",
@@ -154,7 +164,11 @@ export default function Taskbar({
       >
         <span style={{
           display: "inline-block",
-          border: `1px solid currentColor`,
+          border: `1px solid ${GREEN}`,
+          background: startOpen ? GREEN : "transparent",
+          color:      startOpen ? BG    : GREEN,
+          outline:    cosKeyFocus ? `1px solid ${TEAL}` : "none",
+          outlineOffset: 1,
           padding: "0 3px",
           fontSize: "85%",
           lineHeight: 1.3,
