@@ -101,4 +101,60 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "lying_spirit",
+    "title": "The Lying Spirit",
+    "summary": "Checks Hebrews 6:18 — it is impossible for God to lie — against 1 Kings 22:23, where the LORD puts a lying spirit in the prophets' mouths, and 2 Thessalonians 2:11, where God sends a delusion so that people believe the lie.",
+    "ruleVerse": {
+      "book": "Hebrews",
+      "chapter": 6,
+      "verse": 18,
+      "reference": "Hebrews 6:18"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_god_cannot_lie",
+        "statement": "It is impossible for God to lie.",
+        "plain": "Hebrews states it as a property of God, not a habit: 'it is impossible for God to lie.' Deception is not merely something He does not do; it is something He cannot do.",
+        "subject": "god",
+        "action": "lie",
+        "target": "anyone",
+        "permitted": false,
+        "exclusive": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "kings_lying_spirit",
+        "entityId": "god",
+        "verse": {
+          "book": "1 Kings",
+          "chapter": 22,
+          "verse": 23,
+          "reference": "1 Kings 22:23"
+        },
+        "violatesRule": "rule_god_cannot_lie",
+        "violationExplanation": "Micaiah's verdict on Ahab's prophets: 'the LORD has put a lying spirit in the mouths of all these prophets of yours.' The lie those prophets speak is false prophecy, and its author, by the prophet's own account, is the LORD.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — God authors a lying spirit's message."
+      },
+      {
+        "id": "thess_delusion",
+        "entityId": "god",
+        "verse": {
+          "book": "2 Thessalonians",
+          "chapter": 2,
+          "verse": 11,
+          "reference": "2 Thessalonians 2:11"
+        },
+        "violatesRule": "rule_god_cannot_lie",
+        "violationExplanation": "Paul: 'For this reason God will send them a powerful delusion so that they believe the lie.' The delusion is sent by God, and its stated purpose is that its victims believe something false.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — God sends a delusion whose purpose is belief in a lie."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Hebrews makes it a definition: it is impossible for God to lie. Kings has the LORD placing a lying spirit in His own prophets' mouths to deceive a king to his death. Thessalonians has God sending a powerful delusion so that people will believe the lie. A God who cannot lie is doing the lying by instrument in both accounts.",
+    "scoreImpact": -2.0
+  },
 ]

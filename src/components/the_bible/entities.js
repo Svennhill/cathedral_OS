@@ -41,4 +41,15 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  god: {
+    "id": "god",
+    "name": "God",
+    "aka": [
+      "the LORD",
+      "Yahweh"
+    ],
+    "type": "person",
+    "description": "God as speaker and actor throughout both testaments. His statements about Himself are the rules other passages are tested against.",
+    "visualType": "person"
+  },
 }
