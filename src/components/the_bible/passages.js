@@ -825,4 +825,73 @@ export const PASSAGES = [{
     "verdict": "Deuteronomy promises Israel that their destruction will please God the way their prosperity did. Ezekiel records God swearing by His own life that He takes no pleasure in the death of the wicked. Lamentations adds that He does not even afflict willingly. The covenant curse and the sworn oath describe opposite Gods.",
     "scoreImpact": -2.0
   },
+{
+    "id": "empty_tomb",
+    "title": "The Empty Tomb Count",
+    "summary": "Checks Matthew 28:2 — one angel, who sat on the stone — against the other Gospels' figures at the tomb: two angels, two men, one young man.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 28,
+      "verse": 2,
+      "reference": "Matthew 28:2"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_one_angel",
+        "statement": "One angel descended from heaven, rolled away the stone, and sat on it.",
+        "plain": "Matthew's account: a single angel, outside the tomb, seated on the stone he had rolled away.",
+        "subject": "angel",
+        "action": "sit",
+        "target": "heaven",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "john_two_angels",
+        "entityId": "angel",
+        "verse": {
+          "book": "John",
+          "chapter": 20,
+          "verse": 12,
+          "reference": "John 20:12"
+        },
+        "violatesRule": "rule_one_angel",
+        "violationExplanation": "Mary sees 'two angels in white sitting where the body of Jesus had lain, one at the head and the other at the feet.' Two figures, not one — and inside the tomb, not seated on the stone.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — John counts two angels, inside the tomb."
+      },
+      {
+        "id": "luke_two_men",
+        "entityId": "angel",
+        "verse": {
+          "book": "Luke",
+          "chapter": 24,
+          "verse": 4,
+          "reference": "Luke 24:4"
+        },
+        "violatesRule": "rule_one_angel",
+        "violationExplanation": "Luke: 'suddenly two men in radiant apparel stood beside them.' Two figures again, described as men, standing beside the women — not one angel seated on the stone.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Luke counts two men, standing."
+      },
+      {
+        "id": "mark_young_man",
+        "entityId": "angel",
+        "verse": {
+          "book": "Mark",
+          "chapter": 16,
+          "verse": 5,
+          "reference": "Mark 16:5"
+        },
+        "violatesRule": "rule_one_angel",
+        "violationExplanation": "Mark agrees on the count — one figure — and disagrees on everything else: 'a young man dressed in a white robe sitting on the right side' inside the tomb, not the angel of Matthew's account seated on the stone outside it.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Mark's one figure is a young man inside the tomb, not Matthew's angel on the stone."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Four Gospels visit the same tomb on the same morning and file four different reports of who was there: one angel on the stone, two angels inside, two men standing by, one young man within. The count never survives two tellings in a row.",
+    "scoreImpact": -0.5
+  },
 ]

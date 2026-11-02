@@ -131,4 +131,16 @@ simon: {
     "description": "A passer-by from Cyrene whom the soldiers forced to carry the cross of Jesus — in three Gospels. John's Gospel says Jesus carried it Himself.",
     "visualType": "person"
   },
+angel: {
+    "id": "angel",
+    "name": "Angel",
+    "aka": [
+      "angel of the Lord",
+      "men in radiant apparel",
+      "young man in white"
+    ],
+    "type": "person",
+    "description": "The figure or figures at the empty tomb on resurrection morning — one or two of them, angel or man, depending on which Gospel is counting.",
+    "visualType": "person"
+  },
 }
