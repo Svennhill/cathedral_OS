@@ -111,4 +111,14 @@ joab: {
     "description": "David's army commander, who carried out the census and reported the totals — different totals, depending on which book is reporting.",
     "visualType": "person"
   },
+peter: {
+    "id": "peter",
+    "name": "Peter",
+    "aka": [
+      "Simon Peter"
+    ],
+    "type": "person",
+    "description": "The apostle who denied Jesus three times in one night — after being told, depending on the Gospel, exactly how many rooster crows he had.",
+    "visualType": "person"
+  },
 }
