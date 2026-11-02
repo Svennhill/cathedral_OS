@@ -101,4 +101,45 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "jesses_sons",
+    "title": "How Many Sons Did Jesse Have?",
+    "summary": "Checks 1 Samuel 17:12 — Jesse had eight sons — against 1 Chronicles 2:13-15, where the birth-order list of Jesse's sons ends with David, the seventh.",
+    "ruleVerse": {
+      "book": "1 Samuel",
+      "chapter": 17,
+      "verse": 12,
+      "reference": "1 Samuel 17:12"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_eight_sons",
+        "statement": "Jesse had eight sons.",
+        "plain": "Samuel counts them in the introduction to the Goliath story: Jesse of Bethlehem 'had eight sons,' and David is the youngest of them (17:14).",
+        "subject": "jesse",
+        "action": "father",
+        "target": "sons",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "chronicles_seventh",
+        "entityId": "david",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 2,
+          "verse": 15,
+          "reference": "1 Chronicles 2:15"
+        },
+        "violatesRule": "rule_eight_sons",
+        "violationExplanation": "Chronicles lists Jesse's sons by birth order — Eliab, Abinadab, Shimea, Nethanel, Raddai, Ozem — and finishes: 'Ozem sixth, and David seventh.' Seven sons named, David last and seventh. Samuel's eighth son is nowhere in the count.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Chronicles makes David the seventh of seven; Samuel counts eight."
+      }
+    ],
+    "severity": 1,
+    "verdict": "Samuel introduces David as the youngest of Jesse's eight sons. Chronicles gives the family in birth order and stops at seven names, with David seventh. One son exists in one book's count and not the other's list.",
+    "scoreImpact": -0.1
+  },
 ]
