@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  joab: {
+    "id": "joab",
+    "name": "Joab",
+    "aka": [
+      "commander of the army"
+    ],
+    "type": "person",
+    "description": "David's army commander, who carried out the census and reported the totals — different totals, depending on which book is reporting.",
+    "visualType": "person"
+  },
 }
