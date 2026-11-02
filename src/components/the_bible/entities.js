@@ -296,4 +296,14 @@ noah: {
     "description": "Builder of the ark, given the animal manifest twice in two chapters — and the numbers change between the tellings.",
     "visualType": "person"
   },
+elizabeth: {
+    "id": "elizabeth",
+    "name": "Elizabeth",
+    "aka": [
+      "wife of Zechariah"
+    ],
+    "type": "person",
+    "description": "Mother of John the Baptist, introduced by Luke \u2014 with her husband \u2014 as righteous in the sight of God, which is the standing Romans says no one has.",
+    "visualType": "person"
+  },
 }
