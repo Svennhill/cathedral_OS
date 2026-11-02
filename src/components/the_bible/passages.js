@@ -1271,4 +1271,45 @@ export const PASSAGES = [{
     "verdict": "Genesis totals Jacob's migrating household at seventy in all, at the end of its own list. Stephen, retelling the migration as inspired history, totals the same household at seventy-five in all. Five people appear in one count and not the other, and neither text notes a second group.",
     "scoreImpact": -0.1
   },
+{
+    "id": "jacob_renamed",
+    "title": "Renamed Twice",
+    "summary": "Checks Genesis 32:28 — 'Your name will no longer be Jacob, but Israel' — against Genesis 35:10, where God renames him again with the same words, three chapters later.",
+    "ruleVerse": {
+      "book": "Genesis",
+      "chapter": 32,
+      "verse": 28,
+      "reference": "Genesis 32:28"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_renamed_peniel",
+        "statement": "Jacob's name was changed to Israel at Peniel: it would no longer be Jacob.",
+        "plain": "The man who wrestled him states it as done: 'Your name will no longer be Jacob, but Israel, because you have struggled with God and with men, and you have prevailed.'",
+        "subject": "jacob",
+        "action": "rename",
+        "target": "israel",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "renamed_bethel",
+        "entityId": "jacob",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 35,
+          "verse": 10,
+          "reference": "Genesis 35:10"
+        },
+        "violatesRule": "rule_renamed_peniel",
+        "violationExplanation": "Three chapters later God performs the renaming again, in the same formula, as if for the first time: 'Though your name is Jacob, you will no longer be called Jacob. Instead, your name will be Israel.' So God named him Israel. The narrative has called him Jacob all the way between the two namings — and goes on calling him Jacob after both.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — The renaming of Genesis 32 is given again, as new, in Genesis 35."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Genesis renames Jacob to Israel at Peniel, keeps calling him Jacob, then at Bethel has God rename him to Israel again with the original formula — 'you will no longer be called Jacob' — and keeps calling him Jacob afterward anyway. One renaming, delivered twice, honored in neither.",
+    "scoreImpact": -0.5
+  },
 ]
