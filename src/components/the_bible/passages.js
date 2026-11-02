@@ -1986,4 +1986,45 @@ export const PASSAGES = [{
     "verdict": "The same road, the same light, the same voice. Luke's narrative leaves Paul's companions standing speechless; Paul's own courtroom retelling has the whole party on the ground. The posture of the eyewitnesses changes between the telling and the retelling.",
     "scoreImpact": -0.5
   },
+{
+    "id": "priest_at_nob",
+    "title": "The Priest at Nob",
+    "summary": "Checks 1 Samuel 21:1 \u2014 David came to Ahimelech the priest \u2014 against Mark 2:26, where Jesus dates the same visit to the high priesthood of Abiathar.",
+    "ruleVerse": {
+      "book": "1 Samuel",
+      "chapter": 21,
+      "verse": 1,
+      "reference": "1 Samuel 21:1"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_ahimelech_priest",
+        "statement": "The priest who received David at Nob was Ahimelech.",
+        "plain": "1 Samuel names him at the head of the episode: 'Then David came to Nob, to Ahimelech the priest.' It is Ahimelech who gives David the consecrated bread in the verses that follow.",
+        "subject": "ahimelech",
+        "action": "serve",
+        "target": "david",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_abiathar",
+        "entityId": "ahimelech",
+        "verse": {
+          "book": "Mark",
+          "chapter": 2,
+          "verse": 26,
+          "reference": "Mark 2:26"
+        },
+        "violatesRule": "rule_ahimelech_priest",
+        "violationExplanation": "Recounting this same episode \u2014 David entering the house of God and eating the consecrated bread \u2014 Jesus dates it 'during the high priesthood of Abiathar.' Abiathar was Ahimelech's son, who fled to David only after Saul killed his father (1 Samuel 22). At the time of the visit, the priest at Nob was the father, not the son.",
+        "severity": 2,
+        "verdict": "CONTRADICTION \u2014 Mark dates the visit to Abiathar's priesthood; Samuel names his father Ahimelech."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Samuel's account of the consecrated bread names Ahimelech as the priest at Nob, in the first verse of the episode. Jesus's retelling of the same episode in Mark places it under Ahimelech's son Abiathar \u2014 who was not priest yet, and whose flight to David came after his father's death over this very visit.",
+    "scoreImpact": -0.5
+  },
 ]

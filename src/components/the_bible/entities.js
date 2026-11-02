@@ -306,4 +306,14 @@ elizabeth: {
     "description": "Mother of John the Baptist, introduced by Luke \u2014 with her husband \u2014 as righteous in the sight of God, which is the standing Romans says no one has.",
     "visualType": "person"
   },
+ahimelech: {
+    "id": "ahimelech",
+    "name": "Ahimelech",
+    "aka": [
+      "priest of Nob"
+    ],
+    "type": "person",
+    "description": "The priest at Nob who gave David the consecrated bread and Goliath's sword \u2014 and was killed by Saul for it. Mark's Gospel assigns the episode to his son Abiathar's priesthood.",
+    "visualType": "person"
+  },
 }
