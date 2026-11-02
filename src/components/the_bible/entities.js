@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  zechariah: {
+    "id": "zechariah",
+    "name": "Zechariah",
+    "aka": [
+      "son of Jehoiada"
+    ],
+    "type": "person",
+    "description": "The priest's son stoned in the temple courtyard for his prophecy — whose father Jesus names as Berechiah, a different Zechariah's father.",
+    "visualType": "person"
+  },
 }

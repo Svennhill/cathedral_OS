@@ -101,4 +101,45 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "zechariah_father",
+    "title": "Zechariah's Father",
+    "summary": "Checks 2 Chronicles 24:20 — Zechariah son of Jehoiada, the priest killed at the temple — against Matthew 23:35, where Jesus calls the temple-murdered Zechariah the son of Berechiah.",
+    "ruleVerse": {
+      "book": "2 Chronicles",
+      "chapter": 24,
+      "verse": 20,
+      "reference": "2 Chronicles 24:20"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_zechariah_jehoiada",
+        "statement": "The Zechariah who spoke at the temple and was killed there was the son of Jehoiada the priest.",
+        "plain": "Chronicles names him as he stands up to speak: 'Zechariah son of Jehoiada the priest.' The next verse records his killing: stoned, by the king's order, 'in the courtyard of the house of the LORD' (24:21) — the Old Testament's one temple murder of a Zechariah.",
+        "subject": "zechariah",
+        "action": "prophesy",
+        "target": "temple",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "matthew_berechiah",
+        "entityId": "zechariah",
+        "verse": {
+          "book": "Matthew",
+          "chapter": 23,
+          "verse": 35,
+          "reference": "Matthew 23:35"
+        },
+        "violatesRule": "rule_zechariah_jehoiada",
+        "violationExplanation": "Jesus reaches for the same murder — a Zechariah killed 'between the temple and the altar,' the last righteous blood in his catalogue from Abel onward — and names a different father: 'the blood of Zechariah son of Berechiah, whom you murdered between the temple and the altar.' Berechiah is the father of a different Zechariah, the prophet, who was never murdered at the temple.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Matthew gives the temple victim Berechiah as a father; Chronicles gives Jehoiada."
+      }
+    ],
+    "severity": 2,
+    "verdict": "The temple-murdered Zechariah is a fixed point in both Testaments: Chronicles makes him Jehoiada's son, stoned in the house of the LORD. Jesus, citing that same murder as the closing entry in the record of righteous blood, makes him Berechiah's son. The victim is the same; the father is not.",
+    "scoreImpact": -0.5
+  },
 ]
