@@ -336,4 +336,14 @@ solomon: {
     "description": "Son of David and king of Israel, whose building projects — and the officers who supervised them — are chronicled twice, with two different headcounts.",
     "visualType": "person"
   },
+abraham: {
+    "id": "abraham",
+    "name": "Abraham",
+    "aka": [
+      "the patriarch"
+    ],
+    "type": "person",
+    "description": "The patriarch whose burial cave at Machpelah is the Old Testament's most carefully documented purchase — and whose tomb, in Stephen's retelling, moves to Shechem and changes seller.",
+    "visualType": "person"
+  },
 }
