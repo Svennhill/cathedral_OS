@@ -101,4 +101,59 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "baptism_voice",
+    "title": "The Voice at the Baptism",
+    "summary": "Checks Matthew 3:17's words from heaven — 'This is My beloved Son' — against Mark 1:11 and Luke 3:22, where the voice addresses Jesus directly: 'You are My beloved Son.'",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 3,
+      "verse": 17,
+      "reference": "Matthew 3:17"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_this_is",
+        "statement": "The voice from heaven said: 'This is My beloved Son, in whom I am well pleased.'",
+        "plain": "Matthew quotes the voice in the third person — an announcement about Jesus, to whoever was listening.",
+        "subject": "god",
+        "action": "declare",
+        "target": "jesus",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_you_are",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Mark",
+          "chapter": 1,
+          "verse": 11,
+          "reference": "Mark 1:11"
+        },
+        "violatesRule": "rule_this_is",
+        "violationExplanation": "Mark quotes the same voice, at the same moment, in the second person — an address to Jesus, not an announcement about Him: 'You are My beloved Son; in You I am well pleased.' The words spoken from heaven differ between the two records of one utterance.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Mark's voice says 'You are'; Matthew's says 'This is.'"
+      },
+      {
+        "id": "luke_you_are",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Luke",
+          "chapter": 3,
+          "verse": 22,
+          "reference": "Luke 3:22"
+        },
+        "violatesRule": "rule_this_is",
+        "violationExplanation": "Luke agrees with Mark's wording against Matthew's: 'You are My beloved Son; in You I am well pleased.' Two of the three records quote the voice speaking to Jesus; Matthew's quotes it speaking about Him.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Luke's voice also says 'You are,' not 'This is.'"
+      }
+    ],
+    "severity": 2,
+    "verdict": "One baptism, one voice from heaven, quoted in all three Synoptics. Matthew hears a public announcement in the third person: 'This is My beloved Son.' Mark and Luke hear a private address in the second: 'You are My beloved Son.' The voice cannot have been quoted correctly in both forms.",
+    "scoreImpact": -0.5
+  },
 ]
