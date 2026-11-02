@@ -2133,4 +2133,45 @@ export const PASSAGES = [{
     "verdict": "1 Samuel and 1 Chronicles agree: Saul died by his own hand, on his own sword, after his armor-bearer refused. 2 Samuel opens with a man standing before David claiming the kill as his own act — and David has him executed for it. One death, two killers named.",
     "scoreImpact": -0.5
   },
+{
+    "id": "sauls_reign",
+    "title": "How Long Did Saul Reign?",
+    "summary": "Checks Acts 13:21 — Saul ruled forty years — against 1 Samuel 13:1, where the BSB text gives his reign as forty-two years.",
+    "ruleVerse": {
+      "book": "Acts",
+      "chapter": 13,
+      "verse": 21,
+      "reference": "Acts 13:21"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_forty_years",
+        "statement": "Saul son of Kish ruled for forty years.",
+        "plain": "Paul's synagogue sermon gives the length plainly: God gave Israel Saul, 'who ruled forty years.'",
+        "subject": "saul",
+        "action": "reign",
+        "target": "israel",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "samuel_forty_two",
+        "entityId": "saul",
+        "verse": {
+          "book": "1 Samuel",
+          "chapter": 13,
+          "verse": 1,
+          "reference": "1 Samuel 13:1"
+        },
+        "violatesRule": "rule_forty_years",
+        "violationExplanation": "Samuel's own regnal formula, as the BSB prints it: 'Saul was thirty years old when he became king, and he reigned over Israel forty-two years.' Two years longer than Paul's figure — in the book that tells Saul's story.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Samuel gives Saul forty-two years; Paul gives forty."
+      }
+    ],
+    "severity": 1,
+    "verdict": "Paul rounds Saul's reign to forty years in a sermon summary. Samuel's regnal formula gives forty-two. The two-year difference is small; it is also exact, printed, and unreconciled in the text itself.",
+    "scoreImpact": -0.1
+  },
 ]
