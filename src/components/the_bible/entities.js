@@ -205,4 +205,14 @@ ezekiel: {
     "description": "Prophet of the exile, whose eighteenth chapter is a single sustained ruling: no one bears another's sin — the ruling Exodus 20:5 appears to reverse.",
     "visualType": "person"
   },
+stephen: {
+    "id": "stephen",
+    "name": "Stephen",
+    "aka": [
+      "the martyr"
+    ],
+    "type": "person",
+    "description": "The first Christian martyr, whose speech to the Sanhedrin in Acts 7 retells Israel's history — with details the Old Testament itself records differently.",
+    "visualType": "person"
+  },
 }

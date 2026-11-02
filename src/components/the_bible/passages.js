@@ -1230,4 +1230,45 @@ export const PASSAGES = [{
     "verdict": "Exodus has God announce, inside the Ten Commandments, that He visits the fathers' iniquity on their children for generations. Ezekiel has God announce that a son will not bear his father's iniquity — that the soul who sins is the one who will die. Both are presented as God's stated policy on the same question.",
     "scoreImpact": -2.0
   },
+{
+    "id": "jacob_household_count",
+    "title": "Seventy, or Seventy-Five?",
+    "summary": "Checks Genesis 46:27 — Jacob's family who went to Egypt were seventy in all — against Acts 7:14, where Stephen counts seventy-five in all.",
+    "ruleVerse": {
+      "book": "Genesis",
+      "chapter": 46,
+      "verse": 27,
+      "reference": "Genesis 46:27"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_seventy",
+        "statement": "The members of Jacob's family who went to Egypt were seventy in all.",
+        "plain": "Genesis closes its own headcount with a total: 'the members of Jacob's family who went to Egypt were seventy in all.'",
+        "subject": "jacob",
+        "action": "migrate",
+        "target": "egypt",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "stephen_75",
+        "entityId": "stephen",
+        "verse": {
+          "book": "Acts",
+          "chapter": 7,
+          "verse": 14,
+          "reference": "Acts 7:14"
+        },
+        "violatesRule": "rule_seventy",
+        "violationExplanation": "Stephen, recounting the same migration in his speech, gives the total as 'seventy-five in all': Joseph 'sent for his father Jacob and all his relatives, seventy-five in all.' Same family, same journey, same 'in all' — five more people.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Stephen counts seventy-five; Genesis counts seventy."
+      }
+    ],
+    "severity": 1,
+    "verdict": "Genesis totals Jacob's migrating household at seventy in all, at the end of its own list. Stephen, retelling the migration as inspired history, totals the same household at seventy-five in all. Five people appear in one count and not the other, and neither text notes a second group.",
+    "scoreImpact": -0.1
+  },
 ]
