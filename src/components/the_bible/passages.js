@@ -101,4 +101,74 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "no_one_seen_god",
+    "title": "No One Has Seen God",
+    "summary": "Checks John 1:18 — no one has ever seen God — against Exodus 24:10, Numbers 12:8, and Isaiah 6:1, where men see Him.",
+    "ruleVerse": {
+      "book": "John",
+      "chapter": 1,
+      "verse": 18,
+      "reference": "John 1:18"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_never_seen",
+        "statement": "No one has ever seen God.",
+        "plain": "John's claim is universal and past-tense: 'No one has ever seen God.' No exception is offered for elders, prophets, or Moses.",
+        "subject": "god",
+        "action": "be_seen",
+        "target": "human",
+        "permitted": false,
+        "exclusive": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "elders_saw",
+        "entityId": "moses",
+        "verse": {
+          "book": "Exodus",
+          "chapter": 24,
+          "verse": 10,
+          "reference": "Exodus 24:10"
+        },
+        "violatesRule": "rule_never_seen",
+        "violationExplanation": "Moses leads Aaron, Nadab, Abihu, and seventy elders up the mountain, and Exodus reports it in plain narration: 'and they saw the God of Israel.' Not a vision of glory or a form — they saw the God of Israel, and ate and drank (verse 11).",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Seventy-four men saw God at Sinai."
+      },
+      {
+        "id": "moses_form",
+        "entityId": "moses",
+        "verse": {
+          "book": "Numbers",
+          "chapter": 12,
+          "verse": 8,
+          "reference": "Numbers 12:8"
+        },
+        "violatesRule": "rule_never_seen",
+        "violationExplanation": "God Himself describes Moses's access: 'I speak with him face to face, clearly and not in riddles; he sees the form of the LORD.' God states, in His own words, that Moses sees His form.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — God says Moses sees His form."
+      },
+      {
+        "id": "isaiah_saw",
+        "entityId": "isaiah",
+        "verse": {
+          "book": "Isaiah",
+          "chapter": 6,
+          "verse": 1,
+          "reference": "Isaiah 6:1"
+        },
+        "violatesRule": "rule_never_seen",
+        "violationExplanation": "Isaiah opens his temple vision with a flat claim: 'In the year that King Uzziah died, I saw the Lord seated on a throne, high and exalted.' A prophet states in the first person that he saw the Lord.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Isaiah says he saw the Lord."
+      }
+    ],
+    "severity": 3,
+    "verdict": "John 1:18 states the rule absolutely: no one has ever seen God. The Old Testament records the elders of Israel seeing the God of Israel at Sinai, God testifying that Moses sees His form, and Isaiah testifying that he saw the Lord. The 'ever' does not survive its own canon.",
+    "scoreImpact": -2.0
+  },
 ]

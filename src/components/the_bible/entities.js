@@ -41,4 +41,24 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  moses: {
+    "id": "moses",
+    "name": "Moses",
+    "aka": [
+      "the lawgiver"
+    ],
+    "type": "person",
+    "description": "Prophet who led Israel out of Egypt. Exodus says the LORD spoke to him face to face, as a man speaks to his friend.",
+    "visualType": "person"
+  },
+  isaiah: {
+    "id": "isaiah",
+    "name": "Isaiah",
+    "aka": [
+      "the prophet"
+    ],
+    "type": "person",
+    "description": "Prophet of Judah whose visions include the throne of God — and whose new heavens and new earth still contain death.",
+    "visualType": "person"
+  },
 }
