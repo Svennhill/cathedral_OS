@@ -1367,4 +1367,59 @@ export const PASSAGES = [{
     "verdict": "Matthew's Jairus comes to Jesus because his daughter has just died, asking for her life back. Mark's and Luke's Jairus comes because she is dying, asking for her healing — and in both, she dies while Jesus is on the way. The errand that starts the story is a different errand in Matthew than in the other two.",
     "scoreImpact": -0.5
   },
+{
+    "id": "jericho_blind_men",
+    "title": "The Blind Men of Jericho",
+    "summary": "Checks Matthew 20:30 — two blind men beside the road out of Jericho — against Mark 10:46 and Luke 18:35, where one blind man sits there.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 20,
+      "verse": 30,
+      "reference": "Matthew 20:30"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_two_blind",
+        "statement": "Two blind men were sitting beside the road as Jesus left Jericho.",
+        "plain": "Matthew counts them and quotes them together: 'there were two blind men sitting beside the road. When they heard that Jesus was passing by, they cried out, \"Lord, Son of David, have mercy on us!\"'",
+        "subject": "bartimaeus",
+        "action": "cry_out",
+        "target": "jesus",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_bartimaeus",
+        "entityId": "bartimaeus",
+        "verse": {
+          "book": "Mark",
+          "chapter": 10,
+          "verse": 46,
+          "reference": "Mark 10:46"
+        },
+        "violatesRule": "rule_two_blind",
+        "violationExplanation": "Mark tells the same departure from Jericho with one man, named and singled out: 'as Jesus and His disciples were leaving Jericho with a large crowd, a blind beggar named Bartimaeus, the son of Timaeus, was sitting beside the road.' The healing that follows is one man's, throughout.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Mark counts one blind man, and names him."
+      },
+      {
+        "id": "luke_one_blind",
+        "entityId": "bartimaeus",
+        "verse": {
+          "book": "Luke",
+          "chapter": 18,
+          "verse": 35,
+          "reference": "Luke 18:35"
+        },
+        "violatesRule": "rule_two_blind",
+        "violationExplanation": "Luke also counts one — 'a blind man was sitting beside the road, begging' — and moves the scene to the other end of the visit: 'As Jesus drew near to Jericho,' not as He left it. One man instead of two, on arrival instead of departure.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Luke counts one blind man, met on the way in, not out."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Matthew's road out of Jericho has two blind men crying out together, and both are healed. Mark's same road has one, Bartimaeus. Luke's has one again — met while Jesus is still arriving. The crowd, the cry, and the healing agree; the number of men and the direction of travel do not.",
+    "scoreImpact": -0.5
+  },
 ]

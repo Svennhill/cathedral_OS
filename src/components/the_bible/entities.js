@@ -225,4 +225,14 @@ jairus: {
     "description": "A synagogue leader who came to Jesus about his daughter. Whether she had just died or was still dying depends on which Gospel is telling it.",
     "visualType": "person"
   },
+bartimaeus: {
+    "id": "bartimaeus",
+    "name": "Bartimaeus",
+    "aka": [
+      "son of Timaeus"
+    ],
+    "type": "person",
+    "description": "The blind beggar of Jericho — the only one Mark and Luke put beside the road, where Matthew puts two.",
+    "visualType": "person"
+  },
 }
