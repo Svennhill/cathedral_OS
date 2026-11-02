@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  ahimelech: {
+    "id": "ahimelech",
+    "name": "Ahimelech",
+    "aka": [
+      "priest of Nob"
+    ],
+    "type": "person",
+    "description": "The priest at Nob who gave David the consecrated bread and Goliath's sword \u2014 and was killed by Saul for it. Mark's Gospel assigns the episode to his son Abiathar's priesthood.",
+    "visualType": "person"
+  },
 }
