@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  abiathar: {
+    "id": "abiathar",
+    "name": "Abiathar",
+    "aka": [
+      "son of Ahimelech"
+    ],
+    "type": "person",
+    "description": "The priest who fled to David with the ephod, served him for decades \u2014 and was banished from the priesthood by Solomon, in the book that then lists him as Solomon's priest.",
+    "visualType": "person"
+  },
 }
