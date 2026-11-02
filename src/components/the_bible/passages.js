@@ -101,4 +101,57 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "incited_david",
+    "title": "Who Incited David?",
+    "summary": "Checks 2 Samuel 24:1, where the LORD stirs David up to take a census, against 1 Chronicles 21:1, where Satan does it.",
+    "ruleVerse": {
+      "book": "2 Samuel",
+      "chapter": 24,
+      "verse": 1,
+      "reference": "2 Samuel 24:1"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_lord_incited",
+        "statement": "It was the LORD who incited David to number Israel.",
+        "plain": "The census was God's idea before it was David's act: His anger burned, and He stirred David up to do it.",
+        "subject": "god",
+        "action": "incite",
+        "target": "david",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "satan_incited",
+        "entityId": "david",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 21,
+          "verse": 1,
+          "reference": "1 Chronicles 21:1"
+        },
+        "violatesRule": "rule_lord_incited",
+        "violationExplanation": "The same census, retold: 'Then Satan rose up against Israel and incited David to take a census of Israel.' One act, two inciters — the LORD in Samuel, Satan in Chronicles.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Chronicles credits Satan with the incitement Samuel credits to the LORD."
+      },
+      {
+        "id": "david_confesses",
+        "entityId": "david",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 21,
+          "verse": 8,
+          "reference": "1 Chronicles 21:8"
+        },
+        "violatesRule": null,
+        "verdict": "CONSISTENT — David confesses the census as his own sin; the verse names no inciter and breaks no rule."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Samuel and Chronicles agree that David numbered Israel and that it was sin. They do not agree on whose idea it was — and both candidates are named in the text, one verse each.",
+    "scoreImpact": -0.5
+  },
 ]
