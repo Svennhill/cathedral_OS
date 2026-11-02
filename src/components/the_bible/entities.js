@@ -101,4 +101,14 @@ baasha: {
     "description": "King of Israel whose reign Kings measures exactly — and whom Chronicles sends to war years after that measure runs out.",
     "visualType": "person"
   },
+joab: {
+    "id": "joab",
+    "name": "Joab",
+    "aka": [
+      "commander of the army"
+    ],
+    "type": "person",
+    "description": "David's army commander, who carried out the census and reported the totals — different totals, depending on which book is reporting.",
+    "visualType": "person"
+  },
 }

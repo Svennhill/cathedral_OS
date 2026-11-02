@@ -99,6 +99,46 @@ export const PASSAGES = [{
     severity: 3,
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
+  },  {
+    "id": "census_numbers",
+    "title": "The Census Numbers",
+    "summary": "Compares Joab's reported census totals: 2 Samuel 24:9 against 1 Chronicles 21:5 — the same count, two sets of figures.",
+    "ruleVerse": {
+      "book": "2 Samuel",
+      "chapter": 24,
+      "verse": 9,
+      "reference": "2 Samuel 24:9"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_census_totals",
+        "statement": "The census found 800,000 men of valor in Israel and 500,000 in Judah.",
+        "plain": "Joab's report, as Samuel records it: eight hundred thousand in Israel, five hundred thousand in Judah.",
+        "subject": "joab",
+        "action": "report",
+        "target": "david",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "chronicles_totals",
+        "entityId": "joab",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 21,
+          "verse": 5,
+          "reference": "1 Chronicles 21:5"
+        },
+        "violatesRule": "rule_census_totals",
+        "violationExplanation": "Joab's report as Chronicles records it: 1,100,000 men in all Israel, including 470,000 in Judah. Israel's total is 300,000 higher and Judah's 30,000 lower than Samuel's figures for the same census.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — the same report carries two different sets of numbers."
+      }
+    ],
+    "severity": 1,
+    "verdict": "One census, one commander, one report — and two totals that cannot both be the count. A scribal-scale discrepancy, recorded at full size.",
+    "scoreImpact": -0.1
   },
 {
     "id": "incited_david",
