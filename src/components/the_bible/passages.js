@@ -1945,4 +1945,45 @@ export const PASSAGES = [{
     "verdict": "One journey, told twice in the same book: in the narration the companions hear the voice and see no one; in Paul's retelling they see the light and cannot understand the voice. The senses trade places between the tellings.",
     "scoreImpact": -0.5
   },
+{
+    "id": "pauls_posture",
+    "title": "Standing, or Fallen?",
+    "summary": "Checks Acts 9:7 — Paul's companions stood speechless on the Damascus road — against Acts 26:14, Paul's retelling: we all fell to the ground.",
+    "ruleVerse": {
+      "book": "Acts",
+      "chapter": 9,
+      "verse": 7,
+      "reference": "Acts 9:7"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_men_stood",
+        "statement": "The men traveling with Saul stood there speechless.",
+        "plain": "Luke's narration: 'The men traveling with Saul stood there speechless. They heard the voice but did not see anyone.' Standing, while Saul was on the ground (9:4).",
+        "subject": "paul",
+        "action": "stand",
+        "target": "companions",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "all_fell",
+        "entityId": "paul",
+        "verse": {
+          "book": "Acts",
+          "chapter": 26,
+          "verse": 14,
+          "reference": "Acts 26:14"
+        },
+        "violatesRule": "rule_men_stood",
+        "violationExplanation": "Paul retells the same moment to Agrippa: 'We all fell to the ground.' All — the companions included, in the speaker's own summary of the scene Luke narrated with the companions on their feet.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — In the retelling, the standing men have fallen."
+      }
+    ],
+    "severity": 2,
+    "verdict": "The same road, the same light, the same voice. Luke's narrative leaves Paul's companions standing speechless; Paul's own courtroom retelling has the whole party on the ground. The posture of the eyewitnesses changes between the telling and the retelling.",
+    "scoreImpact": -0.5
+  },
 ]
