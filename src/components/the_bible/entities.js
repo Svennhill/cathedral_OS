@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  bartimaeus: {
+    "id": "bartimaeus",
+    "name": "Bartimaeus",
+    "aka": [
+      "son of Timaeus"
+    ],
+    "type": "person",
+    "description": "The blind beggar of Jericho — the only one Mark and Luke put beside the road, where Matthew puts two.",
+    "visualType": "person"
+  },
 }
