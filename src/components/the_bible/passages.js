@@ -101,4 +101,57 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "sauls_death",
+    "title": "How Did Saul Die?",
+    "summary": "Checks 1 Samuel 31:4 — Saul fell on his own sword — against 2 Samuel 1:10, where a messenger tells David: I stood over him and killed him.",
+    "ruleVerse": {
+      "book": "1 Samuel",
+      "chapter": 31,
+      "verse": 4,
+      "reference": "1 Samuel 31:4"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_saul_suicide",
+        "statement": "Saul took his own sword and fell on it.",
+        "plain": "1 Samuel's account: Saul's armor-bearer refused to run him through, so Saul fell on his own sword and died by his own hand.",
+        "subject": "saul",
+        "action": "fall_on_sword",
+        "target": "saul",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "amalekite_kill",
+        "entityId": "saul",
+        "verse": {
+          "book": "2 Samuel",
+          "chapter": 1,
+          "verse": 10,
+          "reference": "2 Samuel 1:10"
+        },
+        "violatesRule": "rule_saul_suicide",
+        "violationExplanation": "The Amalekite messenger reports the same death to David in the first person: 'So I stood over him and killed him, because I knew that after he had fallen he could not survive.' David accepts the report and executes him on the strength of it (2 Samuel 1:16). If the messenger killed Saul, Saul did not die by his own sword; if Saul died by his own sword, the messenger killed no one.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — 2 Samuel's messenger says he killed Saul himself."
+      },
+      {
+        "id": "chronicles_saul",
+        "entityId": "saul",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 10,
+          "verse": 4,
+          "reference": "1 Chronicles 10:4"
+        },
+        "violatesRule": null,
+        "verdict": "CONSISTENT — Chronicles repeats the rule account word for word: Saul took his own sword and fell on it. The rule restated by a second book."
+      }
+    ],
+    "severity": 2,
+    "verdict": "1 Samuel and 1 Chronicles agree: Saul died by his own hand, on his own sword, after his armor-bearer refused. 2 Samuel opens with a man standing before David claiming the kill as his own act — and David has him executed for it. One death, two killers named.",
+    "scoreImpact": -0.5
+  },
 ]
