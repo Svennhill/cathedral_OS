@@ -317,4 +317,45 @@ export const PASSAGES = [{
     "verdict": "Proverbs 26:4 forbids answering a fool according to his folly, and gives a reason. Proverbs 26:5 commands answering a fool according to his folly, and gives a reason. The two instructions are word-for-word opposites, back to back, with no condition stated in either that would separate them.",
     "scoreImpact": -2.0
   },
+{
+    "id": "aramean_charioteers",
+    "title": "Seven Hundred, or Seven Thousand?",
+    "summary": "Checks 2 Samuel 10:18 — David killed seven hundred Aramean charioteers — against 1 Chronicles 19:18's count of the same battle: seven thousand.",
+    "ruleVerse": {
+      "book": "2 Samuel",
+      "chapter": 10,
+      "verse": 18,
+      "reference": "2 Samuel 10:18"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_700_charioteers",
+        "statement": "David killed seven hundred Aramean charioteers in the battle.",
+        "plain": "Samuel's battle report gives the figure alongside the rest of the tally: 'David killed seven hundred charioteers and forty thousand foot soldiers.'",
+        "subject": "david",
+        "action": "kill",
+        "target": "charioteers",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "chronicles_7000",
+        "entityId": "david",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 19,
+          "verse": 18,
+          "reference": "1 Chronicles 19:18"
+        },
+        "violatesRule": "rule_700_charioteers",
+        "violationExplanation": "Chronicles reports the same battle — same enemy, same commander killed, same forty thousand foot soldiers — and multiplies the charioteers by ten: 'David killed seven thousand of their charioteers.' Every other number in the sentence agrees; this one grows a zero.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Chronicles counts ten times Samuel's charioteers in the same battle."
+      }
+    ],
+    "severity": 1,
+    "verdict": "Both books tally the same Aramean battle, agree on its commander and on forty thousand foot soldiers, and differ by a factor of ten on its charioteers: seven hundred in Samuel, seven thousand in Chronicles.",
+    "scoreImpact": -0.1
+  },
 ]
