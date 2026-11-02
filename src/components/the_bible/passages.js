@@ -101,4 +101,71 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "face_of_god",
+    "title": "The Face of God Problem",
+    "summary": "Checks Exodus 33:20's rule that no one can see God's face and live against the passages where men do exactly that.",
+    "ruleVerse": {
+      "book": "Exodus",
+      "chapter": 33,
+      "verse": 20,
+      "reference": "Exodus 33:20"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_no_face",
+        "statement": "No one can see God's face and live.",
+        "plain": "Seeing God's face is fatal to a human being — no exceptions are offered.",
+        "subject": "human",
+        "action": "see_face",
+        "target": "god",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "jacob_peniel",
+        "entityId": "jacob",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 32,
+          "verse": 30,
+          "reference": "Genesis 32:30"
+        },
+        "violatesRule": "rule_no_face",
+        "violationExplanation": "Jacob names the place Peniel because, in his own words, 'I have seen God face to face, and yet my life was spared.' The rule allows no survivors; Jacob reports surviving.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Jacob saw God face to face and lived."
+      },
+      {
+        "id": "moses_face_to_face",
+        "entityId": "moses",
+        "verse": {
+          "book": "Exodus",
+          "chapter": 33,
+          "verse": 11,
+          "reference": "Exodus 33:11"
+        },
+        "violatesRule": "rule_no_face",
+        "violationExplanation": "The same book that states the rule also states, as routine narration, that 'the LORD would speak to Moses face to face, as a man speaks to his friend.'",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Moses spoke with God face to face as a habit."
+      },
+      {
+        "id": "moses_back_only",
+        "entityId": "moses",
+        "verse": {
+          "book": "Exodus",
+          "chapter": 33,
+          "verse": 23,
+          "reference": "Exodus 33:23"
+        },
+        "violatesRule": null,
+        "verdict": "CONSISTENT — God shows Moses His back only: 'My face must not be seen.' The rule restated by its author."
+      }
+    ],
+    "severity": 3,
+    "verdict": "The rule is stated absolutely in Exodus 33:20, restated by God Himself in Exodus 33:23 — and broken by Exodus 33:11 and Genesis 32:30. Face-to-face encounters with God are recorded as survivable, habitual, and survivable again.",
+    "scoreImpact": -2.0
+  },
 ]

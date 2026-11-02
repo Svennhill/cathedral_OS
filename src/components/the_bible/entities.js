@@ -41,4 +41,24 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  moses: {
+    "id": "moses",
+    "name": "Moses",
+    "aka": [
+      "the lawgiver"
+    ],
+    "type": "person",
+    "description": "Prophet who led Israel out of Egypt. Exodus says the LORD spoke to him face to face, as a man speaks to his friend.",
+    "visualType": "person"
+  },
+  jacob: {
+    "id": "jacob",
+    "name": "Jacob",
+    "aka": [
+      "Israel"
+    ],
+    "type": "person",
+    "description": "Patriarch who wrestled at Peniel and named the place for what he said happened there: he had seen God face to face, and lived.",
+    "visualType": "person"
+  },
 }
