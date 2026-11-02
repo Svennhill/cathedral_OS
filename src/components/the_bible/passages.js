@@ -101,4 +101,60 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "none_righteous",
+    "title": "No One Righteous?",
+    "summary": "Checks Romans 3:10 \u2014 there is no one righteous, not even one \u2014 against Luke 1:6, where Zechariah and Elizabeth are righteous in the sight of God, and Genesis 6:9, where Noah is a righteous man, blameless in his generation.",
+    "ruleVerse": {
+      "book": "Romans",
+      "chapter": 3,
+      "verse": 10,
+      "reference": "Romans 3:10"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_none_righteous",
+        "statement": "There is no one righteous, not even one.",
+        "plain": "Paul states it as written scripture and universal fact: 'There is no one righteous, not even one.' The category has zero members.",
+        "subject": "human",
+        "action": "be_righteous",
+        "target": "anyone",
+        "permitted": false,
+        "exclusive": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "luke_righteous_pair",
+        "entityId": "elizabeth",
+        "verse": {
+          "book": "Luke",
+          "chapter": 1,
+          "verse": 6,
+          "reference": "Luke 1:6"
+        },
+        "violatesRule": "rule_none_righteous",
+        "violationExplanation": "Luke introduces John the Baptist's parents with the verdict Paul says no one can receive: 'Both of them were righteous in the sight of God, walking blamelessly in all the commandments and decrees of the Lord.' In the sight of God \u2014 the very vantage Romans writes from.",
+        "severity": 3,
+        "verdict": "CONTRADICTION \u2014 Luke counts two righteous where Paul counts none."
+      },
+      {
+        "id": "genesis_noah",
+        "entityId": "noah",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 6,
+          "verse": 9,
+          "reference": "Genesis 6:9"
+        },
+        "violatesRule": "rule_none_righteous",
+        "violationExplanation": "Genesis introduces Noah with the same verdict: 'Noah was a righteous man, blameless in his generation; Noah walked with God.' Paul's quotation is drawn from the Psalms of this same canon, which elsewhere fills the empty category by name.",
+        "severity": 3,
+        "verdict": "CONTRADICTION \u2014 Genesis names a righteous man where Paul allows none."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Romans empties the category completely: no one righteous, not even one. Luke fills it with a priest and his wife, righteous in God's own sight, blameless in every commandment. Genesis fills it with Noah. The universal statement and the named exceptions are both presented as fact.",
+    "scoreImpact": -2.0
+  },
 ]
