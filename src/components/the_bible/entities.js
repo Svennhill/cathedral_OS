@@ -41,4 +41,15 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  demoniac: {
+    "id": "demoniac",
+    "name": "The Demoniac",
+    "aka": [
+      "the demon-possessed man",
+      "Legion"
+    ],
+    "type": "person",
+    "description": "The man (or men) of the tombs across the Sea of Galilee. Matthew meets Jesus with two of them; Mark and Luke each meet Him with one.",
+    "visualType": "person"
+  },
 }

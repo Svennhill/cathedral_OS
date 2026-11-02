@@ -101,4 +101,59 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "gadarene_demoniacs",
+    "title": "How Many Demoniacs?",
+    "summary": "Checks Matthew 8:28 \u2014 Jesus was met by two demon-possessed men \u2014 against Mark 5:2 and Luke 8:27, where He is met by one man.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 8,
+      "verse": 28,
+      "reference": "Matthew 8:28"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_two_men",
+        "statement": "Jesus was met by two demon-possessed men coming from the tombs.",
+        "plain": "Matthew counts them: 'He was met by two demon-possessed men coming from the tombs. They were so violent that no one could pass that way.'",
+        "subject": "demoniac",
+        "action": "meet",
+        "target": "jesus",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_one_man",
+        "entityId": "demoniac",
+        "verse": {
+          "book": "Mark",
+          "chapter": 5,
+          "verse": 2,
+          "reference": "Mark 5:2"
+        },
+        "violatesRule": "rule_two_men",
+        "violationExplanation": "Mark's account of the same arrival, the same tombs, the same region: 'He was met by a man with an unclean spirit, who was coming from the tombs.' One man, in the singular, throughout Mark's long telling \u2014 spoken to, healed, and sent home as one.",
+        "severity": 2,
+        "verdict": "CONTRADICTION \u2014 Mark counts one man where Matthew counts two."
+      },
+      {
+        "id": "luke_one_man",
+        "entityId": "demoniac",
+        "verse": {
+          "book": "Luke",
+          "chapter": 8,
+          "verse": 27,
+          "reference": "Luke 8:27"
+        },
+        "violatesRule": "rule_two_men",
+        "violationExplanation": "Luke agrees with Mark against Matthew: 'He was met by a demon-possessed man from the town.' One man again \u2014 named legion, healed, and found sitting clothed as a single person in the verses that follow.",
+        "severity": 2,
+        "verdict": "CONTRADICTION \u2014 Luke also counts one man where Matthew counts two."
+      }
+    ],
+    "severity": 2,
+    "verdict": "The same landing, the same tombs, the same deliverance. Matthew's report has two demon-possessed men meeting Jesus; Mark's and Luke's each have one, and tell the whole story around a single man. The second man exists in only one of the three accounts.",
+    "scoreImpact": -0.5
+  },
 ]
