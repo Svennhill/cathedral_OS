@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  ezekiel: {
+    "id": "ezekiel",
+    "name": "Ezekiel",
+    "aka": [
+      "the prophet"
+    ],
+    "type": "person",
+    "description": "Prophet of the exile, whose eighteenth chapter is a single sustained ruling: no one bears another's sin — the ruling Exodus 20:5 appears to reverse.",
+    "visualType": "person"
+  },
 }
