@@ -358,4 +358,45 @@ export const PASSAGES = [{
     "verdict": "Both books tally the same Aramean battle, agree on its commander and on forty thousand foot soldiers, and differ by a factor of ten on its charioteers: seven hundred in Samuel, seven thousand in Chronicles.",
     "scoreImpact": -0.1
   },
+{
+    "id": "baasha_reign",
+    "title": "Baasha's Impossible War",
+    "summary": "Checks 1 Kings 15:33 — Baasha became king in Asa's third year and reigned twenty-four years — against 2 Chronicles 16:1, where Baasha attacks Judah in Asa's thirty-sixth year.",
+    "ruleVerse": {
+      "book": "1 Kings",
+      "chapter": 15,
+      "verse": 33,
+      "reference": "1 Kings 15:33"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_baasha_24",
+        "statement": "Baasha's reign began in the third year of Asa and lasted twenty-four years.",
+        "plain": "Kings gives both numbers in one verse: 'In the third year of Asa's reign over Judah, Baasha son of Ahijah became king of all Israel, and he reigned in Tirzah twenty-four years.' Year 3 plus 24 years of reign puts Baasha's death and his son's succession (1 Kings 16:6-8) at about Asa's 26th-27th year.",
+        "subject": "baasha",
+        "action": "reign",
+        "target": "israel",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "chronicles_year36",
+        "entityId": "baasha",
+        "verse": {
+          "book": "2 Chronicles",
+          "chapter": 16,
+          "verse": 1,
+          "reference": "2 Chronicles 16:1"
+        },
+        "violatesRule": "rule_baasha_24",
+        "violationExplanation": "Nine or ten years after his reign ended, Chronicles has Baasha on campaign as king: 'In the thirty-sixth year of Asa's reign, Baasha king of Israel went up against Judah and fortified Ramah.' A king whose 24-year reign began in Asa's year 3 cannot be making war, as king, in Asa's year 36.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Baasha wars in Asa's 36th year, a decade after Kings ends his reign."
+      }
+    ],
+    "severity": 1,
+    "verdict": "Kings fixes Baasha's reign between Asa's 3rd year and its 24-year length — over by about Asa's 27th year, with his son Elah on the throne after him. Chronicles then dates a war by King Baasha to Asa's 36th year. The chronology gives the dead king a campaign.",
+    "scoreImpact": -0.1
+  },
 ]

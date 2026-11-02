@@ -91,4 +91,14 @@ fool: {
     "description": "The stock figure of Proverbs, whose folly the wise man is told — in consecutive verses — both not to answer and to answer.",
     "visualType": "concept"
   },
+baasha: {
+    "id": "baasha",
+    "name": "Baasha",
+    "aka": [
+      "king of Israel"
+    ],
+    "type": "person",
+    "description": "King of Israel whose reign Kings measures exactly — and whom Chronicles sends to war years after that measure runs out.",
+    "visualType": "person"
+  },
 }
