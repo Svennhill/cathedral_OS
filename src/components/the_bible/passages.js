@@ -101,4 +101,45 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "who_baptized",
+    "title": "Who Baptized?",
+    "summary": "Checks John 3:22 — Jesus spent time with His disciples and baptized — against John 4:2, the same Gospel's correction: it was not Jesus who baptized, but His disciples.",
+    "ruleVerse": {
+      "book": "John",
+      "chapter": 3,
+      "verse": 22,
+      "reference": "John 3:22"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_jesus_baptized",
+        "statement": "Jesus baptized.",
+        "plain": "John's narrator states it plainly: Jesus went into the Judean countryside, 'where He spent some time with them and baptized.' John's disciples repeat it in 3:26: 'He is baptizing, and everyone is going to Him.'",
+        "subject": "jesus",
+        "action": "baptize",
+        "target": "disciples",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "not_jesus",
+        "entityId": "jesus",
+        "verse": {
+          "book": "John",
+          "chapter": 4,
+          "verse": 2,
+          "reference": "John 4:2"
+        },
+        "violatesRule": "rule_jesus_baptized",
+        "violationExplanation": "Two chapters after stating that Jesus baptized — and one verse after repeating that He was 'gaining and baptizing more disciples than John' (4:1) — the narrator stops to correct the record in a parenthesis: '(although it was not Jesus who baptized, but His disciples).' The correction negates the earlier statement in the same Gospel, by the same narrator.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — John 4:2 takes back what John 3:22 stated: it was not Jesus who baptized."
+      }
+    ],
+    "severity": 2,
+    "verdict": "John's Gospel states that Jesus baptized, builds a comparison with John the Baptist on it, and then corrects itself in a parenthesis: it was not Jesus who baptized at all. Both versions stand in the finished text, two chapters apart.",
+    "scoreImpact": -0.5
+  },
 ]
