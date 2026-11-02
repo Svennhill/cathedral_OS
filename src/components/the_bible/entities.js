@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  peter: {
+    "id": "peter",
+    "name": "Peter",
+    "aka": [
+      "Simon Peter"
+    ],
+    "type": "person",
+    "description": "The apostle who denied Jesus three times in one night — after being told, depending on the Gospel, exactly how many rooster crows he had.",
+    "visualType": "person"
+  },
 }

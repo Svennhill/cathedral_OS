@@ -101,4 +101,59 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "cock_crow",
+    "title": "Before the Rooster Crows",
+    "summary": "Compares the prediction given to Peter: Matthew 26:34 allows one crowing; Mark 14:30 specifies two — and Mark 14:72 records the second.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 26,
+      "verse": 34,
+      "reference": "Matthew 26:34"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_one_crow",
+        "statement": "Peter will deny Jesus three times before the rooster crows.",
+        "plain": "Matthew's prediction has a single crowing as its deadline: the denials come first, then the rooster.",
+        "subject": "peter",
+        "action": "deny",
+        "target": "jesus",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_crows_twice",
+        "entityId": "peter",
+        "verse": {
+          "book": "Mark",
+          "chapter": 14,
+          "verse": 30,
+          "reference": "Mark 14:30"
+        },
+        "violatesRule": "rule_one_crow",
+        "violationExplanation": "Mark's version of the same prediction adds a count Matthew doesn't have: 'before the rooster crows twice, you will deny Me three times.' A second crowing exists in Mark's deadline that Matthew's prediction never admits.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Mark's rooster crows twice before the deadline."
+      },
+      {
+        "id": "mark_second_crow",
+        "entityId": "peter",
+        "verse": {
+          "book": "Mark",
+          "chapter": 14,
+          "verse": 72,
+          "reference": "Mark 14:72"
+        },
+        "violatesRule": "rule_one_crow",
+        "violationExplanation": "Mark then narrates the event his prediction required: 'immediately the rooster crowed a second time,' and Peter remembers the word about two crowings. The second crowing Matthew never predicted is, in Mark, the moment the prediction lands.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Mark records the second crowing itself."
+      }
+    ],
+    "severity": 2,
+    "verdict": "The prediction is quoted in both Gospels as Jesus's own words on the same night. Matthew's deadline is the rooster crowing; Mark's is the rooster crowing twice — and Mark's narrative duly supplies a second crowing Matthew's account has no room for.",
+    "scoreImpact": -0.5
+  },
 ]
