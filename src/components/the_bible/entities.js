@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  stephen: {
+    "id": "stephen",
+    "name": "Stephen",
+    "aka": [
+      "the martyr"
+    ],
+    "type": "person",
+    "description": "The first Christian martyr, whose speech to the Sanhedrin in Acts 7 retells Israel's history — with details the Old Testament itself records differently.",
+    "visualType": "person"
+  },
 }
