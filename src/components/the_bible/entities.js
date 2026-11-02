@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  joseph: {
+    "id": "joseph",
+    "name": "Joseph",
+    "aka": [
+      "husband of Mary"
+    ],
+    "type": "person",
+    "description": "The husband of Mary. Two Gospels trace Jesus's line through him and name two different men as his father.",
+    "visualType": "person"
+  },
 }
