@@ -36,6 +36,8 @@ export default function Screen({
   alwaysScreenOnly, setAlwaysScreenOnly,
   greyscale, setGreyscale,
   debugEnabled, setDebugEnabled,
+  desktopZoom, setDesktopZoom,
+  windowZoom, setWindowZoom,
 }) {
   // COS start menu state — lives here so StartMenu renders at screen-frame level
   // (not inside Taskbar, which would clip it with overflow:hidden)
@@ -109,6 +111,10 @@ export default function Screen({
                 setGreyscale={setGreyscale}
                 debugEnabled={debugEnabled}
                 setDebugEnabled={setDebugEnabled}
+                desktopZoom={desktopZoom}
+                setDesktopZoom={setDesktopZoom}
+                windowZoom={windowZoom}
+                setWindowZoom={setWindowZoom}
                 taskbarHeightPct={TASKBAR_HEIGHT_PCT}
               />
             )}
@@ -116,6 +122,7 @@ export default function Screen({
             <Desktop
               openWindow={openWindow}
               taskbarHeightPct={TASKBAR_HEIGHT_PCT}
+              zoom={desktopZoom}
             />
 
             {openWindows.map(win => (
@@ -128,6 +135,7 @@ export default function Screen({
                 onUpdatePos={(x, y) => updateWindowPos(win.id, x, y)}
                 onUpdateSize={(w, h) => updateWindowSize(win.id, w, h)}
                 taskbarHeightPct={TASKBAR_HEIGHT_PCT}
+                contentZoom={windowZoom}
               >
                 {renderApp(win.id)}
               </WindowBox>

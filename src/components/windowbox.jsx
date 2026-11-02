@@ -10,6 +10,7 @@ import { useRef } from "react"
 //   onUpdatePos     — (x, y) → update position in parent state
 //   onUpdateSize    — (w, h) → update size in parent state
 //   taskbarHeightPct — taskbar height as % of screen frame (so maximize lands below it)
+//   contentZoom     — window zoom for the app content (independent of desktop zoom)
 //   children        — the app rendered inside
 
 const GREEN  = "#00ff41"
@@ -25,6 +26,7 @@ export default function WindowBox({
   onUpdatePos,
   onUpdateSize,
   taskbarHeightPct,
+  contentZoom = 1,
   children,
 }) {
   const { title, x, y, width, height, minimized, maximized } = win
@@ -174,6 +176,7 @@ export default function WindowBox({
         padding: 8,
         color: GREEN,
         fontSize: 9,
+        zoom: contentZoom,
       }}>
         {children}
       </div>

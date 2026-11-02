@@ -12,6 +12,33 @@ import { useState } from "react"
 //   2. At 22, render "screw_missing.png" overlay
 //   3. When both at 22, trigger bezel-removal animation
 
+// ── JDZ JACK GEOMETRY ────────────────────────────────────────────────────
+// One anchor for both the click zone and the wire graphic, so the cord
+// always plugs into the jack drawn on bezeld.png.
+const BEZEL_W = 2208, BEZEL_H = 2427
+const JDZ_JACK = { x: 1486, y: 2141 }     // jack centre, bezeld.png px
+const JDZ_ZONE = { w: 88, h: 121 }        // click zone size, bezeld.png px
+// JDZ_wire.png is 383×336 with the plug head pointing up; the head's face
+// is centred at (230, 55). Scaled so the head just covers the jack ring.
+const WIRE_IMG   = { w: 383, h: 336, plugX: 230, plugY: 55 }
+const WIRE_SCALE = 1.12
+
+const pctX = (px) => `${(px / BEZEL_W) * 100}%`
+const pctY = (px) => `${(px / BEZEL_H) * 100}%`
+
+const JDZ_ZONE_STYLE = {
+  left:   pctX(JDZ_JACK.x - JDZ_ZONE.w / 2),
+  top:    pctY(JDZ_JACK.y - JDZ_ZONE.h / 2),
+  width:  pctX(JDZ_ZONE.w),
+  height: pctY(JDZ_ZONE.h),
+}
+const JDZ_WIRE_STYLE = {
+  left:   pctX(JDZ_JACK.x - WIRE_IMG.plugX * WIRE_SCALE),
+  top:    pctY(JDZ_JACK.y - WIRE_IMG.plugY * WIRE_SCALE),
+  width:  pctX(WIRE_IMG.w * WIRE_SCALE),
+  height: pctY(WIRE_IMG.h * WIRE_SCALE),
+}
+
 export default function Bezel({
   screenState, volume,
   knobAngle, handleKnobDown, handleKnobUp,
@@ -119,13 +146,12 @@ export default function Bezel({
         objectFit: "fill", pointerEvents: "none", zIndex: 300,
       }} />
 
-      {/* JDZ WIRE — positioned as % of bezel so it scales correctly */}
+      {/* JDZ WIRE — plug head sits on the JDZ jack (same anchor as the click zone);
+          the cord runs down off the bottom edge of the bezel */}
       {jdzPlugged && (
         <img src="/bezel/JDZ_wire.png" style={{
           position: "absolute",
-          top: "52.1%",   // 1265 / 2427
-          left: "33.5%",  // 740  / 2208
-          width: "20%", height: "20%",
+          ...JDZ_WIRE_STYLE,
           objectFit: "fill", pointerEvents: "none", zIndex: 301,
         }} />
       )}
@@ -166,10 +192,10 @@ export default function Bezel({
         cursor: "pointer", zIndex: 316,
       }} />
 
-      {/* JDZ CLICK ZONE */}
+      {/* JDZ CLICK ZONE — centred on the jack */}
       <div onClick={handleJdzClick} style={{
-        position: "absolute", bottom: "9%", left: "65%",
-        width: "4%", height: "5%",
+        position: "absolute",
+        ...JDZ_ZONE_STYLE,
         cursor: "pointer", zIndex: 316,
       }} />
 

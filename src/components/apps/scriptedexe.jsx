@@ -79,7 +79,7 @@ const COMMANDS = {
 // Both views stay mounted so switching tabs never loses terminal history or
 // case progress.
 const TABS = [
-  { id: 'analyser', label: 'Case analyser' },
+  { id: 'analyser', label: 'Case analyzer' },
   { id: 'terminal', label: 'Terminal' },
 ]
 
@@ -134,7 +134,7 @@ function Terminal({ active }) {
   const [lines, setLines] = useState([
     { type: 'sys',    text: '// scripted.exe v0.1' },
     { type: 'sys',    text: '// type "help" to begin' },
-    { type: 'sys',    text: '// or click "Case analyser" above to open a case' },
+    { type: 'sys',    text: '// or click "Case analyzer" above to open a case' },
     { type: 'blank',  text: '' },
   ])
   const [input, setInput]         = useState('')

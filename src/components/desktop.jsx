@@ -49,7 +49,8 @@ function DesktopIcon({ label, symbol, onDoubleClick }) {
   )
 }
 
-export default function Desktop({ openWindow, taskbarHeightPct }) {
+// zoom — desktop zoom (icons + labels only; never applied to app windows)
+export default function Desktop({ openWindow, taskbarHeightPct, zoom = 1 }) {
   return (
     <div style={{
       position: "absolute",
@@ -65,6 +66,7 @@ export default function Desktop({ openWindow, taskbarHeightPct }) {
         display: "flex",
         flexDirection: "column",
         gap: 2,
+        zoom,
         pointerEvents: "auto",  // icons are interactive
       }}>
         <DesktopIcon

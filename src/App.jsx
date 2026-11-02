@@ -2,10 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import Bezel from "./components/bezel"
 import Screen from "./components/screen"
 import DebugPanel from "./components/debugpanel"
-import {
-  BEZEL_W, BEZEL_H,
-  SO_OVERLAY_TOP, SO_OVERLAY_LEFT, SO_OVERLAY_WIDTH, SO_OVERLAY_HEIGHT,
-} from "./utils/screenConstants"
+import { BEZEL_W, BEZEL_H, screenOnlyBox, ZOOM_DEFAULT, clampZoom } from "./utils/screenConstants"
 
 const DEFAULT_WIN  = { x: 5, y: 8, width: 55, height: 60 }
 const STACK_OFFSET = 3
@@ -60,6 +57,22 @@ export default function App() {
     try { localStorage.setItem('greyscale', greyscale) } catch {}
   }, [greyscale])
 
+  // ── ZOOM ───────────────────────────────────────────────────────────────
+  // Two independent zooms (1 = 100% = the original look):
+  //   desktopZoom — desktop icons and their labels only
+  //   windowZoom  — the content area of open application windows only
+  const readZoom = (key) => {
+    try { return clampZoom(parseFloat(localStorage.getItem(key)) || ZOOM_DEFAULT) } catch { return ZOOM_DEFAULT }
+  }
+  const [desktopZoom, setDesktopZoom] = useState(() => readZoom('desktopZoom'))
+  const [windowZoom,  setWindowZoom]  = useState(() => readZoom('windowZoom'))
+  useEffect(() => {
+    try { localStorage.setItem('desktopZoom', desktopZoom) } catch {}
+  }, [desktopZoom])
+  useEffect(() => {
+    try { localStorage.setItem('windowZoom', windowZoom) } catch {}
+  }, [windowZoom])
+
   // ── WINDOW MANAGEMENT ──────────────────────────────────────────────────
   const [openWindows, setOpenWindows] = useState([])
 
@@ -86,39 +99,31 @@ export default function App() {
   const updateWindowSize = (id, width, height) => setOpenWindows(prev => prev.map(w => w.id === id ? { ...w, width, height } : w))
 
   // ── BEZEL SCALING ──────────────────────────────────────────────────────
-  // ALWAYS scale against 2208×2427 (full bezel).
-  // In screen-only mode, an outer clip container shrinks to SO_BEZEL size
-  // and the inner full-bezel div is shifted so the screen area fills it.
+  // Normal mode: the full 2208×2427 bezel is scaled uniformly to fit the window.
+  // Screen-only mode: the same full-bezel layer is scaled so its SCREEN area
+  // exactly fills the window (see screenOnlyBox) and the bezel falls outside
+  // the clip. Every layer is positioned in % of that layer, so nothing else
+  // needs to know which mode is active.
   const containerRef = useRef(null)
 
-  const calcDimensions = (w, h) => {
-    const scale = Math.min(w / BEZEL_W, h / BEZEL_H)
-    return { width: BEZEL_W * scale, height: BEZEL_H * scale }
-  }
-
-  const [dimensions, setDimensions] = useState(() =>
-    calcDimensions(window.innerWidth, window.innerHeight)
-  )
+  const [viewport, setViewport] = useState(() => ({
+    width: window.innerWidth, height: window.innerHeight,
+  }))
 
   useEffect(() => {
     const obs = new ResizeObserver(entries => {
       for (const e of entries) {
         const { width, height } = e.contentRect
-        setDimensions(calcDimensions(width, height))
+        setViewport({ width, height })
       }
     })
     if (containerRef.current) obs.observe(containerRef.current)
     return () => obs.disconnect()
   }, [])
 
-  // ── SCREEN-ONLY CLIP GEOMETRY ─────────────────────────────────────────
-  // In SO mode, clip the outer container to just the screen + 50px frame,
-  // and shift the inner full-bezel div left/up so the screen area fills it.
-  // This eliminates the large black margins without needing new asset files.
-  const soWidth  = SO_OVERLAY_WIDTH  * dimensions.width
-  const soHeight = SO_OVERLAY_HEIGHT * dimensions.height
-  const soLeft   = SO_OVERLAY_LEFT   * dimensions.width
-  const soTop    = SO_OVERLAY_TOP    * dimensions.height
+  const fitScale   = Math.min(viewport.width / BEZEL_W, viewport.height / BEZEL_H)
+  const dimensions = { width: BEZEL_W * fitScale, height: BEZEL_H * fitScale }
+  const soBox      = screenOnlyBox(viewport.width, viewport.height)
 
   // ── AUDIO ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -210,6 +215,8 @@ export default function App() {
         alwaysScreenOnly={alwaysScreenOnly} setAlwaysScreenOnly={setAlwaysScreenOnly}
         greyscale={greyscale}        setGreyscale={setGreyscale}
         debugEnabled={debugEnabled}  setDebugEnabled={setDebugEnabled}
+        desktopZoom={desktopZoom}    setDesktopZoom={setDesktopZoom}
+        windowZoom={windowZoom}      setWindowZoom={setWindowZoom}
       />
 
       {!screenOnly && (
@@ -233,22 +240,6 @@ export default function App() {
           dimensions={dimensions}
         />
       )}
-
-      {screenOnly && (
-        <img
-          src="/screenOnlyBezel.png"
-          style={{
-            position: "absolute",
-            top:    `${SO_OVERLAY_TOP    * 100}%`,
-            left:   `${SO_OVERLAY_LEFT   * 100}%`,
-            width:  `${SO_OVERLAY_WIDTH  * 100}%`,
-            height: `${SO_OVERLAY_HEIGHT * 100}%`,
-            objectFit: "fill",
-            pointerEvents: "none",
-            zIndex: 300,
-          }}
-        />
-      )}
     </>
   )
 
@@ -266,28 +257,28 @@ export default function App() {
         filter: appFilter,
       }}>
         {/* ── OUTER CLIP CONTAINER ───────────────────────────────────
-            In normal mode: full bezel dimensions (2208×2427 scaled).
-            In screen-only mode: clips to SO_BEZEL size (1736×1417 scaled),
-            eliminating the large black margins above/below the screen area.
+            Normal mode: full bezel dimensions (2208×2427 scaled to fit).
+            Screen-only mode: the whole window — the screen fills it edge
+            to edge and the bezel is clipped away entirely.
         ────────────────────────────────────────────────────────────── */}
         <div style={{
           position: "relative",
-          width:    screenOnly ? soWidth  : dimensions.width,
-          height:   screenOnly ? soHeight : dimensions.height,
+          width:    screenOnly ? viewport.width  : dimensions.width,
+          height:   screenOnly ? viewport.height : dimensions.height,
           overflow: "hidden",
           flexShrink: 0,
         }}>
-          {/* ── INNER FULL-BEZEL CONTENT ─────────────────────────────
-              Always 2208×2427 scaled. In SO mode, shifted up/left so
-              the screen area (PCT) aligns with the outer container's origin.
-              All asset percentages remain correct — nothing needs to change.
+          {/* ── INNER FULL-BEZEL LAYER ───────────────────────────────
+              Normal mode: the scaled bezel at the origin.
+              SO mode: sized and shifted (screenOnlyBox) so the screen
+              area lands exactly on the outer container.
           ─────────────────────────────────────────────────────────── */}
           <div style={{
             position: "absolute",
-            top:  screenOnly ? -soTop  : 0,
-            left: screenOnly ? -soLeft : 0,
-            width:  dimensions.width,
-            height: dimensions.height,
+            top:    screenOnly ? soBox.top    : 0,
+            left:   screenOnly ? soBox.left   : 0,
+            width:  screenOnly ? soBox.width  : dimensions.width,
+            height: screenOnly ? soBox.height : dimensions.height,
           }}>
             {screenContent}
           </div>

@@ -28,35 +28,26 @@ export const PCT = {
 export const SCREEN_CLIP = `inset(${PCT.top * 100}% ${PCT.right * 100}% ${PCT.bottom * 100}% ${PCT.left * 100}% round 4px)`
 
 
-// ── SCREEN-ONLY BEZEL (screenOnlyBezel.png) ─────────────────────────────
-// A minimal gray frame, 50px rim on all sides.
-export const SO_BEZEL_W  = 1736
-export const SO_BEZEL_H  = 1417
-export const SO_INSET    = 50   // px on each side (equal all around)
-
-export const SO_PCT = {
-  top:    SO_INSET / SO_BEZEL_H,                         // 0.03527
-  bottom: SO_INSET / SO_BEZEL_H,                         // 0.03527
-  left:   SO_INSET / SO_BEZEL_W,                         // 0.02882
-  right:  SO_INSET / SO_BEZEL_W,                         // 0.02882
-  width:  (SO_BEZEL_W - SO_INSET * 2) / SO_BEZEL_W,     // 0.94237
-  height: (SO_BEZEL_H - SO_INSET * 2) / SO_BEZEL_H,     // 0.92942
+// ── SCREEN-ONLY MODE ────────────────────────────────────────────────────
+// Screen-only mode shows the screen alone, filling the browser window with no
+// bezel and no margins. The same full-bezel layer is reused; it is sized and
+// shifted so its screen area (PCT) covers exactly the viewport (vw × vh) and
+// everything outside it — the bezel — falls outside the window's clip.
+// The two axes scale independently so the screen fills any window shape;
+// on-screen text is sized in px, so it is not distorted.
+export function screenOnlyBox(vw, vh) {
+  const width  = vw / PCT.width
+  const height = vh / PCT.height
+  return { width, height, left: -PCT.left * width, top: -PCT.top * height }
 }
-
-export const SO_CLIP = `inset(${SO_PCT.top * 100}% ${SO_PCT.right * 100}% ${SO_PCT.bottom * 100}% ${SO_PCT.left * 100}% round 6px)`
-
-
-// ── SCREEN-ONLY OVERLAY ─────────────────────────────────────────────────
-// Position of screenOnlyBezel.png when overlaid within the FULL bezel container.
-// The SO bezel's inner screen area (50px inset) must align exactly with the
-// full bezel's screen area (SCREEN_TOP, SCREEN_LEFT).
-// So: SO_bezel_top = SCREEN_TOP - SO_INSET, SO_bezel_left = SCREEN_LEFT - SO_INSET
-export const SO_OVERLAY_TOP    = (SCREEN_TOP  - SO_INSET) / BEZEL_H   // (296-50)/2427 ≈ 0.10136
-export const SO_OVERLAY_LEFT   = (SCREEN_LEFT - SO_INSET) / BEZEL_W   // (276-50)/2208 ≈ 0.10235
-export const SO_OVERLAY_WIDTH  = SO_BEZEL_W / BEZEL_W                  // 1736/2208     ≈ 0.78623
-export const SO_OVERLAY_HEIGHT = SO_BEZEL_H / BEZEL_H                  // 1417/2427     ≈ 0.58382
 
 
 // ── SHARED ──────────────────────────────────────────────────────────────
 // Taskbar height as a percentage of the screen frame height
 export const TASKBAR_HEIGHT_PCT = 3.5
+
+// ── ZOOM ────────────────────────────────────────────────────────────────
+// Desktop zoom and window zoom are independent. 1 = 100% = original look.
+export const ZOOM_STEPS   = [0.75, 1, 1.25, 1.5, 1.75, 2]
+export const ZOOM_DEFAULT = 1
+export const clampZoom = (z) => Math.min(ZOOM_STEPS[ZOOM_STEPS.length - 1], Math.max(ZOOM_STEPS[0], z))
