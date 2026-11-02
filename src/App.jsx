@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import Bezel from "./components/bezel"
 import Screen from "./components/screen"
 import DebugPanel from "./components/debugpanel"
-import { BEZEL_W, BEZEL_H, screenOnlyBox, ZOOM_DEFAULT, clampZoom } from "./utils/screenConstants"
+import { BEZEL_W, BEZEL_H, PCT, screenOnlyBox, ZOOM_DEFAULT, clampZoom } from "./utils/screenConstants"
 
 const DEFAULT_WIN  = { x: 5, y: 8, width: 55, height: 60 }
 const STACK_OFFSET = 3
@@ -218,6 +218,53 @@ export default function App() {
         desktopZoom={desktopZoom}    setDesktopZoom={setDesktopZoom}
         windowZoom={windowZoom}      setWindowZoom={setWindowZoom}
       />
+
+      {/* ── SCREEN-ONLY POWER ─────────────────────────────────
+          Screen Only hides the bezel and its power switch, so the
+          powered-off screen carries its own power control. Shown in
+          every state where the device is off and the switch is hidden.
+      ────────────────────────────────────────────────────────────── */}
+      {screenOnly && screenState === 'off' && (
+        <div style={{
+          position: "absolute",
+          top:    `${PCT.top    * 100}%`,
+          left:   `${PCT.left   * 100}%`,
+          width:  `${PCT.width  * 100}%`,
+          height: `${PCT.height * 100}%`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 210,
+          pointerEvents: "none",
+        }}>
+          <button
+            onClick={handlePowerClick}
+            aria-label="Power on"
+            title="Power on"
+            style={{
+              pointerEvents: "auto",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "10px 18px",
+              background: "rgba(5,5,16,0.85)",
+              border: "1px solid #00ff41",
+              borderRadius: 0,
+              boxShadow: "0 0 10px rgba(0,255,65,0.35)",
+              color: "#00ff41",
+              fontFamily: "opendyslexic, monospace",
+              fontSize: 14,
+              fontWeight: "bold",
+              letterSpacing: "0.15em",
+              textShadow: "0 0 6px rgba(0,255,65,0.6)",
+              cursor: "pointer",
+            }}
+          >
+            <span style={{ fontSize: 20, lineHeight: 1 }}>⏻</span>
+            POWER
+          </button>
+        </div>
+      )}
 
       {!screenOnly && (
         <Bezel

@@ -20,17 +20,26 @@ const BTN    = {
   whiteSpace: "nowrap",
 }
 
+// Square corners and no rounded focus ring (same cleanup as the COS badge):
+// the global button styles in index.css would otherwise turn the active
+// fill into a pill. Keyboard focus gets a square inset outline instead.
 function TrayButton({ label, title, onClick, active }) {
+  const [keyFocus, setKeyFocus] = useState(false)
   return (
     <button
       onClick={onClick}
       title={title}
+      onFocus={e => setKeyFocus(e.currentTarget.matches(':focus-visible'))}
+      onBlur={() => setKeyFocus(false)}
       style={{
         ...BTN,
         color:       active ? BG : GREEN,
         background:  active ? GREEN : "transparent",
         padding: "0 5px",
         borderLeft: `1px solid ${DIM}`,
+        borderRadius: 0,
+        outline:       keyFocus ? `1px solid ${TEAL}` : "none",
+        outlineOffset: -2,
       }}
     >
       {label}
@@ -148,6 +157,7 @@ export default function Taskbar({
         onClick={onStartClick}
         aria-expanded={startOpen}
         title="COS menu"
+        data-cos-start
         onFocus={e => setCosKeyFocus(e.currentTarget.matches(':focus-visible'))}
         onBlur={() => setCosKeyFocus(false)}
         style={{
