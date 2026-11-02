@@ -263,9 +263,11 @@ export default function StartMenu({
   const [settingsOpen, setSettingsOpen] = useState(false)
   const menuRef = useRef(null)
 
-  // Click outside to close
+  // Click outside to close. The COS button is excluded: it toggles the menu
+  // itself, and closing here first would make its click re-open the menu.
   useEffect(() => {
     const handler = (e) => {
+      if (e.target.closest?.('[data-cos-start]')) return
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         onClose()
       }
