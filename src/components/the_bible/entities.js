@@ -276,4 +276,14 @@ judas: {
     "description": "The disciple who betrayed Jesus for silver. Matthew and Acts close his account with different deaths, different buyers, and the same money.",
     "visualType": "person"
   },
+isaiah: {
+    "id": "isaiah",
+    "name": "Isaiah",
+    "aka": [
+      "the prophet"
+    ],
+    "type": "person",
+    "description": "Prophet of Judah whose visions include the throne of God — and whose new heavens and new earth still contain death.",
+    "visualType": "person"
+  },
 }
