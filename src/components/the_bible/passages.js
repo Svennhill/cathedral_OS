@@ -101,4 +101,71 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "god_changes_mind",
+    "title": "The Mind of God",
+    "summary": "Checks Numbers 23:19 — God does not change His mind — against the passages where the LORD regrets what He has done.",
+    "ruleVerse": {
+      "book": "Numbers",
+      "chapter": 23,
+      "verse": 19,
+      "reference": "Numbers 23:19"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_no_mind_change",
+        "statement": "God is not a man, that He should lie, nor a son of man, that He should change His mind.",
+        "plain": "Changing His mind is something God, by His own statement, does not do.",
+        "subject": "god",
+        "action": "change_mind",
+        "target": "god",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "flood_regret",
+        "entityId": "god",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 6,
+          "verse": 6,
+          "reference": "Genesis 6:6"
+        },
+        "violatesRule": "rule_no_mind_change",
+        "violationExplanation": "Before the flood: 'the LORD regretted that He had made man on the earth, and He was grieved in His heart.' Regret over a settled act is the rule's prohibited act, in narrative form.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — the LORD regretted making man."
+      },
+      {
+        "id": "saul_regret",
+        "entityId": "god",
+        "verse": {
+          "book": "1 Samuel",
+          "chapter": 15,
+          "verse": 35,
+          "reference": "1 Samuel 15:35"
+        },
+        "violatesRule": "rule_no_mind_change",
+        "violationExplanation": "'The LORD regretted that He had made Saul king over Israel.' A second recorded regret, over a second settled decision.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — the LORD regretted making Saul king."
+      },
+      {
+        "id": "glory_of_israel",
+        "entityId": "god",
+        "verse": {
+          "book": "1 Samuel",
+          "chapter": 15,
+          "verse": 29,
+          "reference": "1 Samuel 15:29"
+        },
+        "violatesRule": null,
+        "verdict": "CONSISTENT — Samuel restates the rule verbatim: the Glory of Israel 'does not lie or change His mind.' Six verses before the same chapter records the regret."
+      }
+    ],
+    "severity": 3,
+    "verdict": "The rule is stated twice, in Numbers and again in 1 Samuel 15:29. The regret is also recorded twice — once before the flood, and once in 1 Samuel 15:35, in the same chapter that restates the rule.",
+    "scoreImpact": -2.0
+  },
 ]
