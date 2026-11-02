@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  baasha: {
+    "id": "baasha",
+    "name": "Baasha",
+    "aka": [
+      "king of Israel"
+    ],
+    "type": "person",
+    "description": "King of Israel whose reign Kings measures exactly — and whom Chronicles sends to war years after that measure runs out.",
+    "visualType": "person"
+  },
 }
