@@ -255,4 +255,14 @@ joseph: {
     "description": "The husband of Mary. Two Gospels trace Jesus's line through him and name two different men as his father.",
     "visualType": "person"
   },
+josiah: {
+    "id": "josiah",
+    "name": "Josiah",
+    "aka": [
+      "king of Judah"
+    ],
+    "type": "person",
+    "description": "The reforming king who found the Book of the Law — and was promised a peaceful grave by the prophetess who authenticated it.",
+    "visualType": "person"
+  },
 }

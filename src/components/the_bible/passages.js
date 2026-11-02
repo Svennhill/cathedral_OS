@@ -1545,4 +1545,59 @@ export const PASSAGES = [{
     "verdict": "Both genealogies are given to establish the same descent. At the last step before Jesus they name different fathers for the same man: Jacob in Matthew, Heli in Luke.",
     "scoreImpact": -0.5
   },
+{
+    "id": "josiahs_death",
+    "title": "Josiah's Peaceful Death",
+    "summary": "Checks 2 Kings 22:20 — God's promise that Josiah would be gathered to his grave in peace — against the battle reports: killed by Pharaoh Neco at Megiddo (2 Kings 23:29), or carried wounded to die in Jerusalem (2 Chronicles 35:24).",
+    "ruleVerse": {
+      "book": "2 Kings",
+      "chapter": 22,
+      "verse": 20,
+      "reference": "2 Kings 22:20"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_grave_in_peace",
+        "statement": "Josiah would be gathered to his grave in peace.",
+        "plain": "The prophetess Huldah delivers God's word to the king: 'you will be gathered to your grave in peace. Your eyes will not see all the calamity that I will bring on this place.'",
+        "subject": "josiah",
+        "action": "die",
+        "target": "peace",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "killed_megiddo",
+        "entityId": "josiah",
+        "verse": {
+          "book": "2 Kings",
+          "chapter": 23,
+          "verse": 29,
+          "reference": "2 Kings 23:29"
+        },
+        "violatesRule": "rule_grave_in_peace",
+        "violationExplanation": "Josiah's end, in the same book that carries the promise: he marched out to confront Pharaoh Neco, 'but Neco faced him and killed him at Megiddo.' A king killed in battle by a foreign pharaoh has not been gathered to his grave in peace in any sense the word carries.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — The promised peaceful gathering ends in a battlefield killing."
+      },
+      {
+        "id": "died_jerusalem",
+        "entityId": "josiah",
+        "verse": {
+          "book": "2 Chronicles",
+          "chapter": 35,
+          "verse": 24,
+          "reference": "2 Chronicles 35:24"
+        },
+        "violatesRule": "rule_grave_in_peace",
+        "violationExplanation": "Chronicles agrees the death was violent — archers shot the king (35:23) — and moves it: his servants 'brought him to Jerusalem, where he died.' Wounded at Megiddo, dead at Jerusalem: the place of death itself changes between the two accounts of the promise's failure.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Chronicles also kills him violently, but in a different city."
+      }
+    ],
+    "severity": 2,
+    "verdict": "God promises Josiah a grave gathered in peace. Kings has him killed by Pharaoh Neco at Megiddo; Chronicles has him shot by archers and carried off to die in Jerusalem. The promise fails in both accounts — which cannot even agree on where the failure happened.",
+    "scoreImpact": -0.5
+  },
 ]
