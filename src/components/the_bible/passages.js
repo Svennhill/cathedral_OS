@@ -1189,4 +1189,45 @@ export const PASSAGES = [{
     "verdict": "Mark and Luke bring Jesus one colt for the entry into Jerusalem. Matthew brings a donkey and her colt, spreads the cloaks across both, and seats Jesus on 'them.' The most staged arrival in the Gospels cannot agree on how many animals were under Him.",
     "scoreImpact": -0.5
   },
+{
+    "id": "inherited_sin",
+    "title": "Whose Sin Is It?",
+    "summary": "Checks Exodus 20:5 — God visits the iniquity of the fathers on their children to the third and fourth generations — against Ezekiel 18:20: a son will not bear the iniquity of his father.",
+    "ruleVerse": {
+      "book": "Exodus",
+      "chapter": 20,
+      "verse": 5,
+      "reference": "Exodus 20:5"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_visiting_iniquity",
+        "statement": "God visits the iniquity of the fathers on their children, to the third and fourth generations.",
+        "plain": "In the Ten Commandments God states His own practice: 'I, the LORD your God, am a jealous God, visiting the iniquity of the fathers on their children to the third and fourth generations of those who hate Me.'",
+        "subject": "god",
+        "action": "visit_iniquity",
+        "target": "children",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "ezekiel_each_his_own",
+        "entityId": "ezekiel",
+        "verse": {
+          "book": "Ezekiel",
+          "chapter": 18,
+          "verse": 20,
+          "reference": "Ezekiel 18:20"
+        },
+        "violatesRule": "rule_visiting_iniquity",
+        "violationExplanation": "Ezekiel states the opposite as God's own ruling, in a chapter given to overturning the proverb about fathers' sins landing on sons: 'The soul who sins is the one who will die. A son will not bear the iniquity of his father.' What Exodus says God does to the third and fourth generations, Ezekiel says does not happen to a son at all.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Ezekiel: a son will not bear his father's iniquity. Exodus: God visits it on him."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Exodus has God announce, inside the Ten Commandments, that He visits the fathers' iniquity on their children for generations. Ezekiel has God announce that a son will not bear his father's iniquity — that the soul who sins is the one who will die. Both are presented as God's stated policy on the same question.",
+    "scoreImpact": -2.0
+  },
 ]
