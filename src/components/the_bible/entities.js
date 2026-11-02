@@ -265,4 +265,15 @@ josiah: {
     "description": "The reforming king who found the Book of the Law — and was promised a peaceful grave by the prophetess who authenticated it.",
     "visualType": "person"
   },
+judas: {
+    "id": "judas",
+    "name": "Judas Iscariot",
+    "aka": [
+      "Judas",
+      "the betrayer"
+    ],
+    "type": "person",
+    "description": "The disciple who betrayed Jesus for silver. Matthew and Acts close his account with different deaths, different buyers, and the same money.",
+    "visualType": "person"
+  },
 }

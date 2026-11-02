@@ -1600,4 +1600,45 @@ export const PASSAGES = [{
     "verdict": "God promises Josiah a grave gathered in peace. Kings has him killed by Pharaoh Neco at Megiddo; Chronicles has him shot by archers and carried off to die in Jerusalem. The promise fails in both accounts — which cannot even agree on where the failure happened.",
     "scoreImpact": -0.5
   },
+{
+    "id": "judas_death",
+    "title": "The Death of Judas",
+    "summary": "Compares the two deaths of Judas: Matthew 27:5, where he hanged himself, and Acts 1:18, where he fell headlong and burst open.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 27,
+      "verse": 5,
+      "reference": "Matthew 27:5"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_judas_hanged",
+        "statement": "Judas went away and hanged himself.",
+        "plain": "Matthew's account: Judas threw the silver into the temple, left, and hanged himself.",
+        "subject": "judas",
+        "action": "die",
+        "target": "judas",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "acts_judas_fell",
+        "entityId": "judas",
+        "verse": {
+          "book": "Acts",
+          "chapter": 1,
+          "verse": 18,
+          "reference": "Acts 1:18"
+        },
+        "violatesRule": "rule_judas_hanged",
+        "violationExplanation": "Acts closes the account differently: Judas 'fell headlong and burst open in the middle, and all his intestines spilled out.' A fall and a bursting — not a hanging. The two deaths share a man and a payment and nothing else.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Acts kills Judas by a fall, not a rope."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Matthew hangs Judas. Acts drops him headlong onto a field and bursts him open. One betrayer, two deaths, no shared detail between them beyond the silver that paid for both stories.",
+    "scoreImpact": -0.5
+  },
 ]
