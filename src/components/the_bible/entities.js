@@ -184,4 +184,15 @@ james: {
     "description": "Author of the epistle of James, which states its own terms of justification in the same vocabulary Paul uses — to the opposite effect.",
     "visualType": "person"
   },
+demoniac: {
+    "id": "demoniac",
+    "name": "The Demoniac",
+    "aka": [
+      "the demon-possessed man",
+      "Legion"
+    ],
+    "type": "person",
+    "description": "The man (or men) of the tombs across the Sea of Galilee. Matthew meets Jesus with two of them; Mark and Luke each meet Him with one.",
+    "visualType": "person"
+  },
 }
