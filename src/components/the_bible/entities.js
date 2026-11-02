@@ -326,4 +326,14 @@ saul: {
     "description": "First king of Israel. Two books report his death on Mount Gilboa — and the two reports cannot both be the way it happened.",
     "visualType": "person"
   },
+solomon: {
+    "id": "solomon",
+    "name": "Solomon",
+    "aka": [
+      "King Solomon"
+    ],
+    "type": "person",
+    "description": "Son of David and king of Israel, whose building projects — and the officers who supervised them — are chronicled twice, with two different headcounts.",
+    "visualType": "person"
+  },
 }
