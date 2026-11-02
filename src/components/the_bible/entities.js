@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  fool: {
+    "id": "fool",
+    "name": "The Fool",
+    "aka": [
+      "folly"
+    ],
+    "type": "concept",
+    "description": "The stock figure of Proverbs, whose folly the wise man is told — in consecutive verses — both not to answer and to answer.",
+    "visualType": "concept"
+  },
 }
