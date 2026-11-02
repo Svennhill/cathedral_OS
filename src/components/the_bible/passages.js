@@ -27,8 +27,7 @@
 //
 // Verse text is never stored here: it is read from the BSB store by reference.
 
-export const PASSAGES = [
-  {
+export const PASSAGES = [{
     id: "ascension_problem",
     title: "The Ascension Problem",
     summary: "Checks John 3:13's claim that no one has gone up to heaven against passages where someone does.",
@@ -101,7 +100,7 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
-  {
+{
     "id": "incited_david",
     "title": "Who Incited David?",
     "summary": "Checks 2 Samuel 24:1, where the LORD stirs David up to take a census, against 1 Chronicles 21:1, where Satan does it.",
@@ -152,6 +151,47 @@ export const PASSAGES = [
     ],
     "severity": 2,
     "verdict": "Samuel and Chronicles agree that David numbered Israel and that it was sin. They do not agree on whose idea it was — and both candidates are named in the text, one verse each.",
+    "scoreImpact": -0.5
+  },
+{
+    "id": "abiathar_priests",
+    "title": "Banished, but Still Priest?",
+    "summary": "Checks 1 Kings 2:27 \u2014 Solomon banished Abiathar from the priesthood of the LORD \u2014 against 1 Kings 4:4, Solomon's own officials list in the same book: Zadok and Abiathar were priests.",
+    "ruleVerse": {
+      "book": "1 Kings",
+      "chapter": 2,
+      "verse": 27,
+      "reference": "1 Kings 2:27"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_abiathar_banished",
+        "statement": "Solomon banished Abiathar from the priesthood of the LORD.",
+        "plain": "Kings states the removal and its finality: 'So Solomon banished Abiathar from the priesthood of the LORD and thus fulfilled the word that the LORD had spoken at Shiloh against the house of Eli.'",
+        "subject": "abiathar",
+        "action": "serve",
+        "target": "priesthood",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "kings_officials_list",
+        "entityId": "abiathar",
+        "verse": {
+          "book": "1 Kings",
+          "chapter": 4,
+          "verse": 4,
+          "reference": "1 Kings 4:4"
+        },
+        "violatesRule": "rule_abiathar_banished",
+        "violationExplanation": "Two chapters later, Solomon's official roster for the settled reign: 'Benaiah son of Jehoiada was in charge of the army; Zadok and Abiathar were priests.' The banished man holds the office he was banished from, in the same book, under the king who banished him.",
+        "severity": 2,
+        "verdict": "CONTRADICTION \u2014 The banished Abiathar is listed among Solomon's priests."
+      }
+    ],
+    "severity": 2,
+    "verdict": "1 Kings removes Abiathar from the priesthood as the fulfillment of prophecy \u2014 and then, in its own list of Solomon's officials, seats Abiathar among the priests. (A different Abiathar problem from The Priest at Nob: there, Mark assigns his father's episode to him; here, Kings cannot decide whether Solomon fired him.)",
     "scoreImpact": -0.5
   },
 ]
