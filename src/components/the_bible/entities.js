@@ -286,4 +286,14 @@ isaiah: {
     "description": "Prophet of Judah whose visions include the throne of God — and whose new heavens and new earth still contain death.",
     "visualType": "person"
   },
+noah: {
+    "id": "noah",
+    "name": "Noah",
+    "aka": [
+      "the patriarch"
+    ],
+    "type": "person",
+    "description": "Builder of the ark, given the animal manifest twice in two chapters — and the numbers change between the tellings.",
+    "visualType": "person"
+  },
 }
