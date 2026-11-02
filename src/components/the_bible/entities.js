@@ -346,4 +346,15 @@ abraham: {
     "description": "The patriarch whose burial cave at Machpelah is the Old Testament's most carefully documented purchase — and whose tomb, in Stephen's retelling, moves to Shechem and changes seller.",
     "visualType": "person"
   },
+zebedees_sons: {
+    "id": "zebedees_sons",
+    "name": "James and John",
+    "aka": [
+      "sons of Zebedee",
+      "the Boanerges"
+    ],
+    "type": "person",
+    "description": "The two apostles whose seats in glory are requested — by their mother in Matthew, by themselves in Mark.",
+    "visualType": "person"
+  },
 }

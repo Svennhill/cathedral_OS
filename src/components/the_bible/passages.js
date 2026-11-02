@@ -2449,4 +2449,45 @@ export const PASSAGES = [{
     "verdict": "John's Gospel states that Jesus baptized, builds a comparison with John the Baptist on it, and then corrects itself in a parenthesis: it was not Jesus who baptized at all. Both versions stand in the finished text, two chapters apart.",
     "scoreImpact": -0.5
   },
+{
+    "id": "zebedee_request",
+    "title": "Who Brought the Request?",
+    "summary": "Checks Matthew 20:20 — the mother of Zebedee's sons came to Jesus to make the request — against Mark 10:35, where James and John come and make it themselves.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 20,
+      "verse": 20,
+      "reference": "Matthew 20:20"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_mother_asks",
+        "statement": "The request for the seats at Jesus's right and left was brought by the mother of Zebedee's sons.",
+        "plain": "Matthew: 'Then the mother of Zebedee's sons came to Jesus with her sons and knelt down to make a request of Him' — and in verse 21 it is she who speaks it: 'Declare that in Your kingdom one of these two sons of mine may sit at Your right hand, and the other at Your left.'",
+        "subject": "mother_of_zebedees_sons",
+        "action": "request",
+        "target": "jesus",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_sons_ask",
+        "entityId": "zebedees_sons",
+        "verse": {
+          "book": "Mark",
+          "chapter": 10,
+          "verse": 35,
+          "reference": "Mark 10:35"
+        },
+        "violatesRule": "rule_mother_asks",
+        "violationExplanation": "Mark has no mother in the scene at all: 'Then James and John, the sons of Zebedee, came to Jesus and declared, \"Teacher, we want You to do for us whatever we ask\"' — and in verse 37 they speak the request themselves: 'Grant that one of us may sit at Your right hand.' The petitioner changes between the two accounts of the same conversation.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — In Mark the sons ask for themselves; Matthew gives the asking to their mother."
+      }
+    ],
+    "severity": 2,
+    "verdict": "The request for the two seats is the same in both Gospels, word for word in substance. Who makes it is not: Matthew brings in the boys' mother to kneel and speak it while they stand by; Mark leaves her out entirely and has James and John ask on their own behalf.",
+    "scoreImpact": -0.5
+  },
 ]
