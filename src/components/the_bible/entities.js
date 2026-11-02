@@ -121,4 +121,14 @@ peter: {
     "description": "The apostle who denied Jesus three times in one night — after being told, depending on the Gospel, exactly how many rooster crows he had.",
     "visualType": "person"
   },
+simon: {
+    "id": "simon",
+    "name": "Simon of Cyrene",
+    "aka": [
+      "Simon"
+    ],
+    "type": "person",
+    "description": "A passer-by from Cyrene whom the soldiers forced to carry the cross of Jesus — in three Gospels. John's Gospel says Jesus carried it Himself.",
+    "visualType": "person"
+  },
 }

@@ -591,4 +591,73 @@ export const PASSAGES = [{
     "verdict": "Genesis 1 makes the animals first and man last. Genesis 2 forms man first and the animals after him, because he was alone. Both sequences are stated as narrative fact.",
     "scoreImpact": -0.5
   },
+{
+    "id": "cross_carrier",
+    "title": "Who Carried the Cross?",
+    "summary": "Checks John 19:17 — Jesus went out carrying His own cross — against the three Synoptic Gospels, where Simon of Cyrene is forced to carry it.",
+    "ruleVerse": {
+      "book": "John",
+      "chapter": 19,
+      "verse": 17,
+      "reference": "John 19:17"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_jesus_carried",
+        "statement": "Jesus went out to Golgotha carrying His own cross.",
+        "plain": "John's account gives the cross to Jesus Himself, with no second carrier mentioned.",
+        "subject": "jesus",
+        "action": "carry",
+        "target": "heaven",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_simon",
+        "entityId": "simon",
+        "verse": {
+          "book": "Mark",
+          "chapter": 15,
+          "verse": 21,
+          "reference": "Mark 15:21"
+        },
+        "violatesRule": "rule_jesus_carried",
+        "violationExplanation": "Mark: Simon of Cyrene 'was passing by on his way in from the country, and the soldiers forced him to carry the cross of Jesus.' The cross John gives to Jesus, Mark gives to a bystander.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Mark's soldiers forced Simon to carry the cross."
+      },
+      {
+        "id": "matthew_simon",
+        "entityId": "simon",
+        "verse": {
+          "book": "Matthew",
+          "chapter": 27,
+          "verse": 32,
+          "reference": "Matthew 27:32"
+        },
+        "violatesRule": "rule_jesus_carried",
+        "violationExplanation": "Matthew agrees with Mark: 'they found a man from Cyrene, named Simon, and they forced him to carry the cross of Jesus.'",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Matthew also gives the cross to Simon."
+      },
+      {
+        "id": "luke_simon",
+        "entityId": "simon",
+        "verse": {
+          "book": "Luke",
+          "chapter": 23,
+          "verse": 26,
+          "reference": "Luke 23:26"
+        },
+        "violatesRule": "rule_jesus_carried",
+        "violationExplanation": "Luke: 'they seized Simon of Cyrene on his way in from the country, and they put the cross on him to carry behind Jesus.' Three Synoptics, one carrier — and it is not the man John describes carrying it.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Luke puts the cross on Simon, behind Jesus."
+      }
+    ],
+    "severity": 2,
+    "verdict": "John's Jesus carries His own cross out of the city. In Matthew, Mark, and Luke the soldiers take a passing stranger and put the cross on him instead. The accounts cannot be merged without adding a handover none of them records.",
+    "scoreImpact": -0.5
+  },
 ]
