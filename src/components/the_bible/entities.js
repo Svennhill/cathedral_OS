@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  simon: {
+    "id": "simon",
+    "name": "Simon of Cyrene",
+    "aka": [
+      "Simon"
+    ],
+    "type": "person",
+    "description": "A passer-by from Cyrene whom the soldiers forced to carry the cross of Jesus — in three Gospels. John's Gospel says Jesus carried it Himself.",
+    "visualType": "person"
+  },
 }
