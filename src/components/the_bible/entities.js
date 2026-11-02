@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  jairus: {
+    "id": "jairus",
+    "name": "Jairus",
+    "aka": [
+      "synagogue leader"
+    ],
+    "type": "person",
+    "description": "A synagogue leader who came to Jesus about his daughter. Whether she had just died or was still dying depends on which Gospel is telling it.",
+    "visualType": "person"
+  },
 }
