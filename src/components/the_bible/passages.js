@@ -1504,4 +1504,45 @@ export const PASSAGES = [{
     "verdict": "Asked to his face whether he is Elijah, John the Baptist says he is not. Jesus, preaching about John, says he is the Elijah who was to come. One of the two men in the exchange is wrong about the other's identity — and the text gives no third account to settle it.",
     "scoreImpact": -0.5
   },
+{
+    "id": "josephs_father",
+    "title": "Joseph's Father",
+    "summary": "Checks Matthew 1:16 — Jacob the father of Joseph — against Luke 3:23, where Joseph is the son of Heli.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 1,
+      "verse": 16,
+      "reference": "Matthew 1:16"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_jacob_father",
+        "statement": "Joseph's father was Jacob.",
+        "plain": "Matthew's genealogy ends: 'Jacob the father of Joseph, the husband of Mary.'",
+        "subject": "jacob",
+        "action": "father",
+        "target": "joseph",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "luke_heli",
+        "entityId": "joseph",
+        "verse": {
+          "book": "Luke",
+          "chapter": 3,
+          "verse": 23,
+          "reference": "Luke 3:23"
+        },
+        "violatesRule": "rule_jacob_father",
+        "violationExplanation": "Luke's genealogy, run in the opposite direction, reaches the same man one generation later: Jesus 'was regarded as the son of Joseph, the son of Heli.' Joseph cannot be the son of Jacob in one genealogy and the son of Heli in the other without one list breaking.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Luke makes Joseph the son of Heli."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Both genealogies are given to establish the same descent. At the last step before Jesus they name different fathers for the same man: Jacob in Matthew, Heli in Luke.",
+    "scoreImpact": -0.5
+  },
 ]

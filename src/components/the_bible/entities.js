@@ -245,4 +245,14 @@ john_the_baptist: {
     "description": "The prophet in the wilderness who baptized Jesus. Asked directly if he was Elijah, he said he was not; Jesus said he was.",
     "visualType": "person"
   },
+joseph: {
+    "id": "joseph",
+    "name": "Joseph",
+    "aka": [
+      "husband of Mary"
+    ],
+    "type": "person",
+    "description": "The husband of Mary. Two Gospels trace Jesus's line through him and name two different men as his father.",
+    "visualType": "person"
+  },
 }
