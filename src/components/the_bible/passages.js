@@ -101,4 +101,45 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "pauls_companions",
+    "title": "What Paul's Companions Heard",
+    "summary": "Compares the two tellings of the Damascus road: Acts 9:7 says the men heard the voice; Paul's own retelling in Acts 22:9 says they could not understand it.",
+    "ruleVerse": {
+      "book": "Acts",
+      "chapter": 9,
+      "verse": 7,
+      "reference": "Acts 9:7"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_heard_voice",
+        "statement": "The men traveling with Saul heard the voice but did not see anyone.",
+        "plain": "Luke's narration of the event: the companions heard the voice, and saw no one.",
+        "subject": "human",
+        "action": "hear",
+        "target": "jesus",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "acts_22_retelling",
+        "entityId": "paul",
+        "verse": {
+          "book": "Acts",
+          "chapter": 22,
+          "verse": 9,
+          "reference": "Acts 22:9"
+        },
+        "violatesRule": "rule_heard_voice",
+        "violationExplanation": "Paul's own retelling of the same journey: 'My companions saw the light, but they could not understand the voice of the One speaking to me.' In the BSB text the first account says they heard the voice; the retelling says the voice could not be understood by them. The machine flags the discrepancy as written — heard, versus not understood.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — the retelling has the companions unable to understand the voice the first account says they heard."
+      }
+    ],
+    "severity": 2,
+    "verdict": "One journey, told twice in the same book: in the narration the companions hear the voice and see no one; in Paul's retelling they see the light and cannot understand the voice. The senses trade places between the tellings.",
+    "scoreImpact": -0.5
+  },
 ]
