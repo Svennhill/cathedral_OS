@@ -1641,4 +1641,45 @@ export const PASSAGES = [{
     "verdict": "Matthew hangs Judas. Acts drops him headlong onto a field and bursts him open. One betrayer, two deaths, no shared detail between them beyond the silver that paid for both stories.",
     "scoreImpact": -0.5
   },
+{
+    "id": "judas_field",
+    "title": "Who Bought the Field?",
+    "summary": "Checks Matthew 27:7 — the priests bought the potter's field with the returned silver — against Acts 1:18, where Judas himself bought a field with it.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 27,
+      "verse": 7,
+      "reference": "Matthew 27:7"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_priests_bought",
+        "statement": "The chief priests used the returned money to buy the potter's field.",
+        "plain": "In Matthew the silver changes hands first: Judas returns it, and the priests — not Judas — make the purchase.",
+        "subject": "judas",
+        "action": "buy",
+        "target": "heaven",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "acts_judas_bought",
+        "entityId": "judas",
+        "verse": {
+          "book": "Acts",
+          "chapter": 1,
+          "verse": 18,
+          "reference": "Acts 1:18"
+        },
+        "violatesRule": "rule_priests_bought",
+        "violationExplanation": "Acts assigns the same purchase to the other party: 'with the reward for his wickedness Judas bought a field.' In Matthew the buyer is the priests, spending money Judas had thrown back; in Acts the buyer is Judas himself.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Acts makes Judas the buyer of the field."
+      }
+    ],
+    "severity": 2,
+    "verdict": "The blood money buys one field in both accounts — but the buyer changes. Matthew: the priests, after Judas returned the silver. Acts: Judas, with the reward still in his hand.",
+    "scoreImpact": -0.5
+  },
 ]
