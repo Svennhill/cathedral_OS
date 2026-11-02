@@ -194,4 +194,45 @@ export const PASSAGES = [{
     "verdict": "1 Kings removes Abiathar from the priesthood as the fulfillment of prophecy \u2014 and then, in its own list of Solomon's officials, seats Abiathar among the priests. (A different Abiathar problem from The Priest at Nob: there, Mark assigns his father's episode to him; here, Kings cannot decide whether Solomon fired him.)",
     "scoreImpact": -0.5
   },
+{
+    "id": "absaloms_sons",
+    "title": "Absalom's Sons",
+    "summary": "Checks 2 Samuel 14:27 \u2014 three sons were born to Absalom \u2014 against 2 Samuel 18:18, where Absalom says: I have no son.",
+    "ruleVerse": {
+      "book": "2 Samuel",
+      "chapter": 14,
+      "verse": 27,
+      "reference": "2 Samuel 14:27"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_three_sons",
+        "statement": "Three sons were born to Absalom.",
+        "plain": "2 Samuel's narrator states it as record: 'Three sons were born to Absalom, and a daughter named Tamar.'",
+        "subject": "absalom",
+        "action": "father",
+        "target": "sons",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "absalom_no_son",
+        "entityId": "absalom",
+        "verse": {
+          "book": "2 Samuel",
+          "chapter": 18,
+          "verse": 18,
+          "reference": "2 Samuel 18:18"
+        },
+        "violatesRule": "rule_three_sons",
+        "violationExplanation": "Four chapters later the same book explains Absalom's monument with his own words: he set up the pillar 'for he had said, \"I have no son to preserve the memory of my name.\"' The narrator's record and the man's own stated reason cannot both stand \u2014 either three sons were born to him, or he had no son.",
+        "severity": 2,
+        "verdict": "CONTRADICTION \u2014 Absalom says he has no son; the record gave him three."
+      }
+    ],
+    "severity": 2,
+    "verdict": "The same book, the same man. Chapter 14 records three sons born to Absalom. Chapter 18 records Absalom explaining his monument on the ground that he has no son at all. Nothing in the text records the sons dying, or the statement being mistaken.",
+    "scoreImpact": -0.5
+  },
 ]

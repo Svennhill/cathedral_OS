@@ -60,4 +60,14 @@ abiathar: {
     "description": "The priest who fled to David with the ephod, served him for decades \u2014 and was banished from the priesthood by Solomon, in the book that then lists him as Solomon's priest.",
     "visualType": "person"
   },
+absalom: {
+    "id": "absalom",
+    "name": "Absalom",
+    "aka": [
+      "son of David"
+    ],
+    "type": "person",
+    "description": "David's son, who raised a monument to his own name. The book that records his family also records him saying he has no son to carry it.",
+    "visualType": "person"
+  },
 }
