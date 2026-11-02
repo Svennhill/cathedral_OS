@@ -41,4 +41,15 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  judas: {
+    "id": "judas",
+    "name": "Judas Iscariot",
+    "aka": [
+      "Judas",
+      "the betrayer"
+    ],
+    "type": "person",
+    "description": "The disciple who betrayed Jesus for silver. Matthew and Acts close his account with different deaths, different buyers, and the same money.",
+    "visualType": "person"
+  },
 }
