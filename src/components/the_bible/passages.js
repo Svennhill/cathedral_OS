@@ -1682,4 +1682,45 @@ export const PASSAGES = [{
     "verdict": "The blood money buys one field in both accounts — but the buyer changes. Matthew: the priests, after Judas returned the silver. Acts: Judas, with the reward still in his hand.",
     "scoreImpact": -0.5
   },
+{
+    "id": "moses_speech",
+    "title": "Slow of Speech?",
+    "summary": "Checks Exodus 4:10 — Moses: I have never been eloquent; I am slow of speech and tongue — against Acts 7:22, where Stephen describes Moses as powerful in speech and action.",
+    "ruleVerse": {
+      "book": "Exodus",
+      "chapter": 4,
+      "verse": 10,
+      "reference": "Exodus 4:10"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_slow_speech",
+        "statement": "Moses was not eloquent; he was slow of speech and tongue.",
+        "plain": "Moses states it about himself, in the past and present tense: 'I have never been eloquent, neither in the past nor since You have spoken to Your servant, for I am slow of speech and tongue.' It is his stated reason Aaron must speak for him.",
+        "subject": "moses",
+        "action": "speak",
+        "target": "eloquence",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "stephen_powerful",
+        "entityId": "moses",
+        "verse": {
+          "book": "Acts",
+          "chapter": 7,
+          "verse": 22,
+          "reference": "Acts 7:22"
+        },
+        "violatesRule": "rule_slow_speech",
+        "violationExplanation": "Stephen's history describes the same man before Pharaoh's court: 'Moses was educated in all the wisdom of the Egyptians and was powerful in speech and action.' Powerful in speech is the attribute Moses himself, in Exodus, says he has never had.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Stephen's Moses is powerful in the speech Exodus's Moses disowns."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Exodus builds Aaron's whole role on Moses's own testimony: never eloquent, slow of speech and tongue. Acts has Stephen describe the Egyptian-educated Moses as powerful in speech. The spokesman was hired for a deficiency the later history says he never had.",
+    "scoreImpact": -0.5
+  },
 ]
