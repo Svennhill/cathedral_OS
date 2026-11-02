@@ -101,4 +101,45 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "creation_order",
+    "title": "The Order of Creation",
+    "summary": "Checks Genesis 1's sequence — beasts made (v.25) before man is created (v.27) — against Genesis 2, where man is formed first and the beasts are formed after him.",
+    "ruleVerse": {
+      "book": "Genesis",
+      "chapter": 1,
+      "verse": 25,
+      "reference": "Genesis 1:25"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_animals_first",
+        "statement": "The beasts of the earth were made before man was created.",
+        "plain": "Genesis 1's order: animals first (v.25), then man (v.27).",
+        "subject": "god",
+        "action": "create",
+        "target": "human",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "genesis_two_order",
+        "entityId": "god",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 2,
+          "verse": 19,
+          "reference": "Genesis 2:19"
+        },
+        "violatesRule": "rule_animals_first",
+        "violationExplanation": "Genesis 2 runs the sequence the other way: the man is already formed (2:7) and alone when 'out of the ground the LORD God formed every beast of the field and every bird of the air, and He brought them to the man.' In this account the animals are made after the man, in response to his being alone.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Genesis 2 forms the beasts after the man, to keep him company."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Genesis 1 makes the animals first and man last. Genesis 2 forms man first and the animals after him, because he was alone. Both sequences are stated as narrative fact.",
+    "scoreImpact": -0.5
+  },
 ]
