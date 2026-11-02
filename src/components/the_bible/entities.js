@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  john_the_baptist: {
+    "id": "john_the_baptist",
+    "name": "John the Baptist",
+    "aka": [
+      "the forerunner"
+    ],
+    "type": "person",
+    "description": "The prophet in the wilderness who baptized Jesus. Asked directly if he was Elijah, he said he was not; Jesus said he was.",
+    "visualType": "person"
+  },
 }
