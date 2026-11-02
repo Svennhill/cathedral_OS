@@ -101,4 +101,59 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "name_not_known",
+    "title": "The Name Not Known",
+    "summary": "Checks Exodus 6:3 — God says that by His name the LORD He did not make Himself known to Abraham, Isaac, and Jacob — against Genesis 15:7 and 28:13, where He introduces Himself to Abraham and to Jacob by exactly that name.",
+    "ruleVerse": {
+      "book": "Exodus",
+      "chapter": 6,
+      "verse": 3,
+      "reference": "Exodus 6:3"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_name_unknown",
+        "statement": "God did not make Himself known to the patriarchs by His name the LORD (YHWH).",
+        "plain": "God states His own revelation history to Moses: 'I appeared to Abraham, to Isaac, and to Jacob as God Almighty, but by My name the LORD I did not make Myself known to them.'",
+        "subject": "god",
+        "action": "reveal_name",
+        "target": "patriarchs",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "genesis_abram_name",
+        "entityId": "abraham",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 15,
+          "verse": 7,
+          "reference": "Genesis 15:7"
+        },
+        "violatesRule": "rule_name_unknown",
+        "violationExplanation": "Generations before Exodus, God opens a speech to Abram with the name He later says He never made known to him: 'I am the LORD, who brought you out of Ur of the Chaldeans to give you this land to possess.'",
+        "severity": 3,
+        "verdict": "CONTRADICTION — God tells Abram 'I am the LORD' in Genesis."
+      },
+      {
+        "id": "genesis_jacob_name",
+        "entityId": "jacob",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 28,
+          "verse": 13,
+          "reference": "Genesis 28:13"
+        },
+        "violatesRule": "rule_name_unknown",
+        "violationExplanation": "To Jacob at Bethel, the same introduction: 'I am the LORD, the God of your father Abraham and the God of Isaac.' Jacob is one of the three men Exodus 6:3 names as not having been made known the name.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — God tells Jacob 'I am the LORD' in Genesis."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Exodus 6:3 is God's own account of what He had and had not revealed: as God Almighty He appeared to the patriarchs; by the name LORD He did not make Himself known to them. Genesis records Him introducing Himself by that name, in direct speech, to Abraham and to Jacob both.",
+    "scoreImpact": -2.0
+  },
 ]
