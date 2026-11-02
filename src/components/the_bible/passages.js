@@ -101,4 +101,45 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "stephens_tomb",
+    "title": "Stephen's Tomb",
+    "summary": "Checks Genesis 49:30 — Abraham purchased his burial field from Ephron the Hittite, at Machpelah — against Acts 7:16, where Stephen says Abraham bought the tomb from the sons of Hamor, at Shechem.",
+    "ruleVerse": {
+      "book": "Genesis",
+      "chapter": 49,
+      "verse": 30,
+      "reference": "Genesis 49:30"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_ephron_purchase",
+        "statement": "Abraham purchased the field and cave at Machpelah from Ephron the Hittite as a burial site.",
+        "plain": "Jacob states it on his deathbed: 'This is the field Abraham purchased from Ephron the Hittite as a burial site' — the cave in the field of Machpelah, near Mamre, in Canaan. Genesis 23 records the purchase itself, from Ephron, in detail.",
+        "subject": "abraham",
+        "action": "purchase",
+        "target": "ephron",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "acts_hamor",
+        "entityId": "stephen",
+        "verse": {
+          "book": "Acts",
+          "chapter": 7,
+          "verse": 16,
+          "reference": "Acts 7:16"
+        },
+        "violatesRule": "rule_ephron_purchase",
+        "violationExplanation": "Stephen places the patriarchs' bones 'in the tomb that Abraham had bought from the sons of Hamor at Shechem.' Wrong seller and wrong place: the sons of Hamor sold a field to Jacob, at Shechem, generations later (Genesis 33:19); Abraham bought his tomb from Ephron the Hittite, at Machpelah. Stephen's sentence fuses the two purchases into one that neither account records.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Stephen gives Abraham Hamor's sons, at Shechem, as his sellers."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Abraham's one recorded tomb purchase is from Ephron the Hittite, at Machpelah — recorded at the time in Genesis 23 and restated by Jacob in Genesis 49. Stephen's history gives Abraham a different seller (the sons of Hamor) in a different city (Shechem): the purchase Jacob made, credited to Abraham.",
+    "scoreImpact": -0.5
+  },
 ]

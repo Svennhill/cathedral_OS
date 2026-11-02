@@ -41,4 +41,24 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  stephen: {
+    "id": "stephen",
+    "name": "Stephen",
+    "aka": [
+      "the martyr"
+    ],
+    "type": "person",
+    "description": "The first Christian martyr, whose speech to the Sanhedrin in Acts 7 retells Israel's history — with details the Old Testament itself records differently.",
+    "visualType": "person"
+  },
+  abraham: {
+    "id": "abraham",
+    "name": "Abraham",
+    "aka": [
+      "the patriarch"
+    ],
+    "type": "person",
+    "description": "The patriarch whose burial cave at Machpelah is the Old Testament's most carefully documented purchase — and whose tomb, in Stephen's retelling, moves to Shechem and changes seller.",
+    "visualType": "person"
+  },
 }
