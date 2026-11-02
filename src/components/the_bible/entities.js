@@ -163,4 +163,25 @@ jacob: {
     "description": "Patriarch who wrestled at Peniel and named the place for what he said happened there: he had seen God face to face, and lived.",
     "visualType": "person"
   },
+paul: {
+    "id": "paul",
+    "name": "Paul",
+    "aka": [
+      "Saul of Tarsus",
+      "the apostle"
+    ],
+    "type": "person",
+    "description": "Apostle whose letters state the terms of justification — and whose conversion road is narrated twice, with different details.",
+    "visualType": "person"
+  },
+james: {
+    "id": "james",
+    "name": "James",
+    "aka": [
+      "James the Just"
+    ],
+    "type": "person",
+    "description": "Author of the epistle of James, which states its own terms of justification in the same vocabulary Paul uses — to the opposite effect.",
+    "visualType": "person"
+  },
 }
