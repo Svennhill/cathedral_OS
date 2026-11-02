@@ -770,4 +770,59 @@ export const PASSAGES = [{
     "verdict": "Mark puts the crucifixion at the third hour. John's narrative reaches the sixth hour with Pilate still presenting Jesus to the crowd \u2014 the sentencing, the handover, and the procession all still to come. The two timelines overlap by three hours at the one moment both claim to clock.",
     "scoreImpact": -0.5
   },
+{
+    "id": "destroy_delight",
+    "title": "Does God Delight in Destroying?",
+    "summary": "Checks Deuteronomy 28:63 — it will please the LORD to annihilate and destroy you — against Ezekiel 33:11, God's oath that He takes no pleasure in the death of the wicked, and Lamentations 3:33, that He does not willingly afflict.",
+    "ruleVerse": {
+      "book": "Deuteronomy",
+      "chapter": 28,
+      "verse": 63,
+      "reference": "Deuteronomy 28:63"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_pleased_to_destroy",
+        "statement": "It will please the LORD to annihilate and destroy His disobedient people.",
+        "plain": "The covenant curse states God's pleasure in both directions: 'Just as it pleased the LORD to make you prosper and multiply, so also it will please Him to annihilate you and destroy you.'",
+        "subject": "god",
+        "action": "destroy",
+        "target": "israel",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "ezekiel_no_pleasure",
+        "entityId": "god",
+        "verse": {
+          "book": "Ezekiel",
+          "chapter": 33,
+          "verse": 11,
+          "reference": "Ezekiel 33:11"
+        },
+        "violatesRule": "rule_pleased_to_destroy",
+        "violationExplanation": "God swears against the attribute Deuteronomy assigns Him: '“As surely as I live, declares the Lord GOD, I take no pleasure in the death of the wicked, but rather that the wicked should turn from their ways and live.”' An oath, in the first person, that the pleasure Deuteronomy promises does not exist.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Ezekiel's God swears He takes no such pleasure."
+      },
+      {
+        "id": "lamentations_not_willingly",
+        "entityId": "god",
+        "verse": {
+          "book": "Lamentations",
+          "chapter": 3,
+          "verse": 33,
+          "reference": "Lamentations 3:33"
+        },
+        "violatesRule": "rule_pleased_to_destroy",
+        "violationExplanation": "Lamentations states the same limit as character: 'For He does not willingly afflict or grieve the sons of men.' Destruction that pleases and destruction that is unwilling cannot describe the same act of the same God.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Lamentations: He does not afflict willingly, let alone with pleasure."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Deuteronomy promises Israel that their destruction will please God the way their prosperity did. Ezekiel records God swearing by His own life that He takes no pleasure in the death of the wicked. Lamentations adds that He does not even afflict willingly. The covenant curse and the sworn oath describe opposite Gods.",
+    "scoreImpact": -2.0
+  },
 ]
