@@ -276,4 +276,45 @@ export const PASSAGES = [{
     "verdict": "Micah defines God by the limit on His anger: He does not retain it forever, because He delights in mercy. Jeremiah quotes God promising Judah an anger that will burn forever. The attribute and the sentence cannot both be true of the same anger.",
     "scoreImpact": -2.0
   },
+{
+    "id": "answer_a_fool",
+    "title": "Answer a Fool",
+    "summary": "Checks Proverbs 26:4 — do not answer a fool according to his folly — against the very next verse, Proverbs 26:5: answer a fool according to his folly.",
+    "ruleVerse": {
+      "book": "Proverbs",
+      "chapter": 26,
+      "verse": 4,
+      "reference": "Proverbs 26:4"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_do_not_answer",
+        "statement": "Do not answer a fool according to his folly.",
+        "plain": "The proverb is an instruction, with its reason attached: answer him that way 'or you yourself will be like him.'",
+        "subject": "human",
+        "action": "answer",
+        "target": "fool",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "answer_him",
+        "entityId": "fool",
+        "verse": {
+          "book": "Proverbs",
+          "chapter": 26,
+          "verse": 5,
+          "reference": "Proverbs 26:5"
+        },
+        "violatesRule": "rule_do_not_answer",
+        "violationExplanation": "The next verse issues the opposite instruction, also with its reason attached: 'Answer a fool according to his folly, lest he become wise in his own eyes.' Same wording, same situation, opposite command — one verse apart, in a book presented as a single collection of wisdom.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Verse 5 commands exactly what verse 4 forbids."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Proverbs 26:4 forbids answering a fool according to his folly, and gives a reason. Proverbs 26:5 commands answering a fool according to his folly, and gives a reason. The two instructions are word-for-word opposites, back to back, with no condition stated in either that would separate them.",
+    "scoreImpact": -2.0
+  },
 ]

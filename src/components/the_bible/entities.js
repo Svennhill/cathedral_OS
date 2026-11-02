@@ -81,4 +81,14 @@ god: {
     "description": "God as speaker and actor throughout both testaments. His statements about Himself are the rules other passages are tested against.",
     "visualType": "person"
   },
+fool: {
+    "id": "fool",
+    "name": "The Fool",
+    "aka": [
+      "folly"
+    ],
+    "type": "concept",
+    "description": "The stock figure of Proverbs, whose folly the wise man is told — in consecutive verses — both not to answer and to answer.",
+    "visualType": "concept"
+  },
 }
