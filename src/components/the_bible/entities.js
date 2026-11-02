@@ -357,4 +357,14 @@ zebedees_sons: {
     "description": "The two apostles whose seats in glory are requested — by their mother in Matthew, by themselves in Mark.",
     "visualType": "person"
   },
+zechariah: {
+    "id": "zechariah",
+    "name": "Zechariah",
+    "aka": [
+      "son of Jehoiada"
+    ],
+    "type": "person",
+    "description": "The priest's son stoned in the temple courtyard for his prophecy — whose father Jesus names as Berechiah, a different Zechariah's father.",
+    "visualType": "person"
+  },
 }
