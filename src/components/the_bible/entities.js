@@ -41,4 +41,15 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  paul: {
+    "id": "paul",
+    "name": "Paul",
+    "aka": [
+      "Saul of Tarsus",
+      "the apostle"
+    ],
+    "type": "person",
+    "description": "Apostle whose letters state the terms of justification — and whose conversion road is narrated twice, with different details.",
+    "visualType": "person"
+  },
 }
