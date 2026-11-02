@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  david: {
+    "id": "david",
+    "name": "David",
+    "aka": [
+      "King David"
+    ],
+    "type": "person",
+    "description": "King of Israel who ordered a census of the fighting men — an act two books attribute to two different inciters.",
+    "visualType": "person"
+  },
 }

@@ -101,4 +101,45 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "threshing_floor_price",
+    "title": "The Price of the Threshing Floor",
+    "summary": "Checks 2 Samuel 24:24 — David bought the threshing floor and the oxen for fifty shekels of silver — against 1 Chronicles 21:25: six hundred shekels of gold for the site.",
+    "ruleVerse": {
+      "book": "2 Samuel",
+      "chapter": 24,
+      "verse": 24,
+      "reference": "2 Samuel 24:24"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_fifty_shekels",
+        "statement": "David bought the threshing floor and the oxen for fifty shekels of silver.",
+        "plain": "Samuel gives the price in the purchase itself: 'So David bought the threshing floor and the oxen for fifty shekels of silver.'",
+        "subject": "david",
+        "action": "purchase",
+        "target": "threshing_floor",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "chronicles_six_hundred",
+        "entityId": "david",
+        "verse": {
+          "book": "1 Chronicles",
+          "chapter": 21,
+          "verse": 25,
+          "reference": "1 Chronicles 21:25"
+        },
+        "violatesRule": "rule_fifty_shekels",
+        "violationExplanation": "Chronicles reports the same purchase, from the same seller (Araunah in Samuel, Ornan in Chronicles — the same man), at a different price in a different metal: 'So David paid Ornan six hundred shekels of gold for the site.' Fifty of silver for the floor and oxen; six hundred of gold for the site. The transaction is one; the bill is two.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Chronicles prices the purchase at 600 shekels of gold, not 50 of silver."
+      }
+    ],
+    "severity": 1,
+    "verdict": "One seller, one plague-stopping purchase, one altar site — the future temple mount. Samuel bills David fifty shekels of silver. Chronicles bills him six hundred shekels of gold. Neither text mentions a second payment.",
+    "scoreImpact": -0.1
+  },
 ]
