@@ -660,4 +660,73 @@ export const PASSAGES = [{
     "verdict": "John's Jesus carries His own cross out of the city. In Matthew, Mark, and Luke the soldiers take a passing stranger and put the cross on him instead. The accounts cannot be merged without adding a handover none of them records.",
     "scoreImpact": -0.5
   },
+{
+    "id": "cross_inscription",
+    "title": "The Sign on the Cross",
+    "summary": "Checks Matthew 27:37's wording of the posted charge — THIS IS JESUS, THE KING OF THE JEWS — against the different wordings given by Mark, Luke, and John for the same sign.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 27,
+      "verse": 37,
+      "reference": "Matthew 27:37"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_matthew_sign",
+        "statement": "The sign above Jesus's head read: THIS IS JESUS, THE KING OF THE JEWS.",
+        "plain": "Matthew quotes the posted charge in full: 'Above His head they posted the written charge against Him: THIS IS JESUS, THE KING OF THE JEWS.'",
+        "subject": "jesus",
+        "action": "post_charge",
+        "target": "sign",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_sign",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Mark",
+          "chapter": 15,
+          "verse": 26,
+          "reference": "Mark 15:26"
+        },
+        "violatesRule": "rule_matthew_sign",
+        "violationExplanation": "Mark quotes the same inscription shorter: 'The charge inscribed against Him read: THE KING OF THE JEWS.' No 'this is,' no 'Jesus.' One sign, two texts.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Mark's sign omits words Matthew's sign carries."
+      },
+      {
+        "id": "luke_sign",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Luke",
+          "chapter": 23,
+          "verse": 38,
+          "reference": "Luke 23:38"
+        },
+        "violatesRule": "rule_matthew_sign",
+        "violationExplanation": "Luke quotes it a third way: 'Above Him was posted an inscription: THIS IS THE KING OF THE JEWS.' Matthew's 'Jesus' is gone; Mark's bare title has gained a 'this is.'",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Luke's sign is a third wording for the same board."
+      },
+      {
+        "id": "john_sign",
+        "entityId": "jesus",
+        "verse": {
+          "book": "John",
+          "chapter": 19,
+          "verse": 19,
+          "reference": "John 19:19"
+        },
+        "violatesRule": "rule_matthew_sign",
+        "violationExplanation": "John quotes it a fourth way, and names the author: 'Pilate also had a notice posted on the cross. It read: JESUS OF NAZARETH, THE KING OF THE JEWS.' Nazareth appears in no other Gospel's version; 'this is' appears in none of John's.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — John's sign is a fourth wording, with a word none of the others have."
+      }
+    ],
+    "severity": 1,
+    "verdict": "One cross, one posted charge, four Gospels quoting it — and no two quotations match. Matthew: THIS IS JESUS, THE KING OF THE JEWS. Mark: THE KING OF THE JEWS. Luke: THIS IS THE KING OF THE JEWS. John: JESUS OF NAZARETH, THE KING OF THE JEWS. The most public text in the story is the one its recorders cannot reproduce twice the same way.",
+    "scoreImpact": -0.1
+  },
 ]
