@@ -41,4 +41,15 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  zebedees_sons: {
+    "id": "zebedees_sons",
+    "name": "James and John",
+    "aka": [
+      "sons of Zebedee",
+      "the Boanerges"
+    ],
+    "type": "person",
+    "description": "The two apostles whose seats in glory are requested — by their mother in Matthew, by themselves in Mark.",
+    "visualType": "person"
+  },
 }
