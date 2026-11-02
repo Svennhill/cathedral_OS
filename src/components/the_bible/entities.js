@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  absalom: {
+    "id": "absalom",
+    "name": "Absalom",
+    "aka": [
+      "son of David"
+    ],
+    "type": "person",
+    "description": "David's son, who raised a monument to his own name. The book that records his family also records him saying he has no son to carry it.",
+    "visualType": "person"
+  },
 }
