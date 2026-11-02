@@ -143,4 +143,24 @@ angel: {
     "description": "The figure or figures at the empty tomb on resurrection morning — one or two of them, angel or man, depending on which Gospel is counting.",
     "visualType": "person"
   },
+moses: {
+    "id": "moses",
+    "name": "Moses",
+    "aka": [
+      "the lawgiver"
+    ],
+    "type": "person",
+    "description": "Prophet who led Israel out of Egypt. Exodus says the LORD spoke to him face to face, as a man speaks to his friend.",
+    "visualType": "person"
+  },
+jacob: {
+    "id": "jacob",
+    "name": "Jacob",
+    "aka": [
+      "Israel"
+    ],
+    "type": "person",
+    "description": "Patriarch who wrestled at Peniel and named the place for what he said happened there: he had seen God face to face, and lived.",
+    "visualType": "person"
+  },
 }
