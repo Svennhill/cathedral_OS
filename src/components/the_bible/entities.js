@@ -41,4 +41,14 @@ export const ENTITIES = {
     description: "Any person who has not descended from heaven.",
     visualType: "concept",
   },
+  solomon: {
+    "id": "solomon",
+    "name": "Solomon",
+    "aka": [
+      "King Solomon"
+    ],
+    "type": "person",
+    "description": "Son of David and king of Israel, whose building projects — and the officers who supervised them — are chronicled twice, with two different headcounts.",
+    "visualType": "person"
+  },
 }

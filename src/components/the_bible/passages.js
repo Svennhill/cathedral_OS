@@ -101,4 +101,45 @@ export const PASSAGES = [
     verdict: "LEVEL 3 DOCTRINAL VIOLATION — John 3:13 makes an exclusive universal claim that is directly contradicted by at least two prior Old Testament accounts accepted as canonical by the same tradition.",
     scoreImpact: -2.0,
   },
+  {
+    "id": "solomons_overseers",
+    "title": "Solomon's Overseers",
+    "summary": "Checks 1 Kings 9:23 — 550 chief officers over Solomon's projects — against 2 Chronicles 8:10, which counts 250.",
+    "ruleVerse": {
+      "book": "1 Kings",
+      "chapter": 9,
+      "verse": 23,
+      "reference": "1 Kings 9:23"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_550_officers",
+        "statement": "Solomon's chief officers numbered 550 supervisors.",
+        "plain": "1 Kings counts them exactly: '550 supervisors over the people who did the work.'",
+        "subject": "solomon",
+        "action": "appoint",
+        "target": "officers",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "chronicles_250",
+        "entityId": "solomon",
+        "verse": {
+          "book": "2 Chronicles",
+          "chapter": 8,
+          "verse": 10,
+          "reference": "2 Chronicles 8:10"
+        },
+        "violatesRule": "rule_550_officers",
+        "violationExplanation": "Chronicles describes the same office in the same words — 'the chief officers for King Solomon' — and counts '250 supervisors.' The office, the king, and the description agree; the headcount differs by 300.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Chronicles counts 250 of the officers Kings counts at 550."
+      }
+    ],
+    "severity": 1,
+    "verdict": "Both books describe Solomon's chief officers in nearly identical sentences. One counts 550 supervisors, the other 250. The text gives no second group, no recount, and no explanation for the missing 300.",
+    "scoreImpact": -0.1
+  },
 ]
