@@ -2531,4 +2531,59 @@ export const PASSAGES = [{
     "verdict": "The temple-murdered Zechariah is a fixed point in both Testaments: Chronicles makes him Jehoiada's son, stoned in the house of the LORD. Jesus, citing that same murder as the closing entry in the record of righteous blood, makes him Berechiah's son. The victim is the same; the father is not.",
     "scoreImpact": -0.5
   },
+{
+    "id": "with_or_against",
+    "title": "With Me, or Not Against Me?",
+    "summary": "Checks Matthew 12:30 — Jesus: he who is not with Me is against Me — against Luke 9:50 and Mark 9:40, where Jesus states the reverse: whoever is not against you is for you.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 12,
+      "verse": 30,
+      "reference": "Matthew 12:30"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_not_with_against",
+        "statement": "Whoever is not with Jesus is against Him.",
+        "plain": "Jesus states the rule without a middle: 'He who is not with Me is against Me, and he who does not gather with Me scatters.' Neutrality counts as opposition.",
+        "subject": "human",
+        "action": "stand_with",
+        "target": "jesus",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "luke_not_against",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Luke",
+          "chapter": 9,
+          "verse": 50,
+          "reference": "Luke 9:50"
+        },
+        "violatesRule": "rule_not_with_against",
+        "violationExplanation": "Jesus applies the opposite rule to the same kind of case — an outsider casting out demons in His name: '“Do not stop him,” Jesus replied, “for whoever is not against you is for you.”' The man is not with the disciples; by Matthew's rule he is against them; by Luke's rule he is for them.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Luke's Jesus counts the neutral man as for Him."
+      },
+      {
+        "id": "mark_not_against",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Mark",
+          "chapter": 9,
+          "verse": 40,
+          "reference": "Mark 9:40"
+        },
+        "violatesRule": "rule_not_with_against",
+        "violationExplanation": "Mark records the same ruling in the same words: 'For whoever is not against us is for us.' Two Gospels preserve the maxim that reverses Matthew's — from the same speaker, about the same question of who counts as on His side.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Mark's maxim also reverses Matthew's."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Matthew's Jesus abolishes the middle: not with Me means against Me. Luke's and Mark's Jesus install the middle as the rule: not against us means for us. The two maxims classify the same unaffiliated man into opposite camps, and both are given as Jesus's own teaching.",
+    "scoreImpact": -2.0
+  },
 ]
