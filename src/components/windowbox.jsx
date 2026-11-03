@@ -11,6 +11,7 @@ import { useRef } from "react"
 //   onUpdateSize    — (w, h) → update size in parent state
 //   taskbarHeightPct — taskbar height as % of screen frame (so maximize lands below it)
 //   contentZoom     — window zoom for the app content (independent of desktop zoom)
+//   phone           — phone layout: touch-sized title bar and buttons
 //   children        — the app rendered inside
 
 const GREEN  = "#00ff41"
@@ -27,6 +28,7 @@ export default function WindowBox({
   onUpdateSize,
   taskbarHeightPct,
   contentZoom = 1,
+  phone = false,
   children,
 }) {
   const { title, x, y, width, height, minimized, maximized } = win
@@ -132,7 +134,7 @@ export default function WindowBox({
         onMouseDown={handleTitleMouseDown}
         style={{
           background: WHITE,
-          padding: "2px 4px",
+          padding: phone ? "0 0 0 8px" : "2px 4px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -141,31 +143,36 @@ export default function WindowBox({
           flexShrink: 0,
         }}
       >
-        <span style={{ color: "#000", fontWeight: "bold", fontSize: 9 }}>
+        <span style={{ color: "#000", fontWeight: "bold", fontSize: phone ? 14 : 9 }}>
           {title}
         </span>
 
-        <div style={{ display: "flex", gap: 2 }}>
+        <div style={{ display: "flex", gap: phone ? 0 : 2 }}>
           {/* Minimize */}
           <button
             onMouseDown={e => e.stopPropagation()}
             onClick={onMinimize}
-            style={btnStyle("#d4d4d4", "#888", "#000")}
-          >_</button>
+            aria-label="Minimize"
+            style={phone ? PHONE_HIT : btnStyle("#d4d4d4", "#888", "#000")}
+          >{phone ? <span style={phoneFace("#d4d4d4", "#888", "#000")}>_</span> : "_"}</button>
 
           {/* Maximize / Restore */}
           <button
             onMouseDown={e => e.stopPropagation()}
             onClick={onMaximize}
-            style={btnStyle("#d4d4d4", "#888", "#000")}
-          >{maximized ? "❐" : "□"}</button>
+            aria-label={maximized ? "Restore" : "Maximize"}
+            style={phone ? PHONE_HIT : btnStyle("#d4d4d4", "#888", "#000")}
+          >{phone
+            ? <span style={phoneFace("#d4d4d4", "#888", "#000")}>{maximized ? "❐" : "□"}</span>
+            : (maximized ? "❐" : "□")}</button>
 
           {/* Close */}
           <button
             onMouseDown={e => e.stopPropagation()}
             onClick={onClose}
-            style={btnStyle("#cc0000", "#880000", "#fff")}
-          >✕</button>
+            aria-label="Close"
+            style={phone ? PHONE_HIT : btnStyle("#cc0000", "#880000", "#fff")}
+          >{phone ? <span style={phoneFace("#cc0000", "#880000", "#fff")}>✕</span> : "✕"}</button>
         </div>
       </div>
 
@@ -218,5 +225,21 @@ function btnStyle(bg, border, color) {
     alignItems: "center",
     justifyContent: "center",
     lineHeight: 1,
+  }
+}
+
+// Phone layout: a 40×40 invisible hit area around a 26px button face, so the
+// title bar keeps its small retro buttons and still takes a fingertip.
+const PHONE_HIT = {
+  width: 40, height: 40, padding: 0, margin: 0,
+  background: "transparent", border: "none", borderRadius: 0,
+  display: "flex", alignItems: "center", justifyContent: "center",
+  cursor: "pointer",
+}
+function phoneFace(bg, border, color) {
+  return {
+    ...btnStyle(bg, border, color),
+    width: 26, height: 26, fontSize: 14,
+    boxSizing: "border-box",
   }
 }

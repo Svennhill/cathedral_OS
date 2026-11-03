@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react"
+import { PCT } from "../utils/screenConstants"
+import { screenArtCover } from "../utils/phoneLayout"
 
 const BOOT_LINES = [
   "RELIQUARY 316J-SVU CODEX SYSTEM",
@@ -34,7 +36,10 @@ const BOOT_LINES = [
 const GREEN = "#00ff41"
 const MID_GREEN = "#00a829"
 
-export default function BootScreen({ onBootComplete, setIlluminate }) {
+// phone / frame: the phone layout (utils/phoneLayout.js) and the screen
+// area's size in px. The desktop layout below is untouched; the phone layout
+// is drawn by PhoneBoot from the same state.
+export default function BootScreen({ onBootComplete, setIlluminate, phone = false, frame = null }) {
   const [phase, setPhase] = useState('text')
   const [visibleLines, setVisibleLines] = useState([])
   const [currentLine, setCurrentLine] = useState(0)
@@ -192,6 +197,17 @@ export default function BootScreen({ onBootComplete, setIlluminate }) {
     }
   }
 
+  if (phone && frame?.w && frame?.h) {
+    return (
+      <PhoneBoot
+        frame={frame} phase={phase} blink={blink}
+        visibleLines={visibleLines} currentLine={currentLine} currentChar={currentChar}
+        catScanProgress={catScanProgress} wipeProgress={wipeProgress}
+        splashText={splashText} quoteText={quoteText} getLineColor={getLineColor}
+      />
+    )
+  }
+
   return (
     <div style={{
       position: "absolute",
@@ -297,6 +313,98 @@ export default function BootScreen({ onBootComplete, setIlluminate }) {
         </div>
       )}
 
+    </div>
+  )
+}
+// ── PHONE LAYOUT ──────────────────────────────────────────────────────────
+// Everything is placed inside the screen area itself (not in % of the
+// full-bezel layer, which Screen Only stretches to the window's shape), the
+// art covers that area undistorted, and the text is sized to the screen:
+// boot lines as large as fit on one line each, the splash block anchored to
+// the top of the screen and growing DOWN, so the verse is always whole.
+const LONGEST_LINE = Math.max(...BOOT_LINES.map(l => l.length))
+const CHAR_EM      = 0.66   // monospace advance + the 0.05em letter-spacing
+
+function PhoneBoot({
+  frame, phase, blink, visibleLines, currentLine, currentChar,
+  catScanProgress, wipeProgress, splashText, quoteText, getLineColor,
+}) {
+  const { w, h } = frame
+  const pad   = Math.round(Math.max(10, Math.min(w, h) * 0.035))
+  const fs    = Math.max(10, Math.min(16, Math.floor((w - 2 * pad) / (LONGEST_LINE * CHAR_EM))))
+  const lineH = fs * 1.6
+  const rows  = Math.max(3, Math.min(12, Math.floor((h - 2 * pad) / lineH) - 1))
+  const art   = screenArtCover(w, h)
+  const layer = { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", overflow: "hidden" }
+
+  return (
+    <div style={{ ...layer, fontFamily: "monospace", fontSize: fs, zIndex: 150 }}>
+      <div style={{
+        position: "absolute",
+        top:    `${PCT.top    * 100}%`,
+        left:   `${PCT.left   * 100}%`,
+        width:  `${PCT.width  * 100}%`,
+        height: `${PCT.height * 100}%`,
+        overflow: "hidden",
+      }}>
+        <div style={{ ...layer, zIndex: 0 }}>
+          <img src="/boot/boot_background.png" alt="" style={art} />
+        </div>
+
+        {(phase === 'cathedral' || phase === 'wipe') && (
+          <div style={{ ...layer, zIndex: 1, clipPath: `inset(0 0 ${(1 - catScanProgress) * 100}% 0)` }}>
+            <img src="/boot/boot_cathedral.png" alt="" style={art} />
+          </div>
+        )}
+
+        {phase === 'wipe' && (
+          <div style={{ ...layer, zIndex: 2, clipPath: `inset(0 0 ${(1 - wipeProgress) * 100}% 0)` }}>
+            <img src="/OS/background_OS.png" alt="" style={art} />
+          </div>
+        )}
+
+        {phase === 'text' && (
+          <div style={{ position: "absolute", top: pad, left: pad, right: pad, zIndex: 10 }}>
+            {visibleLines.slice(-rows).map((line, i) => (
+              <div key={i} style={{
+                color: getLineColor(line), lineHeight: 1.6, letterSpacing: "0.05em",
+                opacity: 0.85, whiteSpace: "nowrap",
+              }}>
+                {line}
+              </div>
+            ))}
+            {currentLine < BOOT_LINES.length && (
+              <div style={{ color: GREEN, lineHeight: 1.6, letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
+                {BOOT_LINES[currentLine].slice(0, currentChar)}
+                <span style={{ opacity: blink ? 1 : 0 }}>_</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {phase === 'cathedral' && (
+          <div data-boot-splash style={{
+            position: "absolute",
+            top: Math.round(Math.max(pad, h * 0.04)),
+            left: pad, right: pad,
+            zIndex: 10,
+            textShadow: "0 0 6px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.9)",
+          }}>
+            <div style={{ color: GREEN, fontSize: Math.max(18, fs + 5), letterSpacing: "0.1em", marginBottom: 8 }}>
+              {splashText}<span style={{ opacity: blink ? 1 : 0 }}>_</span>
+            </div>
+            <div style={{
+              color: MID_GREEN, fontSize: Math.max(14, fs), lineHeight: 1.5,
+              letterSpacing: "0.05em", marginBottom: 8, fontStyle: "italic",
+            }}>
+              {quoteText}
+            </div>
+            <div style={{ color: GREEN, letterSpacing: "0.1em" }}>
+              {'> '}<span style={{ opacity: blink ? 1 : 0 }}>_</span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

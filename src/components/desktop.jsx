@@ -2,10 +2,13 @@
 // Lives inside the screen frame div — coordinates are relative to the screen area.
 // Icons positioned below the taskbar (taskbarHeightPct offset).
 
-function DesktopIcon({ label, symbol, onDoubleClick }) {
+// Phone layout: one tap opens (touch has no reliable double-click)
+function DesktopIcon({ label, symbol, onDoubleClick, phone }) {
   return (
     <div
-      onDoubleClick={onDoubleClick}
+      onDoubleClick={phone ? undefined : onDoubleClick}
+      onClick={phone ? onDoubleClick : undefined}
+      role={phone ? "button" : undefined}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -50,7 +53,7 @@ function DesktopIcon({ label, symbol, onDoubleClick }) {
 }
 
 // zoom — desktop zoom (icons + labels only; never applied to app windows)
-export default function Desktop({ openWindow, taskbarHeightPct, zoom = 1 }) {
+export default function Desktop({ openWindow, taskbarHeightPct, zoom = 1, phone = false }) {
   return (
     <div style={{
       position: "absolute",
@@ -73,11 +76,13 @@ export default function Desktop({ openWindow, taskbarHeightPct, zoom = 1 }) {
           label="scripted.exe"
           symbol="►"
           onDoubleClick={() => openWindow('scriptedexe', 'scripted.exe')}
+          phone={phone}
         />
         <DesktopIcon
           label="doug's pretzel factory"
           symbol="∞"
           onDoubleClick={() => openWindow('dougpretfac', "doug's pretzel factory")}
+          phone={phone}
         />
       </div>
     </div>

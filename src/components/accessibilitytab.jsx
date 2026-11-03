@@ -33,16 +33,19 @@ const CARD_MAX_H     = 0.64        // card height, max fraction of screen height
 const CARD_MAX_W     = 0.90        // card width, max fraction of screen width
 const CARD_TOP       = 0.30        // preferred top, fraction of screen height
 
-function AccOption({ label, checked, onChange }) {
+// phone: the phone layout (utils/phoneLayout.js) — larger type and checkboxes
+function AccOption({ label, checked, onChange, phone }) {
   return (
     <label style={{
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      padding: "4px 0",
+      padding: phone ? "0" : "4px 0",
+      minHeight: phone ? 44 : undefined,
+      gap: phone ? 8 : undefined,
       cursor: "pointer",
       fontFamily: FONT,
-      fontSize: 11,
+      fontSize: phone ? 15 : 11,
       color: BLACK,
       userSelect: "none",
       borderBottom: "1px solid rgba(0,0,0,0.08)",
@@ -52,7 +55,7 @@ function AccOption({ label, checked, onChange }) {
         type="checkbox"
         checked={checked}
         onChange={e => onChange(e.target.checked)}
-        style={{ width: 14, height: 14, cursor: "pointer", accentColor: BLACK }}
+        style={{ width: phone ? 22 : 14, height: phone ? 22 : 14, cursor: "pointer", accentColor: BLACK, flexShrink: phone ? 0 : undefined }}
       />
     </label>
   )
@@ -63,6 +66,7 @@ export default function AccessibilityTab({
   alwaysScreenOnly, setAlwaysScreenOnly,
   greyscale,  setGreyscale,
   activePCT,
+  phone = false,
 }) {
   const [open, setOpen] = useState(false)
   const anchorRef       = useRef(null)
@@ -212,7 +216,7 @@ export default function AccessibilityTab({
 
             <div style={{
               fontFamily: FONT,
-              fontSize: 11,
+              fontSize: phone ? 15 : 11,
               fontWeight: "bold",
               color: BLACK,
               letterSpacing: "0.1em",
@@ -227,23 +231,26 @@ export default function AccessibilityTab({
               label="Screen Only"
               checked={screenOnly}
               onChange={setScreenOnly}
+              phone={phone}
             />
             <AccOption
               label="Always load Screen Only"
               checked={alwaysScreenOnly}
               onChange={(v) => { setAlwaysScreenOnly(v); setScreenOnly(v) }}
+              phone={phone}
             />
             <AccOption
               label="Greyscale"
               checked={greyscale}
               onChange={setGreyscale}
+              phone={phone}
             />
 
             <div style={{
               marginTop: 6,
               color: DIM,
               fontFamily: FONT,
-              fontSize: 9,
+              fontSize: phone ? 12 : 9,
               lineHeight: 1.7,
               fontStyle: "italic",
             }}>

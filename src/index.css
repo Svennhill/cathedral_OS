@@ -28,6 +28,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  /* the visible height on phones (iOS 100vh includes the area under the
+     browser's toolbars); the same number as 100vh on desktop */
+  min-height: 100dvh;
 }
 
 h1 {
