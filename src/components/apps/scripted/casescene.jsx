@@ -250,7 +250,7 @@ export default function CaseScene({ caseData, scene }) {
 
         <p className="sc-rule">
           <b>Rule verse — {caseData.ruleVerse.reference}:</b>{" "}
-          “{verses[caseData.ruleVerse.reference] ?? "…"}”
+          {verses[caseData.ruleVerse.reference] ?? "…"}
         </p>
         <p className="sc-help">
           Drag a person {action.dir} into {place.name}. No drag? Tap a person, then tap {place.name}
@@ -425,7 +425,7 @@ function Outcome({ f, first, caseData, scene, verses, ruleNo, placeWord, delay }
 function Verse({ verse, text }) {
   return (
     <blockquote className="cs-verse">
-      “{text ?? "…"}”
+      {text ?? "…"}
       <cite>— {verse.reference} ({TRANSLATION})</cite>
     </blockquote>
   )
