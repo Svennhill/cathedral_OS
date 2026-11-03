@@ -1,8 +1,15 @@
 // StartMenu — drops down from the COS button inside the screen frame
-// Sections: APPS (open windows), SETTINGS (accessibility + debug passcode)
+// Sections: APPS (open windows), CASE PROGRESS (scripted.exe save state +
+// start-over), SETTINGS (accessibility + debug passcode)
+//
+// phone: the phone layout (utils/phoneLayout.js) — full-width menu, rows and
+// controls at touch size. Every desktop value is unchanged.
 
 import { useState, useRef, useEffect } from "react"
 import { ZOOM_STEPS } from "../utils/screenConstants"
+import { PHONE } from "../utils/phoneLayout"
+import { PASSAGES } from "./the_bible/passages"
+import { caseActions, useCaseState, caseStatus } from "./apps/scripted/casestore"
 
 const GREEN  = "#00ff41"
 const TEAL   = "#009191"
@@ -13,15 +20,22 @@ const DEBUG_CODE = "2079"
 
 // ── SUB-COMPONENTS ────────────────────────────────────────────────────────
 
-function SectionHeader({ label, open, onToggle }) {
+function SectionHeader({ label, open, onToggle, phone, id }) {
   return (
     <div
       onClick={onToggle}
+      role="button"
+      tabIndex={0}
+      aria-expanded={open}
+      data-section={id}
+      onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle() } }}
       style={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "3px 8px",
+        padding: phone ? "0 12px" : "3px 8px",
+        minHeight: phone ? PHONE.HIT + 4 : undefined,
+        boxSizing: "border-box",
         background: DIM,
         cursor: "pointer",
         userSelect: "none",
@@ -38,7 +52,7 @@ function SectionHeader({ label, open, onToggle }) {
   )
 }
 
-function AppEntry({ title, symbol, onClick }) {
+function AppEntry({ title, symbol, onClick, phone }) {
   const [hovered, setHovered] = useState(false)
   return (
     <div
@@ -48,8 +62,9 @@ function AppEntry({ title, symbol, onClick }) {
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 8,
-        padding: "3px 12px",
+        gap: phone ? 12 : 8,
+        padding: phone ? "0 14px" : "3px 12px",
+        minHeight: phone ? PHONE.HIT + 4 : undefined,
         cursor: "pointer",
         background: hovered ? `rgba(0,145,145,0.15)` : "transparent",
         fontFamily: FONT,
@@ -61,10 +76,10 @@ function AppEntry({ title, symbol, onClick }) {
     >
       <span style={{
         display: "inline-block",
-        width: 14, height: 14,
+        width: phone ? 22 : 14, height: phone ? 22 : 14,
         border: `1px solid ${hovered ? TEAL : DIM}`,
         textAlign: "center",
-        lineHeight: "12px",
+        lineHeight: phone ? "20px" : "12px",
         fontSize: "65%",
         flexShrink: 0,
       }}>
@@ -75,13 +90,14 @@ function AppEntry({ title, symbol, onClick }) {
   )
 }
 
-function SettingToggle({ label, checked, onChange, locked, lockNote }) {
+function SettingToggle({ label, checked, onChange, locked, lockNote, phone }) {
   return (
     <label style={{
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      padding: "2px 12px",
+      padding: phone ? "0 14px" : "2px 12px",
+      minHeight: phone ? PHONE.HIT + 4 : undefined,
       cursor: locked ? "default" : "pointer",
       fontFamily: FONT,
       fontSize: "72%",
@@ -95,7 +111,7 @@ function SettingToggle({ label, checked, onChange, locked, lockNote }) {
           type="checkbox"
           checked={checked}
           onChange={e => onChange(e.target.checked)}
-          style={{ width: 10, height: 10, cursor: "pointer", accentColor: GREEN }}
+          style={{ width: phone ? 22 : 10, height: phone ? 22 : 10, cursor: "pointer", accentColor: GREEN, flexShrink: 0 }}
         />
       )}
     </label>
@@ -103,7 +119,7 @@ function SettingToggle({ label, checked, onChange, locked, lockNote }) {
 }
 
 // − 100% + stepper over ZOOM_STEPS
-function ZoomSetting({ label, value, onChange }) {
+function ZoomSetting({ label, value, onChange, phone }) {
   const idx = ZOOM_STEPS.indexOf(value)
   const i = idx === -1 ? ZOOM_STEPS.indexOf(1) : idx
   const stepBtn = (disabled) => ({
@@ -115,7 +131,7 @@ function ZoomSetting({ label, value, onChange }) {
     fontFamily: FONT,
     fontSize: "100%",
     lineHeight: 1,
-    width: 14, height: 14,
+    width: phone ? PHONE.HIT : 14, height: phone ? PHONE.HIT : 14,
     padding: 0,
   })
   return (
@@ -123,7 +139,7 @@ function ZoomSetting({ label, value, onChange }) {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      padding: "2px 12px",
+      padding: phone ? "2px 14px" : "2px 12px",
       fontFamily: FONT,
       fontSize: "72%",
       color: `rgba(0,255,65,0.8)`,
@@ -131,14 +147,14 @@ function ZoomSetting({ label, value, onChange }) {
       gap: 6,
     }}>
       <span>{label}</span>
-      <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+      <span style={{ display: "flex", alignItems: "center", gap: phone ? 6 : 4 }}>
         <button
           aria-label={`${label} out`}
           disabled={i === 0}
           onClick={() => onChange(ZOOM_STEPS[i - 1])}
           style={stepBtn(i === 0)}
         >−</button>
-        <span style={{ minWidth: 30, textAlign: "center" }}>{Math.round(ZOOM_STEPS[i] * 100)}%</span>
+        <span style={{ minWidth: phone ? 44 : 30, textAlign: "center" }}>{Math.round(ZOOM_STEPS[i] * 100)}%</span>
         <button
           aria-label={`${label} in`}
           disabled={i === ZOOM_STEPS.length - 1}
@@ -155,7 +171,7 @@ function Divider() {
 }
 
 // ── DEBUG PASSCODE PANEL ──────────────────────────────────────────────────
-function DebugSection({ debugEnabled, onEnableDebug, onDisableDebug }) {
+function DebugSection({ debugEnabled, onEnableDebug, onDisableDebug, phone }) {
   const [expanded, setExpanded] = useState(false)
   const [code, setCode]         = useState('')
   const [error, setError]       = useState(false)
@@ -193,7 +209,8 @@ function DebugSection({ debugEnabled, onEnableDebug, onDisableDebug }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "2px 12px",
+          padding: phone ? "0 14px" : "2px 12px",
+          minHeight: phone ? PHONE.HIT + 4 : undefined,
           cursor: "pointer",
           fontFamily: FONT,
           fontSize: "72%",
@@ -258,8 +275,10 @@ export default function StartMenu({
   desktopZoom,   setDesktopZoom,
   windowZoom,    setWindowZoom,
   taskbarHeightPct,
+  phone = false,
 }) {
   const [appsOpen,     setAppsOpen]     = useState(true)
+  const [progressOpen, setProgressOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -285,12 +304,19 @@ export default function StartMenu({
     <div
       ref={menuRef}
       onMouseDown={e => e.stopPropagation()}
+      data-start-menu
       style={{
         position: "absolute",
         top: `${taskbarHeightPct}%`,
         left: 0,
+        right: phone ? 0 : undefined,     // phone: the full screen width
         zIndex: 400,
         minWidth: 200,
+        // Never taller than the screen below the taskbar; scrolls instead
+        maxHeight: `${100 - taskbarHeightPct}%`,
+        overflowY: "auto",
+        boxSizing: "border-box",
+        fontSize: phone ? 20 : undefined,  // phone: %-sized text scales off this (72% → 14.4px)
         background: BG,
         border: `1px solid ${TEAL}`,
         boxShadow: `0 4px 16px rgba(0,0,0,0.7), 0 0 8px rgba(0,145,145,0.2)`,
@@ -311,10 +337,12 @@ export default function StartMenu({
         </span>
         <button
           onClick={onClose}
+          aria-label="Close menu"
           style={{
             background: "transparent", border: "none",
             color: BG, cursor: "pointer", fontSize: "72%",
             fontFamily: FONT, padding: "0 2px", lineHeight: 1,
+            ...(phone ? { width: PHONE.HIT + 4, height: PHONE.HIT, padding: 0, marginRight: -8, borderRadius: 0, fontSize: "90%" } : null),
           }}
         >
           ✕
@@ -322,7 +350,7 @@ export default function StartMenu({
       </div>
 
       {/* ── APPS SECTION ──────────────────────────────────── */}
-      <SectionHeader label="APPS" open={appsOpen} onToggle={() => setAppsOpen(o => !o)} />
+      <SectionHeader label="APPS" id="apps" phone={phone} open={appsOpen} onToggle={() => setAppsOpen(o => !o)} />
       {appsOpen && (
         <div style={{ paddingTop: 2, paddingBottom: 4 }}>
           {APPS.map(app => (
@@ -331,13 +359,18 @@ export default function StartMenu({
               title={app.title}
               symbol={app.symbol}
               onClick={() => handleOpenApp(app.id, app.title)}
+              phone={phone}
             />
           ))}
         </div>
       )}
 
+      {/* ── CASE PROGRESS SECTION ─────────────────────────── */}
+      <SectionHeader label="CASE PROGRESS" id="progress" phone={phone} open={progressOpen} onToggle={() => setProgressOpen(o => !o)} />
+      {progressOpen && <CaseProgress phone={phone} />}
+
       {/* ── SETTINGS SECTION ──────────────────────────────── */}
-      <SectionHeader label="SETTINGS" open={settingsOpen} onToggle={() => setSettingsOpen(o => !o)} />
+      <SectionHeader label="SETTINGS" id="settings" phone={phone} open={settingsOpen} onToggle={() => setSettingsOpen(o => !o)} />
       {settingsOpen && (
         <div style={{ paddingTop: 2, paddingBottom: 4 }}>
 
@@ -349,26 +382,31 @@ export default function StartMenu({
             label="Screen Only (this session)"
             checked={screenOnly}
             onChange={setScreenOnly}
+            phone={phone}
           />
           <SettingToggle
             label="Always load Screen Only"
             checked={alwaysScreenOnly}
             onChange={(v) => { setAlwaysScreenOnly(v); setScreenOnly(v) }}
+            phone={phone}
           />
           <SettingToggle
             label="Greyscale"
             checked={greyscale}
             onChange={setGreyscale}
+            phone={phone}
           />
           <ZoomSetting
             label="Desktop zoom"
             value={desktopZoom}
             onChange={setDesktopZoom}
+            phone={phone}
           />
           <ZoomSetting
             label="Window zoom"
             value={windowZoom}
             onChange={setWindowZoom}
+            phone={phone}
           />
 
           <Divider />
@@ -381,6 +419,7 @@ export default function StartMenu({
             debugEnabled={debugEnabled}
             onEnableDebug={() => setDebugEnabled(true)}
             onDisableDebug={() => setDebugEnabled(false)}
+            phone={phone}
           />
 
           <Divider />
@@ -393,15 +432,97 @@ export default function StartMenu({
             label="Background"
             locked
             lockNote="login required"
+            phone={phone}
           />
           <SettingToggle
             label="Color theme"
             locked
             lockNote="login required"
+            phone={phone}
           />
         </div>
       )}
 
+    </div>
+  )
+}
+
+// ── CASE PROGRESS ─────────────────────────────────────────────────────────
+// scripted.exe's save state, reachable from the taskbar without opening any
+// window. Reads the same store as the case-select cards (casestore.js) and
+// resets through the same caseActions.reset behind the same two-step confirm
+// as the in-panel "Start the case over" — nothing here keeps its own copy.
+function CaseProgress({ phone }) {
+  const { tested: testedByCase } = useCaseState()
+  const started = PASSAGES.filter(c => testedByCase[c.id]?.length).length
+  const note = { padding: phone ? "6px 14px" : "3px 12px", fontFamily: FONT, fontSize: "62%", color: "rgba(0,255,65,0.6)", lineHeight: 1.45 }
+  return (
+    <div style={{ paddingTop: 2, paddingBottom: 4 }}>
+      <div style={note}>
+        Case progress saves automatically on this device.
+        <br />Started: {started} of {PASSAGES.length} cases
+      </div>
+      <div
+        role="list"
+        aria-label="Case progress"
+        style={phone ? undefined : { maxHeight: 210, overflowY: "auto", scrollbarWidth: "thin", scrollbarColor: `${DIM} transparent` }}
+      >
+        {PASSAGES.map(c => {
+          const tested = testedByCase[c.id] ?? []
+          return (
+            <div key={c.id} role="listitem" data-row style={{
+              padding: phone ? "8px 14px" : "3px 12px",
+              borderTop: `1px dotted ${DIM}`,
+              fontFamily: FONT,
+            }}>
+              <div style={{ fontSize: "68%", color: GREEN, lineHeight: 1.35 }}>{c.title}</div>
+              <div style={{ fontSize: "60%", color: tested.length ? TEAL : "rgba(0,255,65,0.5)", lineHeight: 1.4 }}>
+                {caseStatus(c, tested)}
+              </div>
+              {tested.length > 0 && <ResetCase caseId={c.id} title={c.title} phone={phone} />}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// Same two steps and the same words as the in-panel StartOver (casepanel.jsx)
+function ResetCase({ caseId, title, phone }) {
+  const [asking, setAsking] = useState(false)
+  const btn = (primary) => ({
+    fontFamily: FONT,
+    fontSize: phone ? "62%" : "58%",
+    fontWeight: primary ? "bold" : "normal",
+    color: primary ? GREEN : "rgba(0,255,65,0.75)",
+    background: primary ? "rgba(0,255,65,0.08)" : "transparent",
+    border: `1px solid ${primary ? GREEN : DIM}`,
+    borderRadius: 0,
+    padding: phone ? "0 12px" : "1px 6px",
+    minHeight: phone ? PHONE.HIT : undefined,
+    lineHeight: 1.3,
+    cursor: "pointer",
+  })
+  if (!asking) {
+    return (
+      <div style={{ marginTop: phone ? 6 : 2 }}>
+        <button style={btn(false)} onClick={() => setAsking(true)} aria-label={`Start the case over: ${title}`}>
+          Start the case over
+        </button>
+      </div>
+    )
+  }
+  return (
+    <div role="group" aria-label={`Start ${title} over?`} style={{
+      marginTop: phone ? 6 : 3, padding: phone ? "8px 10px" : "3px 6px",
+      border: `1px dashed ${GREEN}`, color: GREEN,
+    }}>
+      <div style={{ fontSize: "60%", lineHeight: 1.4 }}>Clear every passage you've tested in this case and start again?</div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: phone ? 8 : 3 }}>
+        <button style={btn(false)} autoFocus onClick={() => setAsking(false)}>Keep my progress</button>
+        <button style={btn(true)} onClick={() => caseActions.reset(caseId)}>Yes, start over</button>
+      </div>
     </div>
   )
 }

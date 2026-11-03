@@ -102,6 +102,15 @@ export const caseActions = {
   },
 }
 
+// One case's progress in words — shared by the case-select cards and the
+// start menu's CASE PROGRESS list so the two can never disagree
+export function caseStatus(caseData, tested = []) {
+  const total = caseData.testCases.length
+  return tested.length === 0   ? "Not started" :
+         tested.length < total ? `In progress — ${tested.length} of ${total} passages tested` :
+                                 `Complete — ${total} of ${total} passages tested`
+}
+
 export function useCaseState() {
   return useSyncExternalStore(
     fn => { listeners.add(fn); return () => listeners.delete(fn) },

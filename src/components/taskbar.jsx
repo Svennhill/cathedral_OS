@@ -23,7 +23,7 @@ const BTN    = {
 // Square corners and no rounded focus ring (same cleanup as the COS badge):
 // the global button styles in index.css would otherwise turn the active
 // fill into a pill. Keyboard focus gets a square inset outline instead.
-function TrayButton({ label, title, onClick, active }) {
+function TrayButton({ label, title, onClick, active, phone }) {
   const [keyFocus, setKeyFocus] = useState(false)
   return (
     <button
@@ -35,7 +35,8 @@ function TrayButton({ label, title, onClick, active }) {
         ...BTN,
         color:       active ? BG : GREEN,
         background:  active ? GREEN : "transparent",
-        padding: "0 5px",
+        padding: phone ? "0 10px" : "0 5px",
+        minWidth: phone ? 44 : undefined,
         borderLeft: `1px solid ${DIM}`,
         borderRadius: 0,
         outline:       keyFocus ? `1px solid ${TEAL}` : "none",
@@ -50,7 +51,7 @@ function TrayButton({ label, title, onClick, active }) {
 // ── VOLUME MIXER PANEL ────────────────────────────────────────────────────
 // IMPORTANT: rendered with position:absolute, top:"100%" — so the parent
 // MUST NOT have overflow:hidden or the panel will be clipped.
-function VolumeMixerPanel({ volume, musicPaused, toggleMusic, onClose }) {
+function VolumeMixerPanel({ volume, musicPaused, toggleMusic, onClose, phone }) {
   return (
     <div style={{
       position: "absolute",
@@ -78,7 +79,10 @@ function VolumeMixerPanel({ volume, musicPaused, toggleMusic, onClose }) {
         <span style={{ color: "#000", fontWeight: "bold", fontSize: "80%" }}>volume mixer</span>
         <button
           onClick={onClose}
-          style={{ background: "#cc0000", border: "none", color: "#fff", cursor: "pointer", fontSize: "70%", padding: "1px 3px" }}
+          aria-label="Close volume mixer"
+          style={phone
+            ? { background: "#cc0000", border: "none", borderRadius: 0, color: "#fff", cursor: "pointer", fontSize: "90%", width: 40, height: 40, padding: 0 }
+            : { background: "#cc0000", border: "none", color: "#fff", cursor: "pointer", fontSize: "70%", padding: "1px 3px" }}
         >
           ✕
         </button>
@@ -90,7 +94,7 @@ function VolumeMixerPanel({ volume, musicPaused, toggleMusic, onClose }) {
           <span>OS music</span>
           <button
             onClick={toggleMusic}
-            style={{ ...BTN, height: "auto", padding: "1px 4px", border: `1px solid ${GREEN}`, fontSize: "70%" }}
+            style={{ ...BTN, height: phone ? 40 : "auto", padding: phone ? "0 10px" : "1px 4px", border: `1px solid ${GREEN}`, borderRadius: phone ? 0 : undefined, fontSize: phone ? "90%" : "70%" }}
           >
             {musicPaused ? "► play" : "⏸ pause"}
           </button>
@@ -121,6 +125,7 @@ export default function Taskbar({
   taskbarHeightPct,
   startOpen,          // controlled externally (Screen lifts this state)
   onStartClick,       // toggle callback from Screen
+  phone = false,      // phone layout: touch-sized buttons (utils/phoneLayout.js)
 }) {
   const [mixerOpen, setMixerOpen] = useState(false)
   const [cosKeyFocus, setCosKeyFocus] = useState(false)  // keyboard focus on COS
@@ -142,6 +147,8 @@ export default function Taskbar({
     overflow: "visible",
     pointerEvents: "auto",
     userSelect: "none",
+    // Phone: every %-sized label scales off this (75% → 15px)
+    fontSize: phone ? 20 : undefined,
   }
 
   return (
@@ -165,7 +172,8 @@ export default function Taskbar({
           background: "transparent",
           borderRadius: 0,
           outline: "none",
-          padding: "0 6px",
+          padding: phone ? "0 10px" : "0 6px",
+          minWidth: phone ? 60 : undefined,
           fontWeight: "bold",
           letterSpacing: "0.1em",
           height: "100%",
@@ -213,8 +221,8 @@ export default function Taskbar({
               display:      "flex",
               alignItems:   "center",
               justifyContent: "center",
-              width:        "1.4em",
-              height:       "70%",
+              width:        phone ? 40 : "1.4em",
+              height:       phone ? 36 : "70%",
               aspectRatio:  "1",
               color:        win.minimized ? DIM : GREEN,
               fontSize:     "70%",
@@ -242,12 +250,14 @@ export default function Taskbar({
           title="Toggle OS music"
           onClick={toggleMusic}
           active={!musicPaused}
+          phone={phone}
         />
         <TrayButton
           label={`vol ${Math.round(volume * 100)}%`}
           title="Open volume mixer"
           onClick={() => setMixerOpen(o => !o)}
           active={mixerOpen}
+          phone={phone}
         />
         {mixerOpen && (
           <VolumeMixerPanel
@@ -255,6 +265,7 @@ export default function Taskbar({
             musicPaused={musicPaused}
             toggleMusic={toggleMusic}
             onClose={() => setMixerOpen(false)}
+            phone={phone}
           />
         )}
       </div>

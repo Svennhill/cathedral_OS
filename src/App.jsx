@@ -3,6 +3,9 @@ import Bezel from "./components/bezel"
 import Screen from "./components/screen"
 import DebugPanel from "./components/debugpanel"
 import { BEZEL_W, BEZEL_H, PCT, screenOnlyBox, ZOOM_DEFAULT, clampZoom } from "./utils/screenConstants"
+import {
+  usePhoneLayout, isPhoneNow, usePhoneZoomGuard, PHONE_CSS,
+} from "./utils/phoneLayout"
 
 const DEFAULT_WIN  = { x: 5, y: 8, width: 55, height: 60 }
 const STACK_OFFSET = 3
@@ -37,22 +40,36 @@ export default function App() {
   const [musicPaused, setMusicPaused] = useState(false)
   const audioRef = useRef(null)
 
+  // ── PHONE LAYOUT ───────────────────────────────────────────────────────
+  // Below the phone breakpoint (utils/phoneLayout.js) the screen content gets
+  // touch sizes and browser pinch zoom is held off inside the app.
+  const phone = usePhoneLayout()
+  usePhoneZoomGuard(phone)
+
   // ── ACCESSIBILITY ──────────────────────────────────────────────────────
-  // alwaysScreenOnly: persists — determines startup default
-  const [alwaysScreenOnly, setAlwaysScreenOnly] = useState(() => {
-    try { return localStorage.getItem('alwaysScreenOnly') === 'true' } catch { return false }
-  })
+  // alwaysPref: the owner's EXPLICIT "Always load Screen Only" choice —
+  // true / false, or null when none was ever made. Persists.
+  // ("false" alone was written on every load before, so it only counts as a
+  // choice once the alwaysScreenOnlySet marker says a toggle wrote it.)
+  const [alwaysPref, setAlwaysPref] = useState(readAlwaysPref)
+  // With no explicit choice, a phone starts in Screen Only and a desktop
+  // doesn't (the device at load decides; resizing later never flips it).
+  const [phoneAtLoad] = useState(isPhoneNow)
+  const alwaysScreenOnly    = alwaysPref ?? phoneAtLoad
+  const setAlwaysScreenOnly = (v) => setAlwaysPref(Boolean(v))
   // screenOnly: session-scoped — not written to localStorage
-  const [screenOnly, setScreenOnly] = useState(
-    () => { try { return localStorage.getItem('alwaysScreenOnly') === 'true' } catch { return false } }
-  )
+  const [screenOnly, setScreenOnly] = useState(() => readAlwaysPref() ?? isPhoneNow())
   const [greyscale, setGreyscale] = useState(() => {
     try { return localStorage.getItem('greyscale') === 'true' } catch { return false }
   })
 
   useEffect(() => {
-    try { localStorage.setItem('alwaysScreenOnly', alwaysScreenOnly) } catch {}
-  }, [alwaysScreenOnly])
+    if (alwaysPref === null) return   // no choice made — nothing to save
+    try {
+      localStorage.setItem('alwaysScreenOnly', alwaysPref)
+      localStorage.setItem('alwaysScreenOnlySet', 'true')
+    } catch {}
+  }, [alwaysPref])
   useEffect(() => {
     try { localStorage.setItem('greyscale', greyscale) } catch {}
   }, [greyscale])
@@ -84,7 +101,8 @@ export default function App() {
     const stackIdx = openWindows.length
     setOpenWindows(prev => [...prev, {
       id: appId, title,
-      minimized: false, maximized: false,
+      // Phone layout: windows open filling the screen (□ still restores them)
+      minimized: false, maximized: phone,
       x: DEFAULT_WIN.x + stackIdx * STACK_OFFSET,
       y: DEFAULT_WIN.y + stackIdx * STACK_OFFSET,
       width: DEFAULT_WIN.width, height: DEFAULT_WIN.height,
@@ -124,6 +142,10 @@ export default function App() {
   const fitScale   = Math.min(viewport.width / BEZEL_W, viewport.height / BEZEL_H)
   const dimensions = { width: BEZEL_W * fitScale, height: BEZEL_H * fitScale }
   const soBox      = screenOnlyBox(viewport.width, viewport.height)
+  // The screen area's size in px (normal: inside the scaled bezel; SO: the window)
+  const frame = screenOnly
+    ? { w: viewport.width, h: viewport.height }
+    : { w: dimensions.width * PCT.width, h: dimensions.height * PCT.height }
 
   // ── AUDIO ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -217,6 +239,7 @@ export default function App() {
         debugEnabled={debugEnabled}  setDebugEnabled={setDebugEnabled}
         desktopZoom={desktopZoom}    setDesktopZoom={setDesktopZoom}
         windowZoom={windowZoom}      setWindowZoom={setWindowZoom}
+        phone={phone}                frame={frame}
       />
 
       {/* ── SCREEN-ONLY POWER ─────────────────────────────────
@@ -293,10 +316,15 @@ export default function App() {
   return (
     <>
       <audio ref={audioRef} src="/OS/music_OSnolongerplaysfornowuntilideletethissection.wav" loop />
+      <style>{PHONE_CSS}</style>
 
-      {/* Full-page viewport container — ResizeObserver watches this */}
-      <div ref={containerRef} style={{
-        width: "100vw", height: "100vh",
+      {/* Full-page viewport container — ResizeObserver watches this.
+          Height comes from .cos-viewport (100dvh: the visible height). In the
+          phone layout pinch / double-tap zoom can't start in here (pan-x
+          pan-y keeps scrolling) — see the zoom policy in phoneLayout.js. */}
+      <div ref={containerRef} className={phone ? "cos-viewport cos-phone" : "cos-viewport"} style={{
+        width: "100vw",
+        touchAction: phone ? "pan-x pan-y" : undefined,
         backgroundColor: "#000",
         display: "flex",
         alignItems: "center",
@@ -345,4 +373,14 @@ export default function App() {
       )}
     </>
   )
+}
+
+// The explicit "Always load Screen Only" choice: true / false / null (none)
+function readAlwaysPref() {
+  try {
+    const v = localStorage.getItem('alwaysScreenOnly')
+    if (v === 'true') return true   // only ever written by the owner's toggle
+    if (v === 'false' && localStorage.getItem('alwaysScreenOnlySet') === 'true') return false
+  } catch { /* storage blocked — no saved choice */ }
+  return null
 }

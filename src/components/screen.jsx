@@ -8,6 +8,7 @@ import AccessibilityTab from "./accessibilitytab"
 import ScriptedExe from "./apps/scriptedexe"
 import DougPretFac from "./apps/dougpretfac"
 import { SCREEN_CLIP, PCT, TASKBAR_HEIGHT_PCT } from "../utils/screenConstants"
+import { PHONE, taskbarPct, screenArtCover } from "../utils/phoneLayout"
 
 // App registry — keep in sync with startmenu.jsx APPS array
 function renderApp(appId) {
@@ -38,6 +39,8 @@ export default function Screen({
   debugEnabled, setDebugEnabled,
   desktopZoom, setDesktopZoom,
   windowZoom, setWindowZoom,
+  phone = false,        // phone layout (utils/phoneLayout.js)
+  frame,                // { w, h } — the screen area in px
 }) {
   // COS start menu state — lives here so StartMenu renders at screen-frame level
   // (not inside Taskbar, which would clip it with overflow:hidden)
@@ -50,6 +53,13 @@ export default function Screen({
   // All assets are sized for the full bezel (2208×2427).
   // Screen position is always PCT — no switching needed.
   const clipPath = SCREEN_CLIP
+
+  // Phone layout: a touch-height taskbar, and window/desktop content drawn at
+  // the phone base scale. The F6 zoom sliders multiply on top, each still
+  // touching only its own layer. Desktop: the original values exactly.
+  const tbPct          = taskbarPct(phone, frame?.h, TASKBAR_HEIGHT_PCT)
+  const desktopScale   = phone ? desktopZoom * PHONE.DESKTOP_SCALE : desktopZoom
+  const windowScale    = phone ? windowZoom  * PHONE.WINDOW_SCALE  : windowZoom
 
   const frameStyle = {
     position: "absolute",
@@ -64,7 +74,13 @@ export default function Screen({
   return (
     <>
       {/* ── BACKGROUND OS ──────────────────────────────────── */}
-      {(screenState === 'on' || screenState === 'shutting_down') && (
+      {(screenState === 'on' || screenState === 'shutting_down') && phone && frame && (
+        // Phone: the art covers the screen area undistorted (see screenArtCover)
+        <div style={{ ...frameStyle, pointerEvents: "none", zIndex: 201, filter: screenFilter }}>
+          <img src="/OS/background_OS.png" alt="" style={screenArtCover(frame.w, frame.h)} />
+        </div>
+      )}
+      {(screenState === 'on' || screenState === 'shutting_down') && !phone && (
         <img src="/OS/background_OS.png" style={{
           position: "absolute", top: 0, left: 0,
           width: "100%", height: "100%",
@@ -83,7 +99,7 @@ export default function Screen({
           pointerEvents: "none",
         }}>
           {/* Screen frame — coordinate root for all UI elements */}
-          <div style={frameStyle}>
+          <div style={frameStyle} data-screen-frame>
 
             <Taskbar
               openWindows={openWindows}
@@ -93,9 +109,10 @@ export default function Screen({
               musicPaused={musicPaused}
               toggleMusic={toggleMusic}
               volume={volume}
-              taskbarHeightPct={TASKBAR_HEIGHT_PCT}
+              taskbarHeightPct={tbPct}
               startOpen={startOpen}
               onStartClick={() => setStartOpen(o => !o)}
+              phone={phone}
             />
 
             {/* COS Start Menu — rendered at screen-frame level so it's not clipped */}
@@ -115,14 +132,16 @@ export default function Screen({
                 setDesktopZoom={setDesktopZoom}
                 windowZoom={windowZoom}
                 setWindowZoom={setWindowZoom}
-                taskbarHeightPct={TASKBAR_HEIGHT_PCT}
+                taskbarHeightPct={tbPct}
+                phone={phone}
               />
             )}
 
             <Desktop
               openWindow={openWindow}
-              taskbarHeightPct={TASKBAR_HEIGHT_PCT}
-              zoom={desktopZoom}
+              taskbarHeightPct={tbPct}
+              zoom={desktopScale}
+              phone={phone}
             />
 
             {openWindows.map(win => (
@@ -134,8 +153,9 @@ export default function Screen({
                 onMaximize={() => maximizeWindow(win.id)}
                 onUpdatePos={(x, y) => updateWindowPos(win.id, x, y)}
                 onUpdateSize={(w, h) => updateWindowSize(win.id, w, h)}
-                taskbarHeightPct={TASKBAR_HEIGHT_PCT}
-                contentZoom={windowZoom}
+                taskbarHeightPct={tbPct}
+                contentZoom={windowScale}
+                phone={phone}
               >
                 {renderApp(win.id)}
               </WindowBox>
@@ -156,6 +176,7 @@ export default function Screen({
           greyscale={greyscale}
           setGreyscale={setGreyscale}
           activePCT={PCT}
+          phone={phone}
         />
       )}
 
@@ -175,6 +196,8 @@ export default function Screen({
         <BootScreen
           key={bootKey}
           setIlluminate={setIlluminate}
+          phone={phone}
+          frame={frame}
           onBootComplete={() => {
             if (debugLoop) {
               setBootKey(k => k + 1)

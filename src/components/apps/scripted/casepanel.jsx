@@ -13,7 +13,7 @@ import { ENTITIES } from "../../the_bible/entities"
 import { SEVERITY } from "../../the_bible/severity"
 import { getVerse } from "../../the_bible/bible"
 import { TRANSLATION } from "../../../data/bsb"
-import { caseActions, useCaseState } from "./casestore"
+import { caseActions, useCaseState, caseStatus } from "./casestore"
 import { readerActions } from "./readerstore"
 import { PANEL_CSS } from "./panelstyle"
 import {
@@ -145,11 +145,7 @@ function StageSelect({ cases, testedByCase }) {
 }
 
 function CaseCard({ caseData, tested }) {
-  const total = caseData.testCases.length
-  const status =
-    tested.length === 0     ? "Not started" :
-    tested.length < total   ? `In progress — ${tested.length} of ${total} passages tested` :
-                              `Complete — ${total} of ${total} passages tested`
+  const status = caseStatus(caseData, tested)
 
   return (
     <div className="cs-cardwrap">
