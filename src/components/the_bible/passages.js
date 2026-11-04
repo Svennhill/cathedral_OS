@@ -3106,4 +3106,45 @@ export const PASSAGES = [
     "verdict": "Mark opens his Gospel with a citation and gets its author wrong: the first line he quotes as Isaiah is Malachi 3:1. (Matthew and Luke, copying the passage, quietly drop the attribution.) A scribal-level error, but it stands in the second verse of the book.",
     "scoreImpact": -0.1
   },
+{
+    "id": "fig_tree_withered",
+    "title": "How Quickly Did the Tree Wither?",
+    "summary": "Checks Matthew 21:19 — at Jesus's word, immediately the fig tree withered — against Mark 11:20, where the disciples pass the tree the next morning and see it withered from its roots.",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 21,
+      "verse": 19,
+      "reference": "Matthew 21:19"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_immediately_withered",
+        "statement": "The cursed fig tree withered immediately, in the disciples' presence.",
+        "plain": "Matthew times it: He said 'May you never bear fruit again!' and 'immediately the tree withered.' The disciples ask about it on the spot: 'How did the fig tree wither so quickly?' (21:20).",
+        "subject": "fig_tree",
+        "action": "wither",
+        "target": "immediately",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_next_morning",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Mark",
+          "chapter": 11,
+          "verse": 20,
+          "reference": "Mark 11:20"
+        },
+        "violatesRule": "rule_immediately_withered",
+        "violationExplanation": "Mark spreads the same curse across two days, with the temple cleansing in between: the curse is spoken (11:14), and 'as they were walking back in the morning, they saw the fig tree withered from its roots' — Peter remembering the curse then, as a discovery. In Mark no one sees it wither at all; it is found withered the next day.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Mark's tree is discovered withered the next morning."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Matthew's withering is a public instant miracle: curse, wither, question, all in one scene. Mark's is an overnight process discovered on the walk back, after a whole temple episode has intervened. The speed of the sign — the thing Matthew's disciples marvel at — is the thing Mark's account does not have.",
+    "scoreImpact": -0.5
+  },
 ]
