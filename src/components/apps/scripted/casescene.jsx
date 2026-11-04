@@ -324,12 +324,10 @@ export default function CaseScene({ caseData, scene }) {
     selAt === ZONE   ? `${action.back} ${sel.label} to ${scene.ground}` :
     selAt === GROUND ? `Keep ${sel.label} on ${scene.ground}` :
     `${scene.ground}. Pick a person in ${place.name} first, then choose this to ${action.back.toLowerCase()} them.`
-  const zoneHint =
-    drag ? (target === ZONE ? "Drop here" : "") :
-    selAt === GROUND ? `Tap to ${action.verb.toLowerCase()} ${sel.label} ${action.dir}` : ""
-  const earthHint =
-    drag ? (target === GROUND ? "Drop here" : "") :
-    selAt === ZONE ? `Tap to ${action.back.toLowerCase()} ${sel.label} to ${scene.ground}` : ""
+  // No how-to text is painted into the scene (Steven's ruling, 2026-11-04):
+  // no empty-state annotation in the zone, no drop/tap hints on the zones
+  // or the ground strip. Instructions live in the case text above the
+  // scene; the zone buttons keep their aria-labels for screen readers.
 
   const renderFigure = (f) => {
     const upNow = isUp(f)
@@ -413,11 +411,9 @@ export default function CaseScene({ caseData, scene }) {
           >
             <button type="button" ref={zoneBtnRef} className="sc-zonebtn" onClick={() => onAreaClick(ZONE)} aria-label={zoneLabel}>
               <span className="sc-zone-label" aria-hidden="true">{place.name.toUpperCase()}</span>
-              <span className="sc-zone-hint" aria-hidden="true">{zoneHint}</span>
             </button>
             <div className={"sc-row" + lift(upFigs)}>
-              {upFigs.length ? upFigs.map(renderFigure)
-                : <span className="sc-empty">No one is in {place.name}.</span>}
+              {upFigs.map(renderFigure)}
             </div>
           </div>
 
@@ -427,12 +423,10 @@ export default function CaseScene({ caseData, scene }) {
           >
             <button type="button" ref={earthBtnRef} className="sc-zonebtn" onClick={() => onAreaClick(GROUND)} aria-label={earthLabel} />
             <div className={"sc-row" + lift(groundFigs)}>
-              {groundFigs.length ? groundFigs.map(renderFigure)
-                : <span className="sc-empty">No one is on {scene.ground}.</span>}
+              {groundFigs.map(renderFigure)}
             </div>
             <div className="sc-ground" aria-hidden="true">
               <span>{scene.ground.toUpperCase()}</span>
-              {earthHint && <span className="sc-zone-hint">{earthHint}</span>}
             </div>
           </div>
         </div>

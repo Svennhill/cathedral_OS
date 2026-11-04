@@ -113,7 +113,9 @@ export const SCENE_CSS = `
   font-size: 13px; font-weight: bold; letter-spacing: 0.18em;
   text-shadow: 0 0 6px var(--scene-glow);
 }
-.sc-zone-hint { font-size: 9px; color: var(--scene-dimmed); text-align: right; overflow-wrap: anywhere; min-width: 0; }
+/* (No .sc-zone-hint / .sc-empty rules: in-scene hint and empty-state text
+   were removed by Steven's ruling, 2026-11-04 — how-to lives in the case
+   text above the scene, not painted into it.) */
 
 .sc-row {
   position: relative; z-index: 1; width: 100%;
@@ -133,7 +135,6 @@ export const SCENE_CSS = `
 }
 /* the row a figure is dragged out of rides above the other place's figures */
 .sc-row.lift { z-index: 2; }
-.sc-empty { font-size: 9px; color: var(--scene-dimmed); pointer-events: none; }
 
 /* The ground: low rolling hills behind the figures (::before) and an
    olive tree standing at the left (::after — canopy blobs over a trunk
@@ -186,7 +187,6 @@ export const SCENE_CSS = `
   font-size: 13px; font-weight: bold; letter-spacing: 0.18em; text-align: center;
   text-shadow: 0 0 6px var(--scene-glow);
 }
-.sc-ground .sc-zone-hint { font-weight: normal; letter-spacing: 0; text-shadow: none; text-align: center; }
 
 /* ── figures ───────────────────────────────────────────────────────── */
 .sc-root .sc-fig {
