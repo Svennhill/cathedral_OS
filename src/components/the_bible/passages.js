@@ -3147,4 +3147,45 @@ export const PASSAGES = [
     "verdict": "Matthew's withering is a public instant miracle: curse, wither, question, all in one scene. Mark's is an overnight process discovered on the walk back, after a whole temple episode has intervened. The speed of the sign — the thing Matthew's disciples marvel at — is the thing Mark's account does not have.",
     "scoreImpact": -0.5
   },
+{
+    "id": "zedekiah_peace",
+    "title": "Die in Peace?",
+    "summary": "Checks Jeremiah 34:5 — God's word to Zedekiah: you will die in peace, with spices burned and lamentation — against Jeremiah 52:11, his actual end: eyes put out, bronze shackles, a Babylonian prison until his dying day.",
+    "ruleVerse": {
+      "book": "Jeremiah",
+      "chapter": 34,
+      "verse": 5,
+      "reference": "Jeremiah 34:5"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_die_in_peace",
+        "statement": "Zedekiah would die in peace.",
+        "plain": "Jeremiah delivers it as God's own spoken word, twice guaranteed: 'you will die in peace. As spices were burned for your fathers, so people will burn spices for you and lament, “Alas, O master!” For I Myself have spoken this word, declares the LORD.'",
+        "subject": "zedekiah",
+        "action": "die",
+        "target": "peace",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "jeremiah_blinded_prison",
+        "entityId": "zedekiah",
+        "verse": {
+          "book": "Jeremiah",
+          "chapter": 52,
+          "verse": 11,
+          "reference": "Jeremiah 52:11"
+        },
+        "violatesRule": "rule_die_in_peace",
+        "violationExplanation": "Zedekiah's recorded end, in the same prophetic book: Nebuchadnezzar 'put out Zedekiah’s eyes, bound him with bronze shackles, and took him to Babylon, where he kept him in custody until his dying day' — after his sons were slaughtered before his eyes (52:10), the last thing he ever saw. No spices, no lament, no peace: a blinded prisoner dying in custody.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — The promised peaceful death arrives as blinding and a foreign prison."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Jeremiah promises Zedekiah, in God's name and on God's oath of authorship, a death in peace with royal honors. Jeremiah also records the death: sons executed before his eyes, eyes put out, chains, and a Babylonian cell for life. The same prophet carries both the promise and its opposite.",
+    "scoreImpact": -0.5
+  },
 ]
