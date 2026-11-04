@@ -2722,4 +2722,45 @@ export const PASSAGES = [
     "verdict": "Deuteronomy bars the eunuch from the assembly of the LORD without exception. Isaiah has God promising the faithful eunuch a memorial inside His house and an everlasting name — a better place than sons get. The law excludes by body; the promise includes by covenant; both are given as God's word.",
     "scoreImpact": -2.0
   },
+{
+    "id": "abolish_law",
+    "title": "Abolish the Law?",
+    "summary": "Checks Matthew 5:17 — Jesus: I have not come to abolish the Law, and not a jot will disappear from it (5:18) — against Ephesians 2:15, where Christ makes peace 'by abolishing in His flesh the law of commandments and decrees.'",
+    "ruleVerse": {
+      "book": "Matthew",
+      "chapter": 5,
+      "verse": 17,
+      "reference": "Matthew 5:17"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_not_abolish",
+        "statement": "Jesus did not come to abolish the Law.",
+        "plain": "His own statement: 'Do not think that I have come to abolish the Law or the Prophets. I have not come to abolish them, but to fulfill them.' And verse 18 sets the term: until heaven and earth pass away, not a jot will disappear from the Law until everything is accomplished.",
+        "subject": "jesus",
+        "action": "abolish",
+        "target": "law",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "ephesians_abolished",
+        "entityId": "paul",
+        "verse": {
+          "book": "Ephesians",
+          "chapter": 2,
+          "verse": 15,
+          "reference": "Ephesians 2:15"
+        },
+        "violatesRule": "rule_not_abolish",
+        "violationExplanation": "Ephesians describes the finished act with the same verb Jesus disowns: Christ made peace 'by abolishing in His flesh the law of commandments and decrees.' The law of commandments is abolished — by the man who said He had not come to abolish the Law, while heaven and earth, by every account, still stand.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Ephesians credits Jesus with abolishing what He said He would not."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Jesus denies the mission in advance: not abolish, but fulfill — with the Law's smallest stroke guaranteed until heaven and earth pass. Ephesians reports the mission accomplished by abolition: the law of commandments and decrees abolished in His flesh. Fulfillment is the word one text uses; abolition is the word the other insists on.",
+    "scoreImpact": -2.0
+  },
 ]
