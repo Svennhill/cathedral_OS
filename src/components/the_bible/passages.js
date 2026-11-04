@@ -3065,4 +3065,45 @@ export const PASSAGES = [
     "verdict": "In chapter 16 David lives at court: Saul's armor-bearer, his lyre player, loved by the king. In chapter 17 Saul watches him fight, cannot place him, asks his general whose son he is, and has him brought in for an introduction. The book introduces David to Saul twice — once as family, once as a stranger.",
     "scoreImpact": -0.5
   },
+{
+    "id": "mark_isaiah_quote",
+    "title": "As It Is Written in Isaiah",
+    "summary": "Checks Malachi 3:1 — 'Behold, I will send My messenger, who will prepare the way before Me' — against Mark 1:2, which opens the Gospel by quoting that line as written in Isaiah the prophet.",
+    "ruleVerse": {
+      "book": "Malachi",
+      "chapter": 3,
+      "verse": 1,
+      "reference": "Malachi 3:1"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_malachi_messenger",
+        "statement": "The words 'Behold, I will send My messenger, who will prepare the way before Me' are Malachi's.",
+        "plain": "Malachi 3:1, in Malachi's book, in God's voice through Malachi: the messenger oracle stands at the head of his third chapter.",
+        "subject": "malachi",
+        "action": "prophesy",
+        "target": "messenger",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_attributes_isaiah",
+        "entityId": "john_the_baptist",
+        "verse": {
+          "book": "Mark",
+          "chapter": 1,
+          "verse": 2,
+          "reference": "Mark 1:2"
+        },
+        "violatesRule": "rule_malachi_messenger",
+        "violationExplanation": "Mark's second verse: 'As it is written in Isaiah the prophet: “Behold, I will send My messenger ahead of You, who will prepare Your way.”' The quoted line is Malachi's, word for word in substance — the Isaiah quotation (40:3) only begins in Mark's next verse. The Gospel's first citation credits the wrong prophet.",
+        "severity": 1,
+        "verdict": "CONTRADICTION — Mark attributes Malachi's words to Isaiah."
+      }
+    ],
+    "severity": 1,
+    "verdict": "Mark opens his Gospel with a citation and gets its author wrong: the first line he quotes as Isaiah is Malachi 3:1. (Matthew and Luke, copying the passage, quietly drop the attribution.) A scribal-level error, but it stands in the second verse of the book.",
+    "scoreImpact": -0.1
+  },
 ]
