@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import Bezel from "./components/bezel"
 import Screen from "./components/screen"
 import DebugPanel from "./components/debugpanel"
-import { BEZEL_W, BEZEL_H, PCT, screenOnlyBox, ZOOM_DEFAULT } from "./utils/screenConstants"
+import { PasscodeOverlay } from "./components/passcodeprompt"
+import { BEZEL_W, BEZEL_H, PCT, screenOnlyBox, ZOOM_DEFAULT, clampZoom } from "./utils/screenConstants"
 import {
   usePhoneLayout, isPhoneNow, usePhoneZoomGuard, PHONE_CSS,
 } from "./utils/phoneLayout"
@@ -12,6 +13,22 @@ import {
 import { loadCaseStoreFor } from "./components/apps/scripted/casestore"
 import { readerActions } from "./components/apps/scripted/readerstore"
 import { viewActions } from "./components/apps/scripted/viewstore"
+
+// ── DEBUG CHEAT CODE ─────────────────────────────────────────────────────
+// This key combo opens the owner-passcode prompt over everything, from ANY
+// screen state (off, crt_on, booting, login, on, shutting_down) — even with
+// focus in a text field: it's a system combo, never typed text. It only opens
+// the door; the passcode is still required. Does nothing while debug is
+// already on. Current pick: Ctrl+Alt+D (an earlier note had Ctrl+Alt+Shift+D —
+// set shift: true for that). key is the letter; matched by physical key too,
+// so Option/AltGr turning it into another character doesn't break it.
+const DEBUG_CHEAT_COMBO = { key: "d", ctrl: true, alt: true, shift: false, meta: false }
+
+function isDebugCheatCombo(e) {
+  const c = DEBUG_CHEAT_COMBO
+  if (e.ctrlKey !== c.ctrl || e.altKey !== c.alt || e.shiftKey !== c.shift || e.metaKey !== c.meta) return false
+  return e.code === `Key${c.key.toUpperCase()}` || e.key?.toLowerCase() === c.key
+}
 
 const DEFAULT_WIN  = { x: 5, y: 8, width: 55, height: 60 }
 const STACK_OFFSET = 3
@@ -27,8 +44,11 @@ export default function App() {
   const [debugLoopTarget, setDebugLoopTarget] = useState('booting')
 
   // ── DEBUG OVERRIDE ─────────────────────────────────────────────────────
-  // false by default in production. Toggled via COS → Settings → Debug (passcode 2079).
-  // Also always true in dev mode so the panel is available during development.
+  // false by default in production. Turned on with the owner's passcode
+  // (components/passcodeprompt.jsx) from either door: COS → Settings → Debug
+  // Panel, or the DEBUG_CHEAT_COMBO prompt from any screen state. Turned off
+  // from the Start Menu. Also always true in dev mode so the panel is
+  // available during development.
   // Unlocking it is part of a signed-in session: logout and power-off put it
   // back to this default, so in production the panel never sits on the
   // login screen offering a way past it.
@@ -42,6 +62,41 @@ export default function App() {
   // the OS runs on defaults and nothing is read or written.
   const [currentUser, setCurrentUser] = useState(null)
   const userNs = currentUser ? userNamespace(currentUser.username) : null
+
+  // The cheat-code passcode prompt. A single flag: pressing the combo again,
+  // or holding it down, can't stack a second prompt.
+  const [cheatOpen, setCheatOpen] = useState(false)
+  const closeCheat  = useCallback(() => setCheatOpen(false), [])
+  const unlockDebug = useCallback(() => { setDebugEnabled(true); setCheatOpen(false) }, [])
+
+  useEffect(() => {
+    // Window, capture phase: runs before any field or component sees the key,
+    // so nothing in the app can swallow it — and it never reaches them either.
+    const onKey = (e) => {
+      if (!isDebugCheatCombo(e)) return
+      e.preventDefault()
+      e.stopPropagation()
+      if (e.repeat || debugEnabled) return   // held keys / already on: nothing new
+      setCheatOpen(true)
+    }
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
+  }, [debugEnabled])
+
+  // ── LOGIN JUMP (debug panel) ───────────────────────────────────────────
+  // "login: sign in" / "login: create user" land on the 'login' state with
+  // that card open. view is the requested card ('signin' | 'create'); id
+  // changes on every jump and keys <Screen>, so each jump mounts the login
+  // screen fresh — nothing typed before it (a half-typed password included)
+  // survives the jump. Screen hands view to LoginScreen as its opening card
+  // and spends it (clearLoginView) once the screen leaves 'login', so a later
+  // ordinary arrival at login (e.g. after Log out) opens on the default card.
+  const [loginJump, setLoginJump] = useState({ id: 0, view: null })
+  const jumpToLogin = (view) => {
+    setLoginJump(j => ({ id: j.id + 1, view }))
+    setScreenState('login')
+  }
+  const clearLoginView = useCallback(() => setLoginJump(j => (j.view ? { ...j, view: null } : j)), [])
 
   // ── DISPLAY KNOBS ──────────────────────────────────────────────────────
   const [volume,        setVolume]        = useState(VOLUME_DEFAULT)
@@ -290,11 +345,13 @@ export default function App() {
   const screenContent = (
     <>
       <Screen
+        key={loginJump.id}
         screenState={screenState}    setScreenState={setScreenState}
         luminance={luminance}        density={density}
         clarity={clarity}            illuminate={illuminate}
         align={align}                setIlluminate={setIlluminate}
         debugLoop={debugLoop}        debugLoopTarget={debugLoopTarget}
+        loginView={loginJump.view}   clearLoginView={clearLoginView}
         bootKey={bootKey}            setBootKey={setBootKey}
         openWindows={openWindows}    openWindow={openWindow}
         closeWindow={closeWindow}    minimizeWindow={minimizeWindow}
@@ -440,7 +497,13 @@ export default function App() {
           setLoop={setDebugLoop}
           loopTarget={debugLoopTarget}
           setLoopTarget={setDebugLoopTarget}
+          onJumpLogin={jumpToLogin}
         />
+      )}
+
+      {/* Cheat-code passcode prompt — above everything, debug panel included */}
+      {cheatOpen && (
+        <PasscodeOverlay onSuccess={unlockDebug} onCancel={closeCheat} />
       )}
     </>
   )
