@@ -2887,4 +2887,59 @@ export const PASSAGES = [
     "verdict": "Luke's Jesus eats the Passover with His disciples and then suffers. John's Jerusalem has not eaten the Passover yet when the suffering is already underway the next morning — and John's own dating of the crucifixion (19:14, the day of Preparation for the Passover) keeps the lambs unslain at the hour of the cross. The two chronologies place the feast on opposite sides of the death.",
     "scoreImpact": -0.5
   },
+{
+    "id": "now_i_know",
+    "title": "Now I Know",
+    "summary": "Checks 1 John 3:20 — God knows all things — against Genesis 18:21, where God goes down to Sodom to find out, and Genesis 22:12, where the verdict on Abraham's test arrives as new knowledge: now I know that you fear God.",
+    "ruleVerse": {
+      "book": "1 John",
+      "chapter": 3,
+      "verse": 20,
+      "reference": "1 John 3:20"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_knows_all",
+        "statement": "God knows all things.",
+        "plain": "John states it without range or exception: 'God is greater than our hearts, and He knows all things.' What God knows has no outside.",
+        "subject": "god",
+        "action": "know",
+        "target": "all_things",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "genesis_go_down",
+        "entityId": "god",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 18,
+          "verse": 21,
+          "reference": "Genesis 18:21"
+        },
+        "violatesRule": "rule_knows_all",
+        "violationExplanation": "God describes His own information-gathering about Sodom: 'I will go down to see if their actions fully justify the outcry that has reached Me. If not, I will find out.' A being who knows all things does not travel to check, and has no 'if not' to resolve.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — God goes down to Sodom to find out what He does not yet know."
+      },
+      {
+        "id": "genesis_now_i_know",
+        "entityId": "god",
+        "verse": {
+          "book": "Genesis",
+          "chapter": 22,
+          "verse": 12,
+          "reference": "Genesis 22:12"
+        },
+        "violatesRule": "rule_knows_all",
+        "violationExplanation": "At the climax of the binding of Isaac, the angel of the LORD speaks God's verdict in the first person: 'now I know that you fear God, since you have not withheld your only son from me.' The test's outcome is announced as knowledge newly arrived — the thing the test was run to learn.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — 'Now I know' is not something an all-knowing God can say."
+      }
+    ],
+    "severity": 3,
+    "verdict": "John's God knows all things, full stop. Genesis's God goes down to Sodom to see for Himself and find out, and closes Abraham's test with 'now I know.' Both Genesis scenes are structured as investigations whose outcomes God learns — conduct an omniscient being has no use for.",
+    "scoreImpact": -2.0
+  },
 ]
