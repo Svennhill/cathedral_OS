@@ -3024,4 +3024,45 @@ export const PASSAGES = [
     "verdict": "Exodus 9:6 spends the word 'all': every Egyptian animal died, with Israel's spared as the deliberate contrast. Exodus 9 then keeps going — a warning to bring the livestock in, and hail killing man and beast across the land. Total destruction does not leave stock for the next plague to destroy.",
     "scoreImpact": -0.5
   },
+{
+    "id": "saul_knew_david",
+    "title": "Whose Son Are You?",
+    "summary": "Checks 1 Samuel 16:21 — David entered Saul's service and became his armor-bearer, and Saul loved him very much — against 1 Samuel 17:58, where after the Goliath fight Saul asks David: whose son are you, young man?",
+    "ruleVerse": {
+      "book": "1 Samuel",
+      "chapter": 16,
+      "verse": 21,
+      "reference": "1 Samuel 16:21"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_david_in_service",
+        "statement": "David was already in Saul's service, as his armor-bearer, before the Goliath fight.",
+        "plain": "Samuel's sequence: David 'came to Saul and entered his service,' Saul 'loved him very much,' and David 'became his armor-bearer.' He plays the lyre for Saul's torment in the verses around it. Saul knows David — personally, by name, in his household.",
+        "subject": "david",
+        "action": "serve",
+        "target": "saul",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "saul_asks_whose_son",
+        "entityId": "saul",
+        "verse": {
+          "book": "1 Samuel",
+          "chapter": 17,
+          "verse": 58,
+          "reference": "1 Samuel 17:58"
+        },
+        "violatesRule": "rule_david_in_service",
+        "violationExplanation": "After Goliath falls, Saul has been asking his commander whose son the boy is (17:55-56) and now puts it to David directly: '“Whose son are you, young man?” asked Saul.' David answers with his father's name and town — as a stranger introducing himself to a king he has never served.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Saul interviews as a stranger the armor-bearer he loved."
+      }
+    ],
+    "severity": 2,
+    "verdict": "In chapter 16 David lives at court: Saul's armor-bearer, his lyre player, loved by the king. In chapter 17 Saul watches him fight, cannot place him, asks his general whose son he is, and has him brought in for an introduction. The book introduces David to Saul twice — once as family, once as a stranger.",
+    "scoreImpact": -0.5
+  },
 ]
