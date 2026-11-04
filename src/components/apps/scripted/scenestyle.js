@@ -58,7 +58,7 @@ export const SCENE_CSS = `
    clouds sitting on the dividing line (the ::after puffs — a lit rim
    circle painted 2px above each dark puff, so only a crescent shows). */
 .sc-heaven {
-  position: relative; min-height: 104px; padding: 22px 6px 12px;
+  position: relative; min-height: 140px; padding: 26px 6px 16px;
   display: flex; align-items: flex-end;
   background:
     radial-gradient(circle at 12% 30%, var(--scene-star) 0 1px, transparent 1.5px),
@@ -77,23 +77,23 @@ export const SCENE_CSS = `
   transition: background-color 120ms, box-shadow 120ms;
 }
 .sc-heaven::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30px;
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 38px;
   z-index: 0; pointer-events: none;
   background:
-    radial-gradient(circle 17px at 7% 118%, var(--scene-cloud) 98%, transparent 100%),
-    radial-gradient(circle 23px at 20% 122%, var(--scene-cloud) 98%, transparent 100%),
-    radial-gradient(circle 15px at 33% 116%, var(--scene-cloud) 98%, transparent 100%),
-    radial-gradient(circle 25px at 48% 124%, var(--scene-cloud) 98%, transparent 100%),
-    radial-gradient(circle 16px at 62% 117%, var(--scene-cloud) 98%, transparent 100%),
-    radial-gradient(circle 22px at 76% 121%, var(--scene-cloud) 98%, transparent 100%),
-    radial-gradient(circle 18px at 90% 118%, var(--scene-cloud) 98%, transparent 100%),
-    radial-gradient(circle 17px at 7% calc(118% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
-    radial-gradient(circle 23px at 20% calc(122% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
-    radial-gradient(circle 15px at 33% calc(116% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
-    radial-gradient(circle 25px at 48% calc(124% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
-    radial-gradient(circle 16px at 62% calc(117% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
-    radial-gradient(circle 22px at 76% calc(121% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
-    radial-gradient(circle 18px at 90% calc(118% - 2px), var(--scene-cloud-rim) 98%, transparent 100%);
+    radial-gradient(circle 21px at 7% 118%, var(--scene-cloud) 98%, transparent 100%),
+    radial-gradient(circle 28px at 20% 122%, var(--scene-cloud) 98%, transparent 100%),
+    radial-gradient(circle 19px at 33% 116%, var(--scene-cloud) 98%, transparent 100%),
+    radial-gradient(circle 31px at 48% 124%, var(--scene-cloud) 98%, transparent 100%),
+    radial-gradient(circle 20px at 62% 117%, var(--scene-cloud) 98%, transparent 100%),
+    radial-gradient(circle 27px at 76% 121%, var(--scene-cloud) 98%, transparent 100%),
+    radial-gradient(circle 22px at 90% 118%, var(--scene-cloud) 98%, transparent 100%),
+    radial-gradient(circle 21px at 7% calc(118% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
+    radial-gradient(circle 28px at 20% calc(122% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
+    radial-gradient(circle 19px at 33% calc(116% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
+    radial-gradient(circle 31px at 48% calc(124% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
+    radial-gradient(circle 20px at 62% calc(117% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
+    radial-gradient(circle 27px at 76% calc(121% - 2px), var(--scene-cloud-rim) 98%, transparent 100%),
+    radial-gradient(circle 22px at 90% calc(118% - 2px), var(--scene-cloud-rim) 98%, transparent 100%);
 }
 .sc-heaven.over, .sc-heaven.armed { box-shadow: inset 0 0 0 2px var(--scene-fg), inset 0 0 18px var(--scene-glow); }
 .sc-heaven.over { background-color: var(--scene-soft); }
@@ -121,6 +121,16 @@ export const SCENE_CSS = `
   pointer-events: none;
 }
 .sc-row > * { pointer-events: auto; }
+/* Staging option B (Steven's ruling, 2026-11-04): the Earth row spreads
+   its figures edge to edge instead of gathering them at center, and the
+   Earth section carries more air above the figures (see .sc-earth
+   padding). On wide scenes the spread relaxes to space-around so the
+   cast never pins to distant walls. The Heaven row stays centered —
+   figures sent up gather under the rays. */
+.sc-earth .sc-row { justify-content: space-between; padding: 0 10px; }
+@container scene (min-width: 560px) {
+  .sc-earth .sc-row { justify-content: space-around; }
+}
 /* the row a figure is dragged out of rides above the other place's figures */
 .sc-row.lift { z-index: 2; }
 .sc-empty { font-size: 9px; color: var(--scene-dimmed); pointer-events: none; }
@@ -129,7 +139,7 @@ export const SCENE_CSS = `
    olive tree standing at the left (::after — canopy blobs over a trunk
    stripe), over a textured ground strip with a bright top line. */
 .sc-earth {
-  position: relative; padding: 10px 6px 0;
+  position: relative; padding: 22px 6px 0;
   background: linear-gradient(180deg, transparent, var(--scene-faint));
   transition: box-shadow 120ms;
 }
