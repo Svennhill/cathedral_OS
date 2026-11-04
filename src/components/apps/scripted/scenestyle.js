@@ -149,7 +149,12 @@ export const SCENE_CSS = `
   background:
     radial-gradient(ellipse 75% 65% at 8% 112%, var(--scene-hill) 62%, transparent 63%),
     radial-gradient(ellipse 65% 55% at 55% 118%, var(--scene-hill-far) 62%, transparent 63%),
-    radial-gradient(ellipse 70% 60% at 96% 110%, var(--scene-hill) 62%, transparent 63%);
+    radial-gradient(ellipse 70% 60% at 96% 110%, var(--scene-hill) 62%, transparent 63%),
+    /* a continuous far ridge behind all three hills (last layer = furthest
+       back): the hill line runs unbroken across the scene, so no notch of
+       bare panel can split the hills mid-scene (Steven's ruling,
+       2026-11-04 — same fix the reference mockups took) */
+    radial-gradient(ellipse 140% 55% at 50% 125%, var(--scene-hill-far) 62%, transparent 63%);
 }
 .sc-earth::after {
   content: ""; position: absolute; left: 0; bottom: 20px; width: 92px; height: 66px;
@@ -212,9 +217,12 @@ export const SCENE_CSS = `
 .sc-sprite { width: 32px; height: 52px; display: block; image-rendering: pixelated; pointer-events: none; }
 .sc-person { width: 16px; height: 26px; display: block; shape-rendering: crispEdges; }
 .sc-person rect { fill: currentColor; }
-/* Up in the zone a figure glows in the scene color — heaven is not an
-   error state, so it never takes the verdict's red. */
-.sc-fig.up .sc-sprite, .sc-fig.up .sc-person { filter: drop-shadow(0 0 3px var(--scene-fg)); }
+/* Up in the zone a figure carries Heaven's amber halo glow (palette rule
+   confirmed by Steven, 2026-11-04: Earth green ramp, Heaven amber, red
+   ONLY for the contradiction verdict — heaven is not an error state).
+   The halo sprites (Jesus, Elijah) draw their own amber halo; this glow
+   gives every figure sent up the same amber mark. */
+.sc-fig.up .sc-sprite, .sc-fig.up .sc-person { filter: drop-shadow(0 0 3px var(--scene-warn)); }
 .sc-name { max-width: 100%; text-align: center; overflow-wrap: anywhere; }
 
 .sc-fig.arrive { animation: sc-arrive 420ms ease-out both; }
