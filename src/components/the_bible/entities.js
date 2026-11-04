@@ -418,4 +418,14 @@ pharaoh: {
     "description": "The king whose livestock, servants, and firstborn absorb the plagues in sequence — including animals his own book has already counted as all dead.",
     "visualType": "person"
   },
+zedekiah: {
+    "id": "zedekiah",
+    "name": "Zedekiah",
+    "aka": [
+      "last king of Judah"
+    ],
+    "type": "person",
+    "description": "Judah's last king, promised a peaceful, honored death by Jeremiah — and recorded by Jeremiah as dying blind in a Babylonian prison.",
+    "visualType": "person"
+  },
 }
