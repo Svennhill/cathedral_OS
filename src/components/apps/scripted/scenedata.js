@@ -6,7 +6,8 @@
 // what the case data has no reason to carry:
 //
 //   ACTIONS  how to stage a rule's `action` as a scene: the ground the
-//            figures start on and the words for the outcome. A case whose
+//            figures start on and the words for the outcome and for moving
+//            a figure back to the ground. A case whose
 //            barring rule uses an action not listed here simply has no
 //            visual view (it stays panel-only).
 //   ROSTER   ordinary people with no scriptural record, mixed in with the
@@ -21,6 +22,8 @@ export const ACTIONS = {
     prep:   "to",
     verb:   "Send",       // "Send Enoch up to Heaven"
     dir:    "up",
+    back:   "Return",     // "Return Enoch to Earth"
+    backDir: "down",      // "…or back down to Earth"
   },
 }
 

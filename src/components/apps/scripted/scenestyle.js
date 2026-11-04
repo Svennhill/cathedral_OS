@@ -38,11 +38,12 @@ export const SCENE_CSS = `
   border-bottom: 1px dashed ${DIM};
   transition: background-color 120ms, box-shadow 120ms;
 }
-.sc-heaven.over, .sc-heaven.armed { box-shadow: inset 0 0 0 2px ${GREEN}, inset 0 0 18px rgba(0,255,65,0.35); }
-.sc-heaven.over { background-color: rgba(0,255,65,0.12); }
+.sc-heaven.over, .sc-heaven.armed,
+.sc-earth.over, .sc-earth.armed { box-shadow: inset 0 0 0 2px ${GREEN}, inset 0 0 18px rgba(0,255,65,0.35); }
+.sc-heaven.over, .sc-earth.over { background-color: rgba(0,255,65,0.12); }
 
-/* The zone's own button fills it, under the figures, so a tap on empty sky
-   (or Enter on the keyboard) sends the selected figure up */
+/* Each place's own button fills it, under the figures, so a tap on empty
+   sky or ground (or Enter on the keyboard) moves the selected figure there */
 .sc-root .sc-zonebtn {
   position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
   display: flex; align-items: flex-start; justify-content: space-between; gap: 6px;
@@ -64,16 +65,23 @@ export const SCENE_CSS = `
   pointer-events: none;
 }
 .sc-row > * { pointer-events: auto; }
+/* the row a figure is dragged out of rides above the other place's figures */
+.sc-row.lift { z-index: 2; }
 .sc-empty { font-size: 9px; color: ${DIMMED}; pointer-events: none; }
 
-.sc-earth { position: relative; padding: 10px 6px 0; }
+.sc-earth {
+  position: relative; padding: 10px 6px 0;
+  transition: background-color 120ms, box-shadow 120ms;
+}
 .sc-ground {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 0 8px;
   margin: 0 -6px; padding: 3px 6px 2px; border-top: 2px solid ${GREEN};
   box-shadow: 0 -3px 8px rgba(0,255,65,0.25);
   background: repeating-linear-gradient(135deg, rgba(0,255,65,0.14) 0 2px, transparent 2px 6px);
   font-size: 13px; font-weight: bold; letter-spacing: 0.18em; text-align: center;
   text-shadow: 0 0 6px rgba(0,255,65,0.6);
 }
+.sc-ground .sc-zone-hint { font-weight: normal; letter-spacing: 0; text-shadow: none; text-align: center; }
 
 /* ── figures ───────────────────────────────────────────────────────── */
 .sc-root .sc-fig {
@@ -102,8 +110,10 @@ export const SCENE_CSS = `
 .sc-name { max-width: 100%; text-align: center; overflow-wrap: anywhere; }
 
 .sc-fig.arrive { animation: sc-arrive 420ms ease-out both; }
+.sc-fig.land   { animation: sc-land 420ms ease-out both; }
 .sc-fig.nope   { animation: sc-nope 420ms ease-out both; }
 @keyframes sc-arrive { from { transform: translateY(14px); opacity: 0.3; } to { transform: none; opacity: 1; } }
+@keyframes sc-land   { from { transform: translateY(-14px); opacity: 0.3; } to { transform: none; opacity: 1; } }
 @keyframes sc-nope {
   0% { transform: translateY(-18px); color: ${AMBER}; }
   45% { transform: translateY(0); }
@@ -156,7 +166,7 @@ export const SCENE_CSS = `
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sc-fig.arrive, .sc-fig.nope, .sc-contra.later { animation: none; }
+  .sc-fig.arrive, .sc-fig.land, .sc-fig.nope, .sc-contra.later { animation: none; }
   .sc-root .sc-fig.settle { transition: none; }
 }
 `
