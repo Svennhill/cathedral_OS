@@ -2983,4 +2983,45 @@ export const PASSAGES = [
     "verdict": "Peter tells Jesus to His face that He knows all things, and Jesus lets it stand as the ground of the restoration. Jesus elsewhere names a fact — the day and the hour — and places it outside His own knowledge, with the Father as its only holder. Both statements are spoken by the people who should know.",
     "scoreImpact": -2.0
   },
+{
+    "id": "livestock_twice",
+    "title": "The Livestock That Died Twice",
+    "summary": "Checks Exodus 9:6 — all the livestock of the Egyptians died in the fifth plague — against Exodus 9:25, three plagues later, where the hail strikes down the Egyptians' animals in the field all over again.",
+    "ruleVerse": {
+      "book": "Exodus",
+      "chapter": 9,
+      "verse": 6,
+      "reference": "Exodus 9:6"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_all_livestock_died",
+        "statement": "All the livestock of the Egyptians died.",
+        "plain": "The plague on livestock closes with a total: 'And the next day the LORD did just that. All the livestock of the Egyptians died, but not one animal belonging to the Israelites died.' All is the count.",
+        "subject": "egyptian_livestock",
+        "action": "die",
+        "target": "plague",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "hail_kills_livestock",
+        "entityId": "pharaoh",
+        "verse": {
+          "book": "Exodus",
+          "chapter": 9,
+          "verse": 25,
+          "reference": "Exodus 9:25"
+        },
+        "violatesRule": "rule_all_livestock_died",
+        "violationExplanation": "The seventh plague finds Egyptian animals alive to kill: 'Throughout the land of Egypt, the hail struck down everything in the field, both man and beast.' Moses has just warned Pharaoh to shelter 'your livestock' from the hail (9:19). Livestock that all died in plague five is standing in the fields, owned, warned over, and killed in plague seven — and Pharaoh's horses will be harnessed again for the pursuit in chapter 14.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Egypt's livestock is killed again three plagues after 'all' of it died."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Exodus 9:6 spends the word 'all': every Egyptian animal died, with Israel's spared as the deliberate contrast. Exodus 9 then keeps going — a warning to bring the livestock in, and hail killing man and beast across the land. Total destruction does not leave stock for the next plague to destroy.",
+    "scoreImpact": -0.5
+  },
 ]

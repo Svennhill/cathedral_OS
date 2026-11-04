@@ -408,4 +408,14 @@ poor_offerer: {
     "description": "The Israelite too poor for turtledoves, whose sin offering is fine flour — and whose forgiveness Leviticus grants without blood.",
     "visualType": "person"
   },
+pharaoh: {
+    "id": "pharaoh",
+    "name": "Pharaoh",
+    "aka": [
+      "king of Egypt"
+    ],
+    "type": "person",
+    "description": "The king whose livestock, servants, and firstborn absorb the plagues in sequence — including animals his own book has already counted as all dead.",
+    "visualType": "person"
+  },
 }
