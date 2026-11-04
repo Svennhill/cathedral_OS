@@ -175,9 +175,12 @@ export const SCENE_CSS = `
 .sc-root .sc-earthbtn:hover { border: 0; }
 .sc-root .sc-earthbtn:focus-visible { outline: 2px solid var(--scene-fg); outline-offset: -3px; }
 
+/* The soil band stays a thin strip under the ground line (Steven's
+   note on the B mockup, 2026-11-04: the crust band ran ~a fifth of the
+   scene, thicker than it needs to be). */
 .sc-ground {
   position: relative; z-index: 1; pointer-events: none;
-  margin: 0 -6px; padding: 3px 6px 2px; border-top: 2px solid var(--scene-fg);
+  margin: 0 -6px; padding: 1px 6px 0; border-top: 2px solid var(--scene-fg);
   box-shadow: 0 -3px 8px var(--scene-glow);
   background: repeating-linear-gradient(135deg, var(--scene-mid) 0 2px, transparent 2px 6px);
   font-size: 13px; font-weight: bold; letter-spacing: 0.18em; text-align: center;
