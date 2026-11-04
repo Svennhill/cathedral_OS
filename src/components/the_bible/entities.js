@@ -398,4 +398,14 @@ eunuch: {
     "description": "The man Deuteronomy excludes from the assembly for his body alone — and Isaiah promises a place in God's house and a name that will not be cut off.",
     "visualType": "concept"
   },
+poor_offerer: {
+    "id": "poor_offerer",
+    "name": "The Poor Offerer",
+    "aka": [
+      "the one who cannot afford"
+    ],
+    "type": "person",
+    "description": "The Israelite too poor for turtledoves, whose sin offering is fine flour — and whose forgiveness Leviticus grants without blood.",
+    "visualType": "person"
+  },
 }

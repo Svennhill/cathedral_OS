@@ -2763,4 +2763,46 @@ export const PASSAGES = [
     "verdict": "Jesus denies the mission in advance: not abolish, but fulfill — with the Law's smallest stroke guaranteed until heaven and earth pass. Ephesians reports the mission accomplished by abolition: the law of commandments and decrees abolished in His flesh. Fulfillment is the word one text uses; abolition is the word the other insists on.",
     "scoreImpact": -2.0
   },
+{
+    "id": "forgiveness_flour",
+    "title": "Forgiveness Without Blood",
+    "summary": "Checks Hebrews 9:22 — without the shedding of blood there is no forgiveness — against Leviticus 5:11-13, where the poor man's sin offering is fine flour, no blood at all, 'and he will be forgiven.'",
+    "ruleVerse": {
+      "book": "Hebrews",
+      "chapter": 9,
+      "verse": 22,
+      "reference": "Hebrews 9:22"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_no_forgiveness_without_blood",
+        "statement": "Without the shedding of blood there is no forgiveness.",
+        "plain": "Hebrews states it as the law's own principle: 'According to the law, in fact, nearly everything must be purified with blood, and without the shedding of blood there is no forgiveness.'",
+        "subject": "blood",
+        "action": "forgive",
+        "target": "sins",
+        "permitted": false,
+        "exclusive": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "leviticus_flour",
+        "entityId": "poor_offerer",
+        "verse": {
+          "book": "Leviticus",
+          "chapter": 5,
+          "verse": 13,
+          "reference": "Leviticus 5:13"
+        },
+        "violatesRule": "rule_no_forgiveness_without_blood",
+        "violationExplanation": "The law Hebrews summarizes provides the exception in its own text: the man too poor for birds brings 'a tenth of an ephah of fine flour as a sin offering' (5:11) — no animal, no blood — and the verdict follows: 'the priest will make atonement for him for any of these sins he has committed, and he will be forgiven.' Forgiveness, by the law, without a drop of blood shed.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Leviticus forgives a sin on flour alone."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Hebrews lays down the principle it attributes to the law: no shedding of blood, no forgiveness. The law itself, in Leviticus 5, forgives the poor man's sin for a handful of flour. Either the principle misstates the law it claims to summarize, or the flour offering cannot do what Leviticus says it does.",
+    "scoreImpact": -2.0
+  },
 ]
