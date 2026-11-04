@@ -55,6 +55,20 @@ export function taskbarPct(phone, frameH, desktopPct) {
   return Math.min(PHONE.TASKBAR_MAX, Math.max(desktopPct, (PHONE.TASKBAR_PX / frameH) * 100))
 }
 
+// ── PHONE BASE SCALES ────────────────────────────────────────────────────
+// The base scale the F6 zoom sliders multiply. The WINDOW_SCALE /
+// DESKTOP_SCALE boosts are tuned for Screen Only's full-viewport frame —
+// the phone reading view. Bezel view on a phone is the device as a
+// miniature: its frame is ~289 px wide, and the same boosts inside it are
+// the "everything inside is too zoomed" bug (LIVE-NOTES item 1), so bezel
+// view runs at the desktop's own 1.0 base and the sliders mean the same
+// thing in both modes. Above the breakpoint the base is always 1.
+export function phoneBaseScales(phone, screenOnly) {
+  if (!phone)     return { desktop: 1, window: 1 }
+  if (screenOnly) return { desktop: PHONE.DESKTOP_SCALE, window: PHONE.WINDOW_SCALE }
+  return { desktop: 1, window: 1 }
+}
+
 // ── SCREEN-AREA COVER ────────────────────────────────────────────────────
 // The boot/cathedral/OS art is drawn on full-bezel canvases (2208×2427) with
 // the picture in the screen area. Screen Only stretches that layer to the
@@ -84,6 +98,11 @@ export const PHONE_CSS = `
    the browser's own toolbars, which would push the bottom of the screen out
    of view on load. dvh is the visible height (same number as vh on desktop). */
 .cos-viewport { height: 100vh; height: 100dvh; }
+
+/* The page is a device, not a document: a downward drag must not trigger
+   Android Chrome's pull-to-refresh (a full reload mid-case) or rubber-band
+   scroll chaining. Phone layout only — the class is never on desktop. */
+.cos-phone { overscroll-behavior: none; }
 
 /* iOS zooms the whole page when an input under 16px gets focus — that is a
    browser zoom the user didn't ask for. Inputs in the phone layout are 16px. */

@@ -9,7 +9,7 @@ import AccessibilityTab from "./accessibilitytab"
 import ScriptedExe from "./apps/scriptedexe"
 import DougPretFac from "./apps/dougpretfac"
 import { SCREEN_CLIP, PCT, TASKBAR_HEIGHT_PCT } from "../utils/screenConstants"
-import { PHONE, taskbarPct, screenArtCover } from "../utils/phoneLayout"
+import { PHONE, taskbarPct, screenArtCover, phoneBaseScales } from "../utils/phoneLayout"
 
 // App registry — keep in sync with startmenu.jsx APPS array
 function renderApp(appId) {
@@ -69,11 +69,14 @@ export default function Screen({
   const clipPath = SCREEN_CLIP
 
   // Phone layout: a touch-height taskbar, and window/desktop content drawn at
-  // the phone base scale. The F6 zoom sliders multiply on top, each still
-  // touching only its own layer. Desktop: the original values exactly.
+  // the phone base scale (phoneBaseScales — the boosts belong to Screen
+  // Only's full-viewport frame; bezel view runs at 1.0). The F6 zoom sliders
+  // multiply on top, each still touching only its own layer. Desktop: the
+  // original values exactly.
   const tbPct          = taskbarPct(phone, frame?.h, TASKBAR_HEIGHT_PCT)
-  const desktopScale   = phone ? desktopZoom * PHONE.DESKTOP_SCALE : desktopZoom
-  const windowScale    = phone ? windowZoom  * PHONE.WINDOW_SCALE  : windowZoom
+  const baseScales     = phoneBaseScales(phone, screenOnly)
+  const desktopScale   = desktopZoom * baseScales.desktop
+  const windowScale    = windowZoom  * baseScales.window
 
   const frameStyle = {
     position: "absolute",
