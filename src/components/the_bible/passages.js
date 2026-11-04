@@ -2942,4 +2942,45 @@ export const PASSAGES = [
     "verdict": "John's God knows all things, full stop. Genesis's God goes down to Sodom to see for Himself and find out, and closes Abraham's test with 'now I know.' Both Genesis scenes are structured as investigations whose outcomes God learns — conduct an omniscient being has no use for.",
     "scoreImpact": -2.0
   },
+{
+    "id": "son_knows_not",
+    "title": "The Son Who Does Not Know",
+    "summary": "Checks John 21:17 — Peter to the risen Jesus: Lord, You know all things — against Mark 13:32, where Jesus says of the day and hour: no one knows, not even the Son, but only the Father.",
+    "ruleVerse": {
+      "book": "John",
+      "chapter": 21,
+      "verse": 17,
+      "reference": "John 21:17"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_jesus_knows_all",
+        "statement": "Jesus knows all things.",
+        "plain": "Peter's confession, uncorrected by Jesus in the scene: '“Lord, You know all things. You know I love You.”' The claim is made to Jesus's face and stands in the text as true.",
+        "subject": "jesus",
+        "action": "know",
+        "target": "all_things",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "mark_son_does_not_know",
+        "entityId": "jesus",
+        "verse": {
+          "book": "Mark",
+          "chapter": 13,
+          "verse": 32,
+          "reference": "Mark 13:32"
+        },
+        "violatesRule": "rule_jesus_knows_all",
+        "violationExplanation": "Jesus draws the boundary Himself: 'No one knows about that day or hour, not even the angels in heaven, nor the Son, but only the Father.' The day and hour are a thing the Son does not know — knowledge held by the Father alone, in a sentence constructed to exclude everyone else, explicitly including the Son.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — The Son who knows all things does not know the day or the hour."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Peter tells Jesus to His face that He knows all things, and Jesus lets it stand as the ground of the restoration. Jesus elsewhere names a fact — the day and the hour — and places it outside His own knowledge, with the Father as its only holder. Both statements are spoken by the people who should know.",
+    "scoreImpact": -2.0
+  },
 ]
