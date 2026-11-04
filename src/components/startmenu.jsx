@@ -12,13 +12,13 @@ import { PHONE } from "../utils/phoneLayout"
 import { PASSAGES } from "./the_bible/passages"
 import { caseActions, useCaseState, caseStatus } from "./apps/scripted/casestore"
 import { displayName } from "../data/userstore"
+import PasscodePrompt from "./passcodeprompt"
 
 const GREEN  = "#00ff41"
 const TEAL   = "#009191"
 const DIM    = "#004d1a"
 const BG     = "#050510"
 const FONT   = "opendyslexic, monospace"
-const DEBUG_CODE = "2079"
 
 // ── SUB-COMPONENTS ────────────────────────────────────────────────────────
 
@@ -173,30 +173,11 @@ function Divider() {
 }
 
 // ── DEBUG PASSCODE PANEL ──────────────────────────────────────────────────
+// The passcode field and its check are the shared PasscodePrompt (the same
+// one the Ctrl+Alt+D cheat-code overlay uses). Off → click to show the field;
+// right code turns debug on and folds the field away. On → click turns it off.
 function DebugSection({ debugEnabled, onEnableDebug, onDisableDebug, phone }) {
   const [expanded, setExpanded] = useState(false)
-  const [code, setCode]         = useState('')
-  const [error, setError]       = useState(false)
-  const inputRef = useRef(null)
-
-  const tryCode = (e) => {
-    if (e.key === 'Enter') {
-      if (code === DEBUG_CODE) {
-        onEnableDebug()
-        setExpanded(false)
-        setCode('')
-        setError(false)
-      } else {
-        setError(true)
-        setCode('')
-        setTimeout(() => setError(false), 1200)
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (expanded && inputRef.current) inputRef.current.focus()
-  }, [expanded])
 
   return (
     <div>
@@ -204,8 +185,6 @@ function DebugSection({ debugEnabled, onEnableDebug, onDisableDebug, phone }) {
         onClick={() => {
           if (debugEnabled) { onDisableDebug(); return }
           setExpanded(o => !o)
-          setCode('')
-          setError(false)
         }}
         style={{
           display: "flex",
@@ -227,32 +206,8 @@ function DebugSection({ debugEnabled, onEnableDebug, onDisableDebug, phone }) {
       </div>
 
       {!debugEnabled && expanded && (
-        <div style={{ padding: "2px 12px 4px", fontFamily: FONT }}>
-          <div style={{ fontSize: "68%", color: `rgba(0,255,65,0.5)`, marginBottom: 2 }}>
-            enter passcode:
-          </div>
-          <input
-            ref={inputRef}
-            type="password"
-            value={code}
-            onChange={e => setCode(e.target.value)}
-            onKeyDown={tryCode}
-            maxLength={6}
-            style={{
-              background: "transparent",
-              border: `1px solid ${error ? "#ff4444" : DIM}`,
-              color: error ? "#ff4444" : GREEN,
-              fontFamily: FONT,
-              fontSize: "72%",
-              padding: "1px 4px",
-              width: 60,
-              outline: "none",
-              letterSpacing: "0.2em",
-            }}
-          />
-          {error && (
-            <span style={{ marginLeft: 6, color: "#ff4444", fontSize: "68%" }}>incorrect</span>
-          )}
+        <div style={{ padding: "2px 12px 4px" }}>
+          <PasscodePrompt onSuccess={() => { onEnableDebug(); setExpanded(false) }} />
         </div>
       )}
     </div>

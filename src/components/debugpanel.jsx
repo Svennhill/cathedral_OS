@@ -1,6 +1,13 @@
 import { useState } from "react"
 
-export default function DebugPanel({ screenState, setScreenState, loop, setLoop, loopTarget, setLoopTarget }) {
+// One-click jumps straight to a login card ('login' state, that card open,
+// fields empty). The views are LoginScreen's requestedView values.
+const LOGIN_JUMPS = [
+  { view: 'signin', label: 'login: sign in' },
+  { view: 'create', label: 'login: create user' },
+]
+
+export default function DebugPanel({ screenState, setScreenState, loop, setLoop, loopTarget, setLoopTarget, onJumpLogin }) {
   const [collapsed, setCollapsed] = useState(false)
 
   // ── COLLAPSED STATE ── shows as a small + button in the corner
@@ -87,6 +94,21 @@ export default function DebugPanel({ screenState, setScreenState, loop, setLoop,
         </button>
       ))}
 
+      {LOGIN_JUMPS.map(j => (
+        <button key={j.view} onClick={() => onJumpLogin(j.view)} style={{
+          background: "transparent",
+          color: "#00ff41",
+          border: "1px dashed #00ff41",
+          cursor: "pointer",
+          fontFamily: "monospace",
+          fontSize: "10px",
+          padding: "2px 6px",
+          textAlign: "left",
+        }}>
+          {j.label}
+        </button>
+      ))}
+
       <div style={{ borderTop: "1px solid #003b10", margin: "4px 0" }} />
 
       <button onClick={() => setLoop(l => !l)} style={{
@@ -105,7 +127,7 @@ export default function DebugPanel({ screenState, setScreenState, loop, setLoop,
       {loop && (
         <>
           <div style={{ color: "#00a829", fontSize: "10px" }}>loop target:</div>
-          {['crt_on', 'booting', 'on', 'shutting_down'].map(s => (
+          {['crt_on', 'booting', 'login', 'on', 'shutting_down'].map(s => (
             <button key={s} onClick={() => setLoopTarget(s)} style={{
               background: loopTarget === s ? "#00a829" : "transparent",
               color: loopTarget === s ? "#000" : "#00a829",

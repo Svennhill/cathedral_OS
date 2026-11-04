@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Desktop from "./desktop"
 import BootScreen from "./bootscreen"
 import LoginScreen from "./loginscreen"
@@ -29,6 +29,8 @@ export default function Screen({
   luminance, density, clarity, illuminate, align,
   setIlluminate,
   debugLoop, debugLoopTarget,
+  loginView = null,     // debug jump: the login card to open on — 'signin' | 'create' (App.jsx LOGIN JUMP)
+  clearLoginView,
   bootKey, setBootKey,
   openWindows, openWindow, closeWindow,
   minimizeWindow, maximizeWindow, restoreWindow,
@@ -59,6 +61,17 @@ export default function Screen({
 
   // The quote of the day: typed by the boot, kept on the login screen
   const [bootQuote, setBootQuote] = useState("")
+
+  // ── LOGIN JUMP HAND-OFF ──
+  // A debug jump to login asks for a card: LoginScreen gets it as
+  // requestedView={loginView} and opens on that card as it mounts (App keys
+  // this Screen by the jump, so every jump mounts the login screen fresh,
+  // fields empty). The request lasts for that one visit: once the screen
+  // leaves 'login' it's spent, so a later ordinary arrival at login (e.g.
+  // after Log out) opens on the default card.
+  useEffect(() => {
+    if (screenState !== 'login' && loginView) clearLoginView?.()
+  }, [screenState, loginView, clearLoginView])
 
   const screenFilter = screenState !== 'off'
     ? `brightness(${luminance}) contrast(${density}) blur(${clarity}px)`
