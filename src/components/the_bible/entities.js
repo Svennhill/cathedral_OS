@@ -377,4 +377,14 @@ ahaz: {
     "description": "The king of Judah whose war with Aram and Israel is a failed siege in Kings and Isaiah, and a God-delivered rout in Chronicles.",
     "visualType": "person"
   },
+ahab: {
+    "id": "ahab",
+    "name": "Ahab",
+    "aka": [
+      "king of Israel"
+    ],
+    "type": "person",
+    "description": "The king who took Naboth's vineyard and was promised Naboth's fate in Naboth's field — a prophecy his own history relocates to Samaria.",
+    "visualType": "person"
+  },
 }
