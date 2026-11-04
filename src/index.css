@@ -1,4 +1,38 @@
+/* ── CATHEDRAL OS THEME ──────────────────────────────────────────────────
+   Every OS chrome color (taskbar, start menu, window frames, desktop
+   icons, scripted.exe panels) reads from these variables — never from a
+   raw hex. The palette question (phosphor-green CRT vs. more color) is
+   still open: switching palettes means swapping THIS block only, either
+   by editing the values below or by setting data-os-theme on a root
+   element once a second palette is approved. Translucent shades are
+   derived with color-mix() so one accent value drives the whole ramp. */
 :root {
+  /* palette — phosphor green CRT (current default) */
+  --os-bg: #050510;            /* taskbar / menu surface base */
+  --os-bg-deep: #0a0a1a;       /* window body / icon tile base */
+  --os-accent: #00ff41;        /* primary phosphor green */
+  --os-accent-2: #009191;      /* secondary teal — frame borders, bars */
+  --os-accent-dim: #004d1a;    /* dim green — dividers, inactive chrome */
+  --os-danger: #ff4444;        /* errors / verdicts */
+  --os-danger-strong: #cc0000; /* close-button face */
+  --os-danger-deep: #880000;   /* close-button border */
+  --os-ink: #000000;           /* text on filled accent surfaces */
+
+  /* chrome language — shared by every surface, theme-independent */
+  --os-radius: 3px;            /* panels, menus, popups */
+  --os-radius-sm: 2px;         /* buttons, chips, taskbar slots */
+  --os-bevel-hi: inset 0 1px 0 color-mix(in srgb, var(--os-accent) 28%, transparent);
+  --os-bevel-panel: var(--os-bevel-hi), 0 2px 10px rgba(0, 0, 0, 0.55);
+  --os-titlebar: linear-gradient(180deg,
+      color-mix(in srgb, var(--os-accent-2) 42%, var(--os-bg-deep)),
+      color-mix(in srgb, var(--os-accent-2) 16%, var(--os-bg-deep)));
+  --os-bar: linear-gradient(180deg,
+      color-mix(in srgb, var(--os-accent-2) 20%, var(--os-bg)),
+      var(--os-bg));
+  --os-tile: linear-gradient(160deg,
+      color-mix(in srgb, var(--os-accent) 13%, var(--os-bg-deep)),
+      var(--os-bg-deep));
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -11,6 +45,19 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* PLACEHOLDER second palette — provisional values only, NOT a design
+   proposal. Exists to prove the swing: nothing sets data-os-theme yet.
+   When Steven rules on the palette, this block gets real values (or the
+   :root defaults change) and no component code changes. */
+:root[data-os-theme="stained-glass"] {
+  --os-bg: #0d0a1f;
+  --os-bg-deep: #14102a;
+  --os-accent: #ffb340;
+  --os-accent-2: #7a6cff;
+  --os-accent-dim: #4a3a14;
+  --os-ink: #1a1000;
 }
 
 a {

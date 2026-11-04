@@ -1,9 +1,18 @@
 import { useState } from "react"
+import { IconClose, IconMusicNote, IconPause, IconPlay, IconVolume, IconWindow } from "./icons"
 
-const GREEN  = "#00ff41"
-const TEAL   = "#009191"
-const DIM    = "#004d1a"
-const BG     = "#050510"
+// All colors come from the --os-* theme variables (index.css). Translucent
+// shades are color-mix() derivations of the same variables, so the whole
+// bar swings with the palette from one place.
+const GREEN  = "var(--os-accent)"
+const TEAL   = "var(--os-accent-2)"
+const DIM    = "var(--os-accent-dim)"
+const BG     = "var(--os-bg)"
+const INK    = "var(--os-ink)"
+const DANGER = "var(--os-danger)"
+const mix = (pct, color = "var(--os-accent)") =>
+  `color-mix(in srgb, ${color} ${pct}%, transparent)`
+
 const BTN    = {
   background: "transparent",
   border: "none",
@@ -33,7 +42,7 @@ function TrayButton({ label, title, onClick, active, phone }) {
       onBlur={() => setKeyFocus(false)}
       style={{
         ...BTN,
-        color:       active ? BG : GREEN,
+        color:       active ? INK : GREEN,
         background:  active ? GREEN : "transparent",
         padding: phone ? "0 10px" : "0 5px",
         minWidth: phone ? 44 : undefined,
@@ -59,7 +68,8 @@ function VolumeMixerPanel({ volume, musicPaused, toggleMusic, onClose, phone }) 
       right: 0,
       background: BG,
       border: `1px solid ${TEAL}`,
-      boxShadow: `0 0 8px rgba(0,145,145,0.3)`,
+      borderRadius: "0 0 var(--os-radius) var(--os-radius)",
+      boxShadow: `var(--os-bevel-panel)`,
       minWidth: 160,
       zIndex: 500,
       fontFamily: "opendyslexic, monospace",
@@ -68,45 +78,46 @@ function VolumeMixerPanel({ volume, musicPaused, toggleMusic, onClose, phone }) 
       // Prevent the panel from being clipped by the screen frame's overflow:hidden
       // by positioning in screen-space (zIndex 500 handles stacking)
     }}>
-      {/* Header */}
+      {/* Header — same titlebar treatment as the window frames */}
       <div style={{
-        background: "#ffffff",
-        padding: "2px 6px",
+        background: "var(--os-titlebar)",
+        padding: "2px 4px 2px 8px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        borderBottom: `1px solid ${DIM}`,
       }}>
-        <span style={{ color: "#000", fontWeight: "bold", fontSize: "80%" }}>volume mixer</span>
+        <span style={{ color: GREEN, fontWeight: "bold", fontSize: "80%", letterSpacing: "0.06em" }}>volume mixer</span>
         <button
           onClick={onClose}
           aria-label="Close volume mixer"
           style={phone
-            ? { background: "#cc0000", border: "none", borderRadius: 0, color: "#fff", cursor: "pointer", fontSize: "90%", width: 40, height: 40, padding: 0 }
-            : { background: "#cc0000", border: "none", color: "#fff", cursor: "pointer", fontSize: "70%", padding: "1px 3px" }}
+            ? { background: "transparent", border: "none", borderRadius: 0, color: DANGER, cursor: "pointer", width: 40, height: 40, padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }
+            : { background: mix(14, "var(--os-danger)"), border: `1px solid ${DANGER}`, borderRadius: "var(--os-radius-sm)", color: DANGER, cursor: "pointer", padding: 2, display: "flex", alignItems: "center", justifyContent: "center" }}
         >
-          ✕
+          <IconClose size={phone ? 16 : 10} />
         </button>
       </div>
 
       {/* OS Music channel */}
       <div style={{ padding: "6px 8px", borderBottom: `1px solid ${DIM}` }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
           <span>OS music</span>
           <button
             onClick={toggleMusic}
-            style={{ ...BTN, height: phone ? 40 : "auto", padding: phone ? "0 10px" : "1px 4px", border: `1px solid ${GREEN}`, borderRadius: phone ? 0 : undefined, fontSize: phone ? "90%" : "70%" }}
+            style={{ ...BTN, height: phone ? 40 : "auto", padding: phone ? "0 10px" : "2px 5px", border: `1px solid ${GREEN}`, borderRadius: phone ? 0 : "var(--os-radius-sm)", fontSize: phone ? "90%" : "70%" }}
           >
-            {musicPaused ? "► play" : "⏸ pause"}
+            {musicPaused ? <><IconPlay size={11} /> play</> : <><IconPause size={11} /> pause</>}
           </button>
         </div>
         <div style={{ height: 4, background: DIM, borderRadius: 2 }}>
           <div style={{ height: "100%", width: `${volume * 100}%`, background: GREEN, borderRadius: 2, transition: "width 0.1s" }} />
         </div>
-        <div style={{ color: DIM, marginTop: 2 }}>controlled via hardware knob</div>
+        <div style={{ color: mix(55), marginTop: 2 }}>controlled via hardware knob</div>
       </div>
 
       {/* Future channels */}
-      <div style={{ padding: "4px 8px", color: DIM, fontStyle: "italic" }}>
+      <div style={{ padding: "4px 8px", color: mix(55), fontStyle: "italic" }}>
         // future app channels here
       </div>
     </div>
@@ -135,8 +146,9 @@ export default function Taskbar({
     top: 0, left: 0,
     width: "100%",
     height: `${taskbarHeightPct}%`,
-    background: BG,
+    background: "var(--os-bar)",
     borderBottom: `1px solid ${TEAL}`,
+    boxShadow: "var(--os-bevel-hi)",
     display: "flex",
     alignItems: "center",
     zIndex: 300,
@@ -183,8 +195,10 @@ export default function Taskbar({
         <span style={{
           display: "inline-block",
           border: `1px solid ${GREEN}`,
-          background: startOpen ? GREEN : "transparent",
-          color:      startOpen ? BG    : GREEN,
+          borderRadius: "var(--os-radius-sm)",
+          background: startOpen ? GREEN : "var(--os-tile)",
+          color:      startOpen ? INK    : GREEN,
+          boxShadow:  startOpen ? "none" : "var(--os-bevel-hi)",
           outline:    cosKeyFocus ? `1px solid ${TEAL}` : "none",
           outlineOffset: 1,
           padding: "0 3px",
@@ -213,8 +227,10 @@ export default function Taskbar({
             title={win.title}
             onClick={() => win.minimized ? restoreWindow(win.id) : minimizeWindow(win.id)}
             style={{
-              background:   win.minimized ? "transparent" : `rgba(0,145,145,0.15)`,
+              background:   win.minimized ? "transparent" : mix(15, "var(--os-accent-2)"),
               border:       `1px solid ${win.minimized ? DIM : TEAL}`,
+              borderRadius: "var(--os-radius-sm)",
+              boxShadow:    win.minimized ? "none" : "var(--os-bevel-hi)",
               cursor:       "pointer",
               padding:      0,
               flexShrink:   0,
@@ -224,13 +240,13 @@ export default function Taskbar({
               width:        phone ? 40 : "1.4em",
               height:       phone ? 36 : "70%",
               aspectRatio:  "1",
-              color:        win.minimized ? DIM : GREEN,
+              color:        win.minimized ? mix(45) : GREEN,
               fontSize:     "70%",
               fontFamily:   "opendyslexic, monospace",
               boxSizing:    "border-box",
             }}
           >
-            ▪
+            <IconWindow size={phone ? 16 : 11} />
           </button>
         ))}
       </div>
@@ -246,14 +262,14 @@ export default function Taskbar({
         flexShrink: 0,
       }}>
         <TrayButton
-          label={musicPaused ? "♪ off" : "♪ on"}
+          label={<><IconMusicNote size={13} /> {musicPaused ? "off" : "on"}</>}
           title="Toggle OS music"
           onClick={toggleMusic}
           active={!musicPaused}
           phone={phone}
         />
         <TrayButton
-          label={`vol ${Math.round(volume * 100)}%`}
+          label={<><IconVolume size={13} /> {Math.round(volume * 100)}%</>}
           title="Open volume mixer"
           onClick={() => setMixerOpen(o => !o)}
           active={mixerOpen}

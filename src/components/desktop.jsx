@@ -1,13 +1,23 @@
 // Desktop — icon layer of the OS
 // Lives inside the screen frame div — coordinates are relative to the screen area.
 // Icons positioned below the taskbar (taskbarHeightPct offset).
+//
+// Icons come from the OS icon system (components/icons.jsx) and colors from
+// the --os-* theme variables (index.css) — no local hex, so the desktop
+// swings with the palette like every other surface.
+
+import { useState } from "react"
+import { AppIcon } from "./icons"
 
 // Phone layout: one tap opens (touch has no reliable double-click)
-function DesktopIcon({ label, symbol, onDoubleClick, phone }) {
+function DesktopIcon({ label, appId, onDoubleClick, phone }) {
+  const [hovered, setHovered] = useState(false)
   return (
     <div
       onDoubleClick={phone ? undefined : onDoubleClick}
       onClick={phone ? onDoubleClick : undefined}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       role={phone ? "button" : undefined}
       style={{
         display: "flex",
@@ -21,28 +31,31 @@ function DesktopIcon({ label, symbol, onDoubleClick, phone }) {
       }}
     >
       <div style={{
-        width: 26,
-        height: 26,
-        border: "1px solid #00ff41",
-        backgroundColor: "#0a0a1a",
+        width: 28,
+        height: 28,
+        border: `1px solid color-mix(in srgb, var(--os-accent) ${hovered ? 90 : 60}%, transparent)`,
+        borderRadius: "var(--os-radius)",
+        background: "var(--os-tile)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: 12,
-        color: "#00ff41",
-        boxShadow: "0 0 4px rgba(0,255,65,0.35)",
-        fontFamily: "monospace",
+        color: "var(--os-accent)",
+        boxShadow: hovered
+          ? "var(--os-bevel-hi), 0 0 10px color-mix(in srgb, var(--os-accent) 45%, transparent)"
+          : "var(--os-bevel-hi), 0 0 4px color-mix(in srgb, var(--os-accent) 30%, transparent)",
+        transition: "box-shadow 120ms, border-color 120ms",
         flexShrink: 0,
       }}>
-        {symbol}
+        <AppIcon id={appId} size={17} />
       </div>
       <span style={{
-        color: "#00ff41",
+        color: "var(--os-accent)",
         fontSize: 7,
         textAlign: "center",
         fontFamily: "opendyslexic, monospace",
-        textShadow: "0 0 5px rgba(0,255,65,0.8)",
+        textShadow: "0 0 5px color-mix(in srgb, var(--os-accent) 80%, transparent)",
         lineHeight: 1.3,
+        letterSpacing: "0.02em",
         maxWidth: 50,
         wordBreak: "break-word",
       }}>
@@ -74,13 +87,13 @@ export default function Desktop({ openWindow, taskbarHeightPct, zoom = 1, phone 
       }}>
         <DesktopIcon
           label="scripted.exe"
-          symbol="►"
+          appId="scriptedexe"
           onDoubleClick={() => openWindow('scriptedexe', 'scripted.exe')}
           phone={phone}
         />
         <DesktopIcon
           label="doug's pretzel factory"
-          symbol="∞"
+          appId="dougpretfac"
           onDoubleClick={() => openWindow('dougpretfac', "doug's pretzel factory")}
           phone={phone}
         />
