@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Desktop from "./desktop"
 import BootScreen from "./bootscreen"
+import LoginScreen from "./loginscreen"
 import WindowBox from "./windowbox"
 import Taskbar from "./taskbar"
 import StartMenu from "./startmenu"
@@ -41,10 +42,23 @@ export default function Screen({
   windowZoom, setWindowZoom,
   phone = false,        // phone layout (utils/phoneLayout.js)
   frame,                // { w, h } — the screen area in px
+  currentUser = null,   // signed-in user's public profile (null: nobody)
+  onLogin,              // (user) → App makes the user current (settings, progress)
+  onLogout,             // () → App ends the session and returns to 'login'
 }) {
   // COS start menu state — lives here so StartMenu renders at screen-frame level
   // (not inside Taskbar, which would clip it with overflow:hidden)
   const [startOpen, setStartOpen] = useState(false)
+  // Leaving the OS (log out, power off, a debug jump) closes the menu, so the
+  // next session never opens with the last one's menu showing
+  const [menuState, setMenuState] = useState(screenState)
+  if (menuState !== screenState) {
+    setMenuState(screenState)
+    if (startOpen) setStartOpen(false)
+  }
+
+  // The quote of the day: typed by the boot, kept on the login screen
+  const [bootQuote, setBootQuote] = useState("")
 
   const screenFilter = screenState !== 'off'
     ? `brightness(${luminance}) contrast(${density}) blur(${clarity}px)`
@@ -134,6 +148,8 @@ export default function Screen({
                 setWindowZoom={setWindowZoom}
                 taskbarHeightPct={tbPct}
                 phone={phone}
+                currentUser={currentUser}
+                onLogout={() => { setStartOpen(false); onLogout?.() }}
               />
             )}
 
@@ -198,14 +214,28 @@ export default function Screen({
           setIlluminate={setIlluminate}
           phone={phone}
           frame={frame}
-          onBootComplete={() => {
+          onBootComplete={(info) => {
+            setBootQuote(info?.quote ?? "")
             if (debugLoop) {
               setBootKey(k => k + 1)
               setScreenState(debugLoopTarget)
             } else {
-              setScreenState('on')
+              setScreenState('login')   // the OS only loads after a login
             }
           }}
+        />
+      )}
+
+      {/* ── LOGIN ──────────────────────────────────────────── */}
+      {/* Over the cathedral picture the boot left up; a successful login
+          plays the background_OS wipe, then the OS */}
+      {screenState === 'login' && (
+        <LoginScreen
+          phone={phone}
+          frame={frame}
+          quote={bootQuote}
+          onAuthenticated={user => onLogin?.(user)}
+          onEnter={() => setScreenState('on')}
         />
       )}
 

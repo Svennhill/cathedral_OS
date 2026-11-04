@@ -72,7 +72,7 @@ export default function DebugPanel({ screenState, setScreenState, loop, setLoop,
 
       <div style={{ color: "#00a829", marginBottom: "4px" }}>state: {screenState}</div>
 
-      {['off', 'crt_on', 'booting', 'on', 'shutting_down'].map(s => (
+      {['off', 'crt_on', 'booting', 'login', 'on', 'shutting_down'].map(s => (
         <button key={s} onClick={() => setScreenState(s)} style={{
           background: screenState === s ? "#00ff41" : "transparent",
           color: screenState === s ? "#000" : "#00ff41",

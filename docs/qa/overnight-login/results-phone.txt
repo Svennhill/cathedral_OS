@@ -1,0 +1,25 @@
+PASS  phone portrait: starts in Screen Only (own POWER button)
+PASS  phone: PhoneBoot types "login" at the prompt, then hands off to the gate
+PASS  phone: no autofocus (keyboard does not jump up on arrival)
+PASS  phone: every input ≥ 44px tall and 16px text (no iOS focus zoom)  — [{"h":44,"fs":"16px"},{"h":44,"fs":"16px"},{"h":44,"fs":"16px"},{"h":44,"fs":"16px"},{"h":44,"fs":"16px"},{"h":44,"fs":"16px"}]
+PASS  phone: every button ≥ 44px tall  — [44,44]
+PASS  phone: card fits the screen width  — 362 in 390
+PASS  phone: errors shown in the form, focus on first invalid field
+PASS  phone: create → sign in, username filled
+PASS  phone: sign in → OS
+PASS  phone: start menu shows the user (tag as flourish) + touch-size Log out  — {"h":40,"line":"Signed in as ▸ Pat Phone [✝] @pat_phone Log out"}
+PASS  phone + bezel: logout lands on the gate, still in bezel view
+PASS  phone + bezel: password field reachable (the card scrolls inside the small screen)
+PASS  phone + bezel: sign in works
+PASS  phone portrait: no page errors
+PASS  phone landscape: boots to the gate
+PASS  phone landscape: the form area scrolls when the card is taller than the screen  — {"scrollH":845,"clientH":342,"oy":"auto"}
+PASS  phone landscape: create + sign in → OS
+PASS  phone landscape: no page errors
+PASS  desktop: boots to the gate in bezel view (no user → device default)
+PASS  desktop Screen Only: logout keeps Screen Only; the gate fills the window  — {"x":431.984375,"y":344.59375,"width":416,"height":222.78125}
+PASS  desktop Screen Only: sign in works (Enter)
+PASS  "Always load Screen Only" saved for that user only
+PASS  desktop Screen Only: no page errors
+
+23/23 checks passed

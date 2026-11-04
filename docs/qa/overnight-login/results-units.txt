@@ -1,0 +1,45 @@
+PASS  SHA-256 fallback matches crypto.subtle on 8 vectors (incl. empty, block edges, Unicode)  — [true,true,true,true,true,true,true,true]
+PASS  SHA-256("abc") known answer
+PASS  names: letters/spaces/hyphens/apostrophes (incl. curly ’ and accents) pass  — [null,null,null,null,null,null,null]
+PASS  names: empty, digits, symbols, no-letter, markup, >40 chars fail  — ["enter a first name","enter a first name","first name: letters, spaces, hyphens, and apostrophes only","first name: letters, spaces, hyphens, and apostrophes only","first name: letters, spaces, hyphens, and apostrophes only","first name: letters, spaces, hyphens, and apostrophes only","first name: letters, spaces, hyphens, and apostrophes only","first name: 40 characters max"]
+PASS  usernames: 3–20 letters/numbers/underscore pass (incl. classic/peacock/grape/spice/assassin)  — [null,null,null,null,null,null,null,null,null,null]
+PASS  usernames: empty, 2 chars, 21 chars, space, hyphen, non-ASCII, profanity (case + digit swaps) fail  — ["choose a username","username must be 3–20 characters","username must be 3–20 characters","username: letters, numbers, and underscores only","username: letters, numbers, and underscores only","username: letters, numbers, and underscores only","that username isn't allowed — choose another","that username isn't allowed — choose another","that username isn't allowed — choose another","that username isn't allowed — choose another","that username isn't allowed — choose another","that username isn't allowed — choose another"]
+PASS  password: too short fails  — password needs at least 8 characters
+PASS  password: no uppercase fails  — password needs an uppercase letter
+PASS  password: no lowercase fails  — password needs a lowercase letter
+PASS  password: no digit or symbol fails  — password needs a number or symbol
+PASS  password: lists every missing piece  — password needs at least 8 characters, an uppercase letter, and a number or symbol
+PASS  password: empty and >128 fail
+PASS  password: Passw0rd / Password! / passphrase pass
+PASS  confirm: mismatch and empty fail, match passes
+PASS  tag: optional; flourishes incl. symbols pass  — [null,null,null,null,null]
+PASS  tag: >16 chars, bidi override, control char, profanity fail  — ["tag: 16 characters max","tag can't contain control characters","tag can't contain control characters","that tag isn't allowed — choose another"]
+PASS  store: empty registry → hasAnyUsers false
+PASS  store: createUser trims and returns a public profile (no salt/hash)
+PASS  store: duplicate username blocked, any case
+PASS  store: createUser re-validates (server-style)  — {"firstName":"enter a first name","lastName":"last name: letters, spaces, hyphens, and apostrophes only","username":"username must be 3–20 characters","password":"password needs at least 8 characters, an uppercase letter, and a number or symbol"}
+PASS  store: userExists case-insensitive
+PASS  store: getUser case-insensitive, public profile only
+PASS  registry record shape is exactly { username, firstName, lastName, tag, salt, hash, createdAt }  — createdAt,firstName,hash,lastName,salt,tag,username
+PASS  hash = SHA-256(salt + password); 128-bit random salt
+PASS  password never stored in plaintext (no localStorage value contains it)
+PASS  per-user salts differ; same password → different hashes
+PASS  verifyLogin: right password ok; username any case/whitespace ok
+PASS  verifyLogin: wrong password / wrong case / unknown user / empty / overlong → the same generic error
+PASS  displayName: "First Last [tag]"; markup stays a plain string  — ["Steven Hildreth [the Skeptic]","A B","<img src=x onerror=alert(1)> Z [\"><b>]"]
+PASS  corrupt registry → treated as empty, no crash
+PASS  damaged entries ignored, good ones kept
+PASS  namespace key is cos:<lowercased username>:<name>
+PASS  reserved key cos:<username>:lilpopeTour
+PASS  migration: all six legacy keys adopted into the namespace, legacy removed  — {"greyscale":[null,"true"],"alwaysScreenOnly":[null,"false"],"alwaysScreenOnlySet":[null,"true"],"desktopZoom":[null,"1.5"],"windowZoom":[null,"1.25"],"scriptedCaseProgress":[null,"{\"v\":1,\"stage\":0,\"caseId\":null,\"tested\":{}}"]}
+PASS  migration: lilpopeTour neither blocks adoption nor is touched
+PASS  migration: adopted values read back (greyscale, zooms, explicit Screen Only false)  — {"greyscale":true,"alwaysPref":false,"desktopZoom":1.5,"windowZoom":1.25,"volume":null}
+PASS  migration: a user who already has values adopts nothing and legacy is kept
+PASS  migration: next user with an empty namespace adopts what is left
+PASS  unsaved prefs read back as null (caller picks defaults)
+PASS  plain http (no crypto.subtle): create + sign in work via the built-in SHA-256  — {"made":true,"insecureOk":true,"secureOk":true,"wrong":false}
+PASS  …and that account signs in on https too (identical hashes); wrong password still fails
+PASS  storage full/blocked: createUser fails with an in-form message, nothing half-saved  — {"ok":false,"errors":{"form":"couldn't save — storage on this device is full or blocked"}}
+PASS  no page errors
+
+43/43 checks passed

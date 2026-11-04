@@ -1,0 +1,60 @@
+PASS  zero users: empty state says so and points at Create User
+PASS  zero users: no sign-in fields, no Login button
+PASS  zero users: focus lands on Create User  — BUTTON:Create User
+PASS  hook: card registered as exclusion "loginForm" (matches the card rect)
+PASS  hook: Create User button registered as target "createUserButton"  — {"text":"Create User","connected":true,"isCardButton":true}
+PASS  hook: mouse movement emits no login.* events
+PASS  Enter on Create User switches to CREATE USER (no submit)
+PASS  hook: login.modeSwitch emitted {signin → create}  — [{"n":"login.modeSwitch","d":{"from":"signin","to":"create"}}]
+PASS  focus on mode switch → First name
+PASS  hook: exclusion rect updated on mode switch  — 163 → 313.265625
+PASS  hook: target is the same Create User element after the switch
+PASS  create mode: every field has a <label for>
+PASS  password rule shown as helper text under the field (and described-by)  — 8+ characters, with a lowercase letter, an uppercase letter, and a number or symbol
+PASS  hook: login.submit emitted on an invalid create attempt
+PASS  empty create: alert names the 5 required fields  — 5 fields need attention: first name, last name, username, password, confirm password
+PASS  empty create: focus on the first invalid field (First name)
+PASS  empty create: field shows its own message + aria-invalid  — {"invalid":true,"text":"enter a first name"}
+PASS  alert region is role=alert (aria-live)
+PASS  tag is optional (no error when blank)
+PASS  hook: login.input on keydown + input for each keystroke  — 12 events
+PASS  hook: login.input never carries the value
+PASS  hook: login.input on paste and on autofill  — ["paste","autofill"]
+PASS  hook: keys on buttons (not fields) emit no login.input
+PASS  first name with a digit → its own message
+PASS  focus on error → the invalid field
+PASS  confirm mismatch blocked
+PASS  password rule fails in the form: "Abcde1!"  — password needs at least 8 characters
+PASS  password rule fails in the form: "alllowercase1"  — password needs an uppercase letter
+PASS  password rule fails in the form: "ALLUPPER1"  — password needs a lowercase letter
+PASS  password rule fails in the form: "NoDigitsHere"  — password needs a number or symbol
+PASS  username "ab" rejected in the form  — username must be 3–20 characters
+PASS  username "bad name" rejected in the form  — username: letters, numbers, and underscores only
+PASS  username "shithead" rejected in the form  — that username isn't allowed — choose another
+PASS  username "FuCk_it" rejected in the form  — that username isn't allowed — choose another
+PASS  username "b1tch_please" rejected in the form  — that username isn't allowed — choose another
+PASS  profanity message
+PASS  storage full/blocked → message in the form (no alert dialog), still in CREATE USER  — couldn't save — storage on this device is full or blocked
+PASS  valid create (Passw0rd! passes) → SIGN IN mode
+PASS  created: username prefilled, password empty, focus on Password
+PASS  created: status line announces it (role=status)  — user Steven created — enter the password to sign in
+PASS  hook: auto switch back emits login.modeSwitch {create → signin}
+PASS  duplicate username (other case) → "that username is taken"
+PASS  Back → SIGN IN; username still filled → focus on Password  — Password
+PASS  sign-in mode: every field has a <label for>
+PASS  Tab order: Username → Password → Login → Create User  — Username > Password > BUTTON:Login > BUTTON:Create User
+PASS  sign in with both fields empty → per-field messages, focus Username
+PASS  hook: login.submit on a sign-in attempt
+PASS  wrong password → "username or password not recognized" (Enter submitted)  — username or password not recognized
+PASS  after error: password cleared, focus on Password, both fields aria-invalid
+PASS  unknown user → the identical generic message  — username or password not recognized
+PASS  password is case-sensitive → generic message
+PASS  hook: no password text ever in any bus event
+PASS  hook: exclusion rect follows a window resize
+PASS  right password → ACCESS GRANTED
+PASS  the background_OS wipe plays over the cathedral (login → OS transition)  — uncovered % sampled: 100,95,90,85,81,76,73,68,63,60,38,33,30,25,21,16,11,8,3,0,0
+PASS  reaches the OS after the wipe
+PASS  hook: exclusion + target unregistered once the form is gone
+PASS  no page errors
+
+58/58 checks passed

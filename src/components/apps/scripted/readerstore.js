@@ -46,6 +46,8 @@ export const readerActions = {
   },
   pickChapter(chapter) { set({ chapter, step: 2 }) },
   read(book, chapter)  { set({ book, chapter, step: 2 }) },
+  // Logout / power-off: the next user starts with a closed reader
+  reset() { set(initial) },
 }
 
 export function useReaderState() {
