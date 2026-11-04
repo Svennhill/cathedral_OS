@@ -2805,4 +2805,45 @@ export const PASSAGES = [
     "verdict": "Hebrews lays down the principle it attributes to the law: no shedding of blood, no forgiveness. The law itself, in Leviticus 5, forgives the poor man's sin for a handful of flour. Either the principle misstates the law it claims to summarize, or the flour offering cannot do what Leviticus says it does.",
     "scoreImpact": -2.0
   },
+{
+    "id": "death_new_creation",
+    "title": "Death in the New Creation",
+    "summary": "Checks Revelation 21:4 — in the new creation there will be no more death — against Isaiah 65:20, where in God's new heavens and new earth (65:17) a youth will die at a hundred years and a sinner who falls short is accursed.",
+    "ruleVerse": {
+      "book": "Revelation",
+      "chapter": 21,
+      "verse": 4,
+      "reference": "Revelation 21:4"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_no_more_death",
+        "statement": "In the new creation there will be no more death.",
+        "plain": "John's vision closes the subject: 'there will be no more death or mourning or crying or pain, for the former things have passed away.' Death is among the former things.",
+        "subject": "death",
+        "action": "exist",
+        "target": "new_creation",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "isaiah_dies_at_hundred",
+        "entityId": "isaiah",
+        "verse": {
+          "book": "Isaiah",
+          "chapter": 65,
+          "verse": 20,
+          "reference": "Isaiah 65:20"
+        },
+        "violatesRule": "rule_no_more_death",
+        "violationExplanation": "Isaiah's new heavens and new earth (65:17) run on different physics: 'the youth will die at a hundred years, and he who fails to reach a hundred will be considered accursed.' People still die in Isaiah's new creation — they simply die old, and dying young is still a curse. Death has not passed away; it has been rescheduled.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Isaiah's new earth still has death in it."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Both prophets describe God's new heavens and new earth. John's has no more death at all. Isaiah's has death deferred to a hundred years, with a curse on anyone who dies younger. The former things have either passed away, or they have been given a longer lease.",
+    "scoreImpact": -2.0
+  },
 ]
