@@ -6,16 +6,16 @@
 // keyboard — tests it. Every move works the other way too: drag a figure
 // back down, or tap it and then tap the ground.
 //
-// Where a figure stands is this scene's own state, kept apart from the
-// record. What each figure means comes from deriveScene() (derivescene.js);
-// scoring goes through caseActions.test, the same call the panel's "Test it
-// against the rule" button makes, so the two views share one record and a
-// passage can only ever be scored once — the first time it goes up.
-// Bringing a figure back down never untests it; sending it up again replays
-// the recorded result. On entry, every tested figure starts in the zone
-// (its record puts it there); untested and exempt figures start on the
-// ground. Decoys never leave the ground: a drop in the zone is their
-// NO RECORD outcome, not a move.
+// Where a figure stands is this visit's own state, kept apart from the
+// record: every figure starts on the ground — nobody is pre-placed in
+// the zone, whatever its record says. What each figure means comes from
+// deriveScene() (derivescene.js); scoring goes through caseActions.test,
+// the same call the panel's "Test it against the rule" button makes, so
+// the two views share one record and a passage can only ever be scored
+// once — the first time it goes up. Bringing a figure back down never
+// untests it; sending it up again replays the recorded result. Decoys
+// never leave the ground: a drop in the zone is their NO RECORD outcome,
+// not a move.
 //
 // This replaces only step 3 of 4 (Test the passages). Steps 1, 2 and 4 are
 // the panel's, and the panel stays a complete way to run every case.
@@ -27,6 +27,7 @@ import { TRANSLATION } from "../../../data/bsb"
 import { caseActions, useCaseState } from "./casestore"
 import { PANEL_CSS } from "./panelstyle"
 import { SCENE_CSS } from "./scenestyle"
+import { spriteFor } from "./sprites"
 import { computeScores, fmtScore, fmtImpact } from "./scoring"
 
 const STAGES     = ["Choose a case", "The rule", "Test the passages", "Verdict"]
@@ -89,13 +90,13 @@ export default function CaseScene({ caseData, scene }) {
   const { place, action, figures } = scene
   const placeWord = place.name.toLowerCase()
   const byKey = (k) => figures.find(f => f.key === k)
-  // Position, never the record: a scored figure is up when its passage is
-  // tested and it hasn't been brought back down this visit. A scored figure
-  // can only be up once tested (the only way up is the test).
-  const isUp = (f) =>
-    f.kind === "none" ? false :
-    f.testId          ? tested.includes(f.testId) && placed[f.key] !== GROUND :
-                        placed[f.key] === ZONE
+  // Placement is this visit's arrangement, never the record: a figure is
+  // up only because it was put there this visit. (Reading it off `tested`
+  // pre-placed finished figures in the zone on entry; Steven's ruling is
+  // that everybody starts on the ground. A figure's record still shows in
+  // its styling and label below — position is the only thing placement
+  // decides.)
+  const isUp = (f) => f.kind !== "none" && placed[f.key] === ZONE
   const at    = (f) => isUp(f) ? ZONE : GROUND
   const shown = computeScores(caseData, tested.filter(id => id !== hold))
   const total = caseData.testCases.length
@@ -336,6 +337,7 @@ export default function CaseScene({ caseData, scene }) {
     const tc = f.testId && caseData.testCases.find(t => t.id === f.testId)
     // The record's look belongs to the record, not the position: a tested
     // contradiction keeps it wherever the figure stands
+    const spr = spriteFor(f, upNow)
     const done = Boolean(tc) && tested.includes(tc.id)
     const anim = !d && fx?.key === f.key && settle !== f.key ? " " + fx.name : ""
     const record = !done ? "" : tc.violatesRule ? ", tested: CONTRADICTION" : ", tested: NO CONTRADICTION"
@@ -356,7 +358,9 @@ export default function CaseScene({ caseData, scene }) {
         onAnimationEnd={(e) => { if (e.target === e.currentTarget) setFx(x => x?.key === f.key ? null : x) }}
         onDragStart={(e) => e.preventDefault()}
       >
-        <Person />
+        {spr
+          ? <img className="sc-sprite" src={spr} alt="" draggable={false} />
+          : <Person />}
         <span className="sc-name">{f.label}</span>
       </button>
     )
@@ -597,7 +601,8 @@ function Verse({ verse, text }) {
   )
 }
 
-// A small pixel figure, drawn in the text color
+// A small pixel figure, drawn in the text color — the fallback for a
+// person who has no sprite in the registry (sprites.js)
 function Person() {
   return (
     <svg className="sc-person" viewBox="0 0 8 13" aria-hidden="true">
