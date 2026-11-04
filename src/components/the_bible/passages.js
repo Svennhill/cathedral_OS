@@ -2846,4 +2846,45 @@ export const PASSAGES = [
     "verdict": "Both prophets describe God's new heavens and new earth. John's has no more death at all. Isaiah's has death deferred to a hundred years, with a curse on anyone who dies younger. The former things have either passed away, or they have been given a longer lease.",
     "scoreImpact": -2.0
   },
+{
+    "id": "passover_eaten",
+    "title": "Had Passover Been Eaten?",
+    "summary": "Checks Luke 22:15 — Jesus at the Last Supper: I have eagerly desired to eat this Passover with you before My suffering — against John 18:28, where on the morning after that supper the Jewish leaders avoid defilement so that they can eat the Passover.",
+    "ruleVerse": {
+      "book": "Luke",
+      "chapter": 22,
+      "verse": 15,
+      "reference": "Luke 22:15"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_supper_was_passover",
+        "statement": "The Last Supper was the Passover meal, eaten the night before the crucifixion.",
+        "plain": "Jesus names the meal as He sits at it: 'I have eagerly desired to eat this Passover with you before My suffering.' In Luke's chronology the Passover is eaten; what remains is the suffering.",
+        "subject": "jesus",
+        "action": "eat",
+        "target": "passover",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "john_not_yet_eaten",
+        "entityId": "jesus",
+        "verse": {
+          "book": "John",
+          "chapter": 18,
+          "verse": 28,
+          "reference": "John 18:28"
+        },
+        "violatesRule": "rule_supper_was_passover",
+        "violationExplanation": "The next morning, in John, the Passover has not been eaten: Jesus is led to the Praetorium early, 'and the Jews did not enter the Praetorium, to avoid being defiled and unable to eat the Passover.' If the feast still lies ahead on crucifixion morning, the meal of the night before was not it.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — In John, Passover is still uneaten the morning after Luke's Passover supper."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Luke's Jesus eats the Passover with His disciples and then suffers. John's Jerusalem has not eaten the Passover yet when the suffering is already underway the next morning — and John's own dating of the crucifixion (19:14, the day of Preparation for the Passover) keeps the lambs unslain at the hour of the cross. The two chronologies place the feast on opposite sides of the death.",
+    "scoreImpact": -0.5
+  },
 ]
