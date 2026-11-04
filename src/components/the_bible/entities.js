@@ -367,4 +367,14 @@ zechariah: {
     "description": "The priest's son stoned in the temple courtyard for his prophecy — whose father Jesus names as Berechiah, a different Zechariah's father.",
     "visualType": "person"
   },
+ahaz: {
+    "id": "ahaz",
+    "name": "Ahaz",
+    "aka": [
+      "king of Judah"
+    ],
+    "type": "person",
+    "description": "The king of Judah whose war with Aram and Israel is a failed siege in Kings and Isaiah, and a God-delivered rout in Chronicles.",
+    "visualType": "person"
+  },
 }

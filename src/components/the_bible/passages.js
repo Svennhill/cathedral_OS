@@ -2586,4 +2586,57 @@ export const PASSAGES = [{
     "verdict": "Matthew's Jesus abolishes the middle: not with Me means against Me. Luke's and Mark's Jesus install the middle as the rule: not against us means for us. The two maxims classify the same unaffiliated man into opposite camps, and both are given as Jesus's own teaching.",
     "scoreImpact": -2.0
   },
+  {
+    "id": "ahaz_overcome",
+    "title": "Could They Overcome Ahaz?",
+    "summary": "Checks 2 Kings 16:5 — Rezin and Pekah besieged Ahaz but could not overcome him — against 2 Chronicles 28:5, where the LORD delivered Ahaz into their hands and they struck him with great force. Isaiah 7:1 sides with Kings.",
+    "ruleVerse": {
+      "book": "2 Kings",
+      "chapter": 16,
+      "verse": 5,
+      "reference": "2 Kings 16:5"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_could_not_overcome",
+        "statement": "Rezin of Aram and Pekah of Israel could not overcome Ahaz.",
+        "plain": "Kings states the campaign's limit plainly: 'They besieged Ahaz but could not overcome him.'",
+        "subject": "ahaz",
+        "action": "be_overcome",
+        "target": "enemies",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "chronicles_delivered",
+        "entityId": "ahaz",
+        "verse": {
+          "book": "2 Chronicles",
+          "chapter": 28,
+          "verse": 5,
+          "reference": "2 Chronicles 28:5"
+        },
+        "violatesRule": "rule_could_not_overcome",
+        "violationExplanation": "Chronicles reports the same war as a rout delivered by God: 'So the LORD his God delivered Ahaz into the hand of the king of Aram, who attacked him and took many captives to Damascus. Ahaz was also delivered into the hand of the king of Israel, who struck him with great force.' Delivered into their hands, struck with great force, captives taken — the outcome Kings says the attackers could not achieve.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — Chronicles has Ahaz delivered into the hands Kings says could not overcome him."
+      },
+      {
+        "id": "isaiah_could_not",
+        "entityId": "ahaz",
+        "verse": {
+          "book": "Isaiah",
+          "chapter": 7,
+          "verse": 1,
+          "reference": "Isaiah 7:1"
+        },
+        "violatesRule": null,
+        "verdict": "CONSISTENT — Isaiah agrees with Kings: Rezin and Pekah marched on Jerusalem 'but he could not overpower the city.' The failed siege is common ground between Kings and the prophet."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Kings and Isaiah agree the Aramean-Israelite campaign failed against Ahaz. Chronicles describes the same war as God delivering Ahaz into both kings' hands, with mass captivity and great slaughter. The war has two outcomes, and the books distribute them by author.",
+    "scoreImpact": -0.5
+  },
 ]
