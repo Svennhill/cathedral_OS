@@ -2639,4 +2639,45 @@ export const PASSAGES = [{
     "verdict": "Kings and Isaiah agree the Aramean-Israelite campaign failed against Ahaz. Chronicles describes the same war as God delivering Ahaz into both kings' hands, with mass captivity and great slaughter. The war has two outcomes, and the books distribute them by author.",
     "scoreImpact": -0.5
   },
+  {
+    "id": "ahabs_blood",
+    "title": "Where the Dogs Licked",
+    "summary": "Checks 1 Kings 21:19 — Elijah's prophecy: in the place where the dogs licked Naboth's blood, the dogs will lick Ahab's blood — against 1 Kings 22:38, where Ahab's blood is licked by dogs at the pool of Samaria, a day's journey from Naboth's vineyard in Jezreel.",
+    "ruleVerse": {
+      "book": "1 Kings",
+      "chapter": 21,
+      "verse": 19,
+      "reference": "1 Kings 21:19"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_same_place",
+        "statement": "The dogs would lick Ahab's blood in the same place where they licked Naboth's.",
+        "plain": "Elijah's sentence is place-specific: '“In the place where the dogs licked up the blood of Naboth, there also the dogs will lick up your blood—yes, yours!”' The place is the point of the prophecy: Naboth's stolen plot in Jezreel.",
+        "subject": "ahab",
+        "action": "bleed",
+        "target": "naboths_vineyard",
+        "permitted": true
+      }
+    ],
+    "testCases": [
+      {
+        "id": "pool_of_samaria",
+        "entityId": "ahab",
+        "verse": {
+          "book": "1 Kings",
+          "chapter": 22,
+          "verse": 38,
+          "reference": "1 Kings 22:38"
+        },
+        "violatesRule": "rule_same_place",
+        "violationExplanation": "Ahab falls at Ramoth-Gilead and his chariot is brought home: 'And the chariot was washed at the pool of Samaria where the prostitutes bathed, and the dogs licked up Ahab’s blood, according to the word that the LORD had spoken.' Dogs, blood — and the wrong city. The licking happens at Samaria's pool, not at Naboth's plot in Jezreel, while the narrator certifies the prophecy fulfilled.",
+        "severity": 2,
+        "verdict": "CONTRADICTION — The dogs lick Ahab's blood at Samaria, not where Naboth's was licked."
+      }
+    ],
+    "severity": 2,
+    "verdict": "Elijah's prophecy stakes everything on the place: where Naboth's blood was licked, there Ahab's will be. Kings dutifully records dogs licking Ahab's blood — at the pool of Samaria, after his body is carried home from another battlefield — and calls it fulfillment. The detail the prophecy is made of is the detail the fulfillment misses.",
+    "scoreImpact": -0.5
+  },
 ]
