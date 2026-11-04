@@ -13,11 +13,18 @@ import { PASSAGES } from "./the_bible/passages"
 import { caseActions, useCaseState, caseStatus } from "./apps/scripted/casestore"
 import { displayName } from "../data/userstore"
 import PasscodePrompt from "./passcodeprompt"
+import { AppIcon, IconCathedral, IconChevronDown, IconChevronRight, IconChevronUp, IconClose } from "./icons"
 
-const GREEN  = "#00ff41"
-const TEAL   = "#009191"
-const DIM    = "#004d1a"
-const BG     = "#050510"
+// All colors come from the --os-* theme variables (index.css); translucent
+// shades are color-mix() derivations so the menu swings with the palette.
+const GREEN  = "var(--os-accent)"
+const TEAL   = "var(--os-accent-2)"
+const DIM    = "var(--os-accent-dim)"
+const BG     = "var(--os-bg)"
+const INK    = "var(--os-ink)"
+const DANGER = "var(--os-danger)"
+const mix = (pct, color = "var(--os-accent)") =>
+  `color-mix(in srgb, ${color} ${pct}%, transparent)`
 const FONT   = "opendyslexic, monospace"
 
 // ── SUB-COMPONENTS ────────────────────────────────────────────────────────
@@ -38,7 +45,8 @@ function SectionHeader({ label, open, onToggle, phone, id }) {
         padding: phone ? "0 12px" : "3px 8px",
         minHeight: phone ? PHONE.HIT + 4 : undefined,
         boxSizing: "border-box",
-        background: DIM,
+        background: `linear-gradient(180deg, ${mix(90, DIM)}, ${mix(65, DIM)})`,
+        boxShadow: "var(--os-bevel-hi)",
         cursor: "pointer",
         userSelect: "none",
         fontFamily: FONT,
@@ -49,12 +57,12 @@ function SectionHeader({ label, open, onToggle, phone, id }) {
       }}
     >
       <span>{label}</span>
-      <span style={{ opacity: 0.6, fontSize: "80%" }}>{open ? "▲" : "▼"}</span>
+      <span style={{ opacity: 0.7, display: "flex" }}>{open ? <IconChevronUp size={12} /> : <IconChevronDown size={12} />}</span>
     </div>
   )
 }
 
-function AppEntry({ title, symbol, onClick, phone }) {
+function AppEntry({ title, appId, onClick, phone }) {
   const [hovered, setHovered] = useState(false)
   return (
     <div
@@ -68,24 +76,27 @@ function AppEntry({ title, symbol, onClick, phone }) {
         padding: phone ? "0 14px" : "3px 12px",
         minHeight: phone ? PHONE.HIT + 4 : undefined,
         cursor: "pointer",
-        background: hovered ? `rgba(0,145,145,0.15)` : "transparent",
+        background: hovered ? mix(15, TEAL) : "transparent",
         fontFamily: FONT,
         fontSize: "72%",
-        color: hovered ? GREEN : `rgba(0,255,65,0.7)`,
+        color: hovered ? GREEN : mix(70),
         transition: "background 0.1s",
         userSelect: "none",
       }}
     >
       <span style={{
-        display: "inline-block",
-        width: phone ? 22 : 14, height: phone ? 22 : 14,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: phone ? 26 : 18, height: phone ? 26 : 18,
         border: `1px solid ${hovered ? TEAL : DIM}`,
-        textAlign: "center",
-        lineHeight: phone ? "20px" : "12px",
-        fontSize: "65%",
+        borderRadius: "var(--os-radius-sm)",
+        background: "var(--os-tile)",
+        boxShadow: "var(--os-bevel-hi)",
+        color: GREEN,
         flexShrink: 0,
       }}>
-        {symbol}
+        <AppIcon id={appId} size={phone ? 16 : 12} />
       </span>
       <span>{title}</span>
     </div>
@@ -103,7 +114,7 @@ function SettingToggle({ label, checked, onChange, locked, lockNote, phone }) {
       cursor: locked ? "default" : "pointer",
       fontFamily: FONT,
       fontSize: "72%",
-      color: locked ? `rgba(0,255,65,0.35)` : `rgba(0,255,65,0.8)`,
+      color: locked ? mix(35) : mix(80),
       userSelect: "none",
       gap: 6,
     }}>
@@ -144,7 +155,7 @@ function ZoomSetting({ label, value, onChange, phone }) {
       padding: phone ? "2px 14px" : "2px 12px",
       fontFamily: FONT,
       fontSize: "72%",
-      color: `rgba(0,255,65,0.8)`,
+      color: mix(80),
       userSelect: "none",
       gap: 6,
     }}>
@@ -195,13 +206,18 @@ function DebugSection({ debugEnabled, onEnableDebug, onDisableDebug, phone }) {
           cursor: "pointer",
           fontFamily: FONT,
           fontSize: "72%",
-          color: debugEnabled ? GREEN : `rgba(0,255,65,0.8)`,
+          color: debugEnabled ? GREEN : mix(80),
           userSelect: "none",
         }}
       >
         <span>Debug Panel</span>
-        <span style={{ fontSize: "70%", opacity: 0.7 }}>
-          {debugEnabled ? "● ON" : (expanded ? "▲" : "▶")}
+        <span style={{ fontSize: "70%", opacity: 0.85, display: "flex", alignItems: "center", gap: 4 }}>
+          {debugEnabled ? (
+            <>
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: GREEN, boxShadow: `0 0 5px ${GREEN}`, display: "inline-block" }} />
+              ON
+            </>
+          ) : (expanded ? <IconChevronUp size={12} /> : <IconChevronRight size={12} />)}
         </span>
       </div>
 
@@ -216,10 +232,12 @@ function DebugSection({ debugEnabled, onEnableDebug, onDisableDebug, phone }) {
 
 // ── MAIN START MENU ───────────────────────────────────────────────────────
 
-// App registry — keep in sync with screen.jsx renderApp()
+// App registry — keep in sync with screen.jsx renderApp().
+// Icons resolve from the app id via APP_ICONS in icons.jsx (shared with
+// the desktop), so an app has one mark everywhere.
 const APPS = [
-  { id: 'scriptedexe', title: 'scripted.exe',       symbol: '►' },
-  { id: 'dougpretfac', title: "doug's pretzel factory", symbol: '∞' },
+  { id: 'scriptedexe', title: 'scripted.exe' },
+  { id: 'dougpretfac', title: "doug's pretzel factory" },
 ]
 
 export default function StartMenu({
@@ -278,33 +296,37 @@ export default function StartMenu({
         fontSize: phone ? 20 : undefined,  // phone: %-sized text scales off this (72% → 14.4px)
         background: BG,
         border: `1px solid ${TEAL}`,
-        boxShadow: `0 4px 16px rgba(0,0,0,0.7), 0 0 8px rgba(0,145,145,0.2)`,
+        borderRadius: "0 0 var(--os-radius) var(--os-radius)",
+        boxShadow: `var(--os-bevel-panel), 0 0 8px ${mix(20, TEAL)}`,
         fontFamily: FONT,
         pointerEvents: "auto",
       }}
     >
-      {/* Menu title bar */}
+      {/* Menu title bar — same treatment as the window title bars */}
       <div style={{
-        background: TEAL,
-        padding: "2px 8px",
+        background: "var(--os-titlebar)",
+        borderBottom: `1px solid ${DIM}`,
+        padding: "3px 4px 3px 8px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
       }}>
-        <span style={{ color: BG, fontSize: "72%", letterSpacing: "0.1em", fontFamily: FONT }}>
-          ≡ CATHEDRAL OS
+        <span style={{ color: GREEN, fontSize: "72%", letterSpacing: "0.1em", fontFamily: FONT, display: "flex", alignItems: "center", gap: 6 }}>
+          <IconCathedral size={13} />
+          CATHEDRAL OS
         </span>
         <button
           onClick={onClose}
           aria-label="Close menu"
           style={{
             background: "transparent", border: "none",
-            color: BG, cursor: "pointer", fontSize: "72%",
+            color: GREEN, cursor: "pointer",
             fontFamily: FONT, padding: "0 2px", lineHeight: 1,
-            ...(phone ? { width: PHONE.HIT + 4, height: PHONE.HIT, padding: 0, marginRight: -8, borderRadius: 0, fontSize: "90%" } : null),
+            display: "flex", alignItems: "center", justifyContent: "center",
+            ...(phone ? { width: PHONE.HIT + 4, height: PHONE.HIT, padding: 0, marginRight: -8, borderRadius: 0 } : null),
           }}
         >
-          ✕
+          <IconClose size={phone ? 16 : 11} />
         </button>
       </div>
 
@@ -319,7 +341,7 @@ export default function StartMenu({
             <AppEntry
               key={app.id}
               title={app.title}
-              symbol={app.symbol}
+              appId={app.id}
               onClick={() => handleOpenApp(app.id, app.title)}
               phone={phone}
             />
@@ -480,7 +502,7 @@ function UserLine({ user, onLogout, phone }) {
 function CaseProgress({ phone }) {
   const { tested: testedByCase } = useCaseState()
   const started = PASSAGES.filter(c => testedByCase[c.id]?.length).length
-  const note = { padding: phone ? "6px 14px" : "3px 12px", fontFamily: FONT, fontSize: "62%", color: "rgba(0,255,65,0.6)", lineHeight: 1.45 }
+  const note = { padding: phone ? "6px 14px" : "3px 12px", fontFamily: FONT, fontSize: "62%", color: mix(60), lineHeight: 1.45 }
   return (
     <div style={{ paddingTop: 2, paddingBottom: 4 }}>
       <div style={note}>
@@ -501,7 +523,7 @@ function CaseProgress({ phone }) {
               fontFamily: FONT,
             }}>
               <div style={{ fontSize: "68%", color: GREEN, lineHeight: 1.35 }}>{c.title}</div>
-              <div style={{ fontSize: "60%", color: tested.length ? TEAL : "rgba(0,255,65,0.5)", lineHeight: 1.4 }}>
+              <div style={{ fontSize: "60%", color: tested.length ? TEAL : mix(50), lineHeight: 1.4 }}>
                 {caseStatus(c, tested)}
               </div>
               {tested.length > 0 && <ResetCase caseId={c.id} title={c.title} phone={phone} />}
@@ -520,8 +542,8 @@ function ResetCase({ caseId, title, phone }) {
     fontFamily: FONT,
     fontSize: phone ? "62%" : "58%",
     fontWeight: primary ? "bold" : "normal",
-    color: primary ? GREEN : "rgba(0,255,65,0.75)",
-    background: primary ? "rgba(0,255,65,0.08)" : "transparent",
+    color: primary ? GREEN : mix(75),
+    background: primary ? mix(8) : "transparent",
     border: `1px solid ${primary ? GREEN : DIM}`,
     borderRadius: 0,
     padding: phone ? "0 12px" : "1px 6px",

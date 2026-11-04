@@ -17,7 +17,7 @@ function renderApp(appId) {
     case 'scriptedexe': return <ScriptedExe />
     case 'dougpretfac': return <DougPretFac />
     default: return (
-      <div style={{ color: '#ff4444', padding: 8, fontFamily: 'monospace', fontSize: 9 }}>
+      <div style={{ color: 'var(--os-danger)', padding: 8, fontFamily: 'monospace', fontSize: 9 }}>
         ERROR: app "{appId}" not found
       </div>
     )
@@ -296,7 +296,7 @@ export default function Screen({
         <div style={{
           position: "absolute", top: 0, left: 0,
           width: "100%", height: "100%",
-          backgroundColor: `rgba(0,255,65,${illuminate * 0.3})`,
+          backgroundColor: `color-mix(in srgb, var(--os-accent) ${illuminate * 30}%, transparent)`,
           pointerEvents: "none", clipPath, zIndex: 205,
         }} />
       )}

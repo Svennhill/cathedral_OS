@@ -1,4 +1,5 @@
 import { useRef } from "react"
+import { IconClose, IconMaximize, IconMinimize, IconResizeGrip, IconRestore } from "./icons"
 
 // WindowBox — full window manager chrome for cathedral_OS
 //
@@ -13,11 +14,16 @@ import { useRef } from "react"
 //   contentZoom     — window zoom for the app content (independent of desktop zoom)
 //   phone           — phone layout: touch-sized title bar and buttons
 //   children        — the app rendered inside
+//
+// Chrome colors come from the --os-* theme variables (index.css) and the
+// control glyphs from the OS icon system (icons.jsx) — the flat white
+// title bar and text-glyph buttons are gone.
 
-const GREEN  = "#00ff41"
-const TEAL   = "#009191"
-const BG     = "#0a0a1a"
-const WHITE  = "#ffffff"
+const GREEN = "var(--os-accent)"
+const TEAL  = "var(--os-accent-2)"
+const DIM   = "var(--os-accent-dim)"
+const BG    = "var(--os-bg-deep)"
+const mix = (pct, color) => `color-mix(in srgb, ${color} ${pct}%, transparent)`
 
 export default function WindowBox({
   win,
@@ -122,7 +128,8 @@ export default function WindowBox({
       ...boxStyle,
       backgroundColor: BG,
       border: `1px solid ${TEAL}`,
-      boxShadow: `0 0 10px rgba(0,145,145,0.25), 2px 2px 0 #000`,
+      borderRadius: "var(--os-radius)",
+      boxShadow: "var(--os-bevel-panel), 0 0 10px color-mix(in srgb, var(--os-accent-2) 25%, transparent)",
       fontFamily: "opendyslexic, monospace",
       display: "flex",
       flexDirection: "column",
@@ -133,8 +140,9 @@ export default function WindowBox({
       <div
         onMouseDown={handleTitleMouseDown}
         style={{
-          background: WHITE,
-          padding: phone ? "0 0 0 8px" : "2px 4px",
+          background: "var(--os-titlebar)",
+          borderBottom: `1px solid ${DIM}`,
+          padding: phone ? "0 0 0 8px" : "3px 4px 3px 8px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -143,36 +151,41 @@ export default function WindowBox({
           flexShrink: 0,
         }}
       >
-        <span style={{ color: "#000", fontWeight: "bold", fontSize: phone ? 14 : 9 }}>
+        <span style={{
+          color: GREEN, fontWeight: "bold",
+          fontSize: phone ? 14 : 9,
+          letterSpacing: "0.06em",
+          textShadow: `0 0 6px ${mix(45, GREEN)}`,
+        }}>
           {title}
         </span>
 
-        <div style={{ display: "flex", gap: phone ? 0 : 2 }}>
+        <div style={{ display: "flex", gap: phone ? 0 : 3, alignItems: "center" }}>
           {/* Minimize */}
           <button
             onMouseDown={e => e.stopPropagation()}
             onClick={onMinimize}
             aria-label="Minimize"
-            style={phone ? PHONE_HIT : btnStyle("#d4d4d4", "#888", "#000")}
-          >{phone ? <span style={phoneFace("#d4d4d4", "#888", "#000")}>_</span> : "_"}</button>
+            style={phone ? PHONE_HIT : faceStyle(false)}
+          >{phone ? <span style={phoneFace(false)}><IconMinimize size={14} /></span> : <IconMinimize size={9} />}</button>
 
           {/* Maximize / Restore */}
           <button
             onMouseDown={e => e.stopPropagation()}
             onClick={onMaximize}
             aria-label={maximized ? "Restore" : "Maximize"}
-            style={phone ? PHONE_HIT : btnStyle("#d4d4d4", "#888", "#000")}
+            style={phone ? PHONE_HIT : faceStyle(false)}
           >{phone
-            ? <span style={phoneFace("#d4d4d4", "#888", "#000")}>{maximized ? "❐" : "□"}</span>
-            : (maximized ? "❐" : "□")}</button>
+            ? <span style={phoneFace(false)}>{maximized ? <IconRestore size={14} /> : <IconMaximize size={14} />}</span>
+            : (maximized ? <IconRestore size={9} /> : <IconMaximize size={9} />)}</button>
 
           {/* Close */}
           <button
             onMouseDown={e => e.stopPropagation()}
             onClick={onClose}
             aria-label="Close"
-            style={phone ? PHONE_HIT : btnStyle("#cc0000", "#880000", "#fff")}
-          >{phone ? <span style={phoneFace("#cc0000", "#880000", "#fff")}>✕</span> : "✕"}</button>
+            style={phone ? PHONE_HIT : faceStyle(true)}
+          >{phone ? <span style={phoneFace(true)}><IconClose size={14} /></span> : <IconClose size={9} />}</button>
         </div>
       </div>
 
@@ -194,17 +207,15 @@ export default function WindowBox({
           onMouseDown={handleResizeMouseDown}
           style={{
             position: "absolute",
-            bottom: 0, right: 0,
-            width: 10, height: 10,
+            bottom: 1, right: 1,
+            width: 12, height: 12,
             cursor: "nwse-resize",
             zIndex: 1,
+            color: TEAL,
+            opacity: 0.55,
           }}
         >
-          {/* Subtle visual indicator */}
-          <svg width="10" height="10" style={{ display: "block", opacity: 0.4 }}>
-            <line x1="10" y1="0" x2="0" y2="10" stroke={TEAL} strokeWidth="1" />
-            <line x1="10" y1="4" x2="4" y2="10" stroke={TEAL} strokeWidth="1" />
-          </svg>
+          <IconResizeGrip size={12} />
         </div>
       )}
 
@@ -212,15 +223,22 @@ export default function WindowBox({
   )
 }
 
-function btnStyle(bg, border, color) {
+// Window-control button face — one treatment for all three controls:
+// dark gradient face, accent border and glyph; the close control swaps
+// the accent for the danger ramp. Part of the chrome language in
+// index.css (--os-radius-sm corner, --os-bevel-hi top highlight).
+function faceStyle(danger) {
   return {
-    width: 11, height: 11,
-    fontSize: 7, padding: 0,
+    width: 15, height: 15,
+    padding: 0,
     cursor: "pointer",
-    background: bg,
-    border: `1px solid ${border}`,
-    color,
-    fontWeight: "bold",
+    background: danger
+      ? `linear-gradient(180deg, ${mix(65, "var(--os-danger-strong)")}, ${mix(40, "var(--os-danger-deep)")})`
+      : `linear-gradient(180deg, ${mix(30, TEAL)}, ${mix(12, TEAL)})`,
+    border: `1px solid ${danger ? "var(--os-danger-deep)" : mix(55, GREEN)}`,
+    borderRadius: "var(--os-radius-sm)",
+    boxShadow: "var(--os-bevel-hi)",
+    color: danger ? "#ffffff" : GREEN,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -236,10 +254,10 @@ const PHONE_HIT = {
   display: "flex", alignItems: "center", justifyContent: "center",
   cursor: "pointer",
 }
-function phoneFace(bg, border, color) {
+function phoneFace(danger) {
   return {
-    ...btnStyle(bg, border, color),
-    width: 26, height: 26, fontSize: 14,
+    ...faceStyle(danger),
+    width: 26, height: 26,
     boxSizing: "border-box",
   }
 }
