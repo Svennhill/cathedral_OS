@@ -198,7 +198,7 @@ function StageRule({ caseData, verses }) {
       <p className="cs-term"><b>Rule verse:</b> {TERMS.ruleVerse}</p>
 
       <blockquote className="cs-verse big">
-        “{verses[ref] ?? "…"}”
+        {verses[ref] ?? "…"}
         <cite>— {ref} ({TRANSLATION})</cite>
       </blockquote>
 
@@ -323,7 +323,7 @@ function PassageCard({ tc, caseData, text, isTested, animate, ruleLabel }) {
       </div>
 
       <blockquote className="cs-verse">
-        “{text ?? "…"}”
+        {text ?? "…"}
         <cite>— {tc.verse.reference}</cite>
       </blockquote>
 
@@ -378,7 +378,7 @@ function StageVerdict({ caseData, verses, tested, scores }) {
 
         <Row label="The rule">
           <blockquote className="cs-verse">
-            “{verses[ruleRef] ?? "…"}”
+            {verses[ruleRef] ?? "…"}
             <cite>— {ruleRef} ({TRANSLATION})</cite>
           </blockquote>
         </Row>
