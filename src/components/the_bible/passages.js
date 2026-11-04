@@ -27,7 +27,8 @@
 //
 // Verse text is never stored here: it is read from the BSB store by reference.
 
-export const PASSAGES = [{
+export const PASSAGES = [
+{
     id: "ascension_problem",
     title: "The Ascension Problem",
     summary: "Checks John 3:13's claim that no one has gone up to heaven against passages where someone does.",
@@ -2586,7 +2587,7 @@ export const PASSAGES = [{
     "verdict": "Matthew's Jesus abolishes the middle: not with Me means against Me. Luke's and Mark's Jesus install the middle as the rule: not against us means for us. The two maxims classify the same unaffiliated man into opposite camps, and both are given as Jesus's own teaching.",
     "scoreImpact": -2.0
   },
-  {
+{
     "id": "ahaz_overcome",
     "title": "Could They Overcome Ahaz?",
     "summary": "Checks 2 Kings 16:5 — Rezin and Pekah besieged Ahaz but could not overcome him — against 2 Chronicles 28:5, where the LORD delivered Ahaz into their hands and they struck him with great force. Isaiah 7:1 sides with Kings.",
@@ -2639,7 +2640,7 @@ export const PASSAGES = [{
     "verdict": "Kings and Isaiah agree the Aramean-Israelite campaign failed against Ahaz. Chronicles describes the same war as God delivering Ahaz into both kings' hands, with mass captivity and great slaughter. The war has two outcomes, and the books distribute them by author.",
     "scoreImpact": -0.5
   },
-  {
+{
     "id": "ahabs_blood",
     "title": "Where the Dogs Licked",
     "summary": "Checks 1 Kings 21:19 — Elijah's prophecy: in the place where the dogs licked Naboth's blood, the dogs will lick Ahab's blood — against 1 Kings 22:38, where Ahab's blood is licked by dogs at the pool of Samaria, a day's journey from Naboth's vineyard in Jezreel.",
@@ -2679,5 +2680,46 @@ export const PASSAGES = [{
     "severity": 2,
     "verdict": "Elijah's prophecy stakes everything on the place: where Naboth's blood was licked, there Ahab's will be. Kings dutifully records dogs licking Ahab's blood — at the pool of Samaria, after his body is carried home from another battlefield — and calls it fulfillment. The detail the prophecy is made of is the detail the fulfillment misses.",
     "scoreImpact": -0.5
+  },
+{
+    "id": "eunuch_assembly",
+    "title": "The Eunuch's Place",
+    "summary": "Checks Deuteronomy 23:1 — no man with crushed or severed genitals may enter the assembly of the LORD — against Isaiah 56:4-5, where God promises faithful eunuchs a place in His house and an everlasting name.",
+    "ruleVerse": {
+      "book": "Deuteronomy",
+      "chapter": 23,
+      "verse": 1,
+      "reference": "Deuteronomy 23:1"
+    },
+    "rulesItDefines": [
+      {
+        "id": "rule_eunuch_excluded",
+        "statement": "No eunuch may enter the assembly of the LORD.",
+        "plain": "The law is categorical and physical: 'No man with crushed or severed genitals may enter the assembly of the LORD.' No exception for faithfulness is stated.",
+        "subject": "eunuch",
+        "action": "enter",
+        "target": "assembly",
+        "permitted": false
+      }
+    ],
+    "testCases": [
+      {
+        "id": "isaiah_eunuch_place",
+        "entityId": "eunuch",
+        "verse": {
+          "book": "Isaiah",
+          "chapter": 56,
+          "verse": 5,
+          "reference": "Isaiah 56:5"
+        },
+        "violatesRule": "rule_eunuch_excluded",
+        "violationExplanation": "God's promise to the eunuchs who keep His Sabbaths and hold His covenant (verse 4): 'I will give them, in My house and within My walls, a memorial and a name better than that of sons and daughters. I will give them an everlasting name that will not be cut off.' The excluded class is given a place inside the walls the law kept them out of — permanently, by name.",
+        "severity": 3,
+        "verdict": "CONTRADICTION — Isaiah seats in God's house the men Deuteronomy bars from it."
+      }
+    ],
+    "severity": 3,
+    "verdict": "Deuteronomy bars the eunuch from the assembly of the LORD without exception. Isaiah has God promising the faithful eunuch a memorial inside His house and an everlasting name — a better place than sons get. The law excludes by body; the promise includes by covenant; both are given as God's word.",
+    "scoreImpact": -2.0
   },
 ]

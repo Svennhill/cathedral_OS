@@ -1,6 +1,7 @@
 // src/components/the_bible/entities.js
 
-export const ENTITIES = {jesus: {
+export const ENTITIES = {
+jesus: {
     id: "jesus",
     name: "Jesus",
     aka: ["Son of Man", "Son of God", "Christ"],
@@ -386,5 +387,15 @@ ahab: {
     "type": "person",
     "description": "The king who took Naboth's vineyard and was promised Naboth's fate in Naboth's field — a prophecy his own history relocates to Samaria.",
     "visualType": "person"
+  },
+eunuch: {
+    "id": "eunuch",
+    "name": "The Eunuch",
+    "aka": [
+      "the faithful eunuch"
+    ],
+    "type": "concept",
+    "description": "The man Deuteronomy excludes from the assembly for his body alone — and Isaiah promises a place in God's house and a name that will not be cut off.",
+    "visualType": "concept"
   },
 }
