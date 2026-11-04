@@ -2,16 +2,25 @@ import { useState, useEffect, useRef } from "react"
 import Bezel from "./components/bezel"
 import Screen from "./components/screen"
 import DebugPanel from "./components/debugpanel"
-import { BEZEL_W, BEZEL_H, PCT, screenOnlyBox, ZOOM_DEFAULT, clampZoom } from "./utils/screenConstants"
+import { BEZEL_W, BEZEL_H, PCT, screenOnlyBox, ZOOM_DEFAULT } from "./utils/screenConstants"
 import {
   usePhoneLayout, isPhoneNow, usePhoneZoomGuard, PHONE_CSS,
 } from "./utils/phoneLayout"
+import {
+  userNamespace, readUserPrefs, writeUserPref, adoptLegacyData, USER_KEYS, VOLUME_DEFAULT,
+} from "./data/userprefs"
+import { loadCaseStoreFor } from "./components/apps/scripted/casestore"
+import { readerActions } from "./components/apps/scripted/readerstore"
+import { viewActions } from "./components/apps/scripted/viewstore"
 
 const DEFAULT_WIN  = { x: 5, y: 8, width: 55, height: 60 }
 const STACK_OFFSET = 3
 
 export default function App() {
   // ── SCREEN STATE ───────────────────────────────────────────────────────
+  // off → crt_on → booting → login → on → shutting_down → off
+  // The OS ('on') is only entered from 'login' after a successful sign-in
+  // (the passcode-gated debug panel can still jump anywhere).
   const [screenState, setScreenState] = useState('off')
   const [bootKey, setBootKey]         = useState(0)
   const [debugLoop, setDebugLoop]     = useState(false)
@@ -20,10 +29,22 @@ export default function App() {
   // ── DEBUG OVERRIDE ─────────────────────────────────────────────────────
   // false by default in production. Toggled via COS → Settings → Debug (passcode 2079).
   // Also always true in dev mode so the panel is available during development.
-  const [debugEnabled, setDebugEnabled] = useState(() => !!import.meta.env.DEV)
+  // Unlocking it is part of a signed-in session: logout and power-off put it
+  // back to this default, so in production the panel never sits on the
+  // login screen offering a way past it.
+  const DEBUG_DEFAULT = !!import.meta.env.DEV
+  const [debugEnabled, setDebugEnabled] = useState(DEBUG_DEFAULT)
+
+  // ── CURRENT USER ───────────────────────────────────────────────────────
+  // The signed-in user's public profile (data/userstore.js), or null. Every
+  // saved setting below — and scripted.exe's case progress — belongs to
+  // this user, under cos:<username>:<name> (data/userprefs.js). With no user
+  // the OS runs on defaults and nothing is read or written.
+  const [currentUser, setCurrentUser] = useState(null)
+  const userNs = currentUser ? userNamespace(currentUser.username) : null
 
   // ── DISPLAY KNOBS ──────────────────────────────────────────────────────
-  const [volume,        setVolume]        = useState(0.5)
+  const [volume,        setVolume]        = useState(VOLUME_DEFAULT)
   const [luminance,     setLuminance]     = useState(1)
   const [luminanceAngle, setLuminanceAngle] = useState(0)
   const [density,       setDensity]       = useState(1)
@@ -47,48 +68,50 @@ export default function App() {
   usePhoneZoomGuard(phone)
 
   // ── ACCESSIBILITY ──────────────────────────────────────────────────────
-  // alwaysPref: the owner's EXPLICIT "Always load Screen Only" choice —
-  // true / false, or null when none was ever made. Persists.
+  // alwaysPref: the user's EXPLICIT "Always load Screen Only" choice —
+  // true / false, or null when none was ever made. Saved per user, and
+  // applied when they sign in.
   // ("false" alone was written on every load before, so it only counts as a
   // choice once the alwaysScreenOnlySet marker says a toggle wrote it.)
-  const [alwaysPref, setAlwaysPref] = useState(readAlwaysPref)
+  const [alwaysPref, setAlwaysPref] = useState(null)
   // With no explicit choice, a phone starts in Screen Only and a desktop
   // doesn't (the device at load decides; resizing later never flips it).
   const [phoneAtLoad] = useState(isPhoneNow)
   const alwaysScreenOnly    = alwaysPref ?? phoneAtLoad
   const setAlwaysScreenOnly = (v) => setAlwaysPref(Boolean(v))
-  // screenOnly: session-scoped — not written to localStorage
-  const [screenOnly, setScreenOnly] = useState(() => readAlwaysPref() ?? isPhoneNow())
-  const [greyscale, setGreyscale] = useState(() => {
-    try { return localStorage.getItem('greyscale') === 'true' } catch { return false }
-  })
-
-  useEffect(() => {
-    if (alwaysPref === null) return   // no choice made — nothing to save
-    try {
-      localStorage.setItem('alwaysScreenOnly', alwaysPref)
-      localStorage.setItem('alwaysScreenOnlySet', 'true')
-    } catch {}
-  }, [alwaysPref])
-  useEffect(() => {
-    try { localStorage.setItem('greyscale', greyscale) } catch {}
-  }, [greyscale])
+  // screenOnly: session-scoped — not written to localStorage. Before any
+  // login it is the device default; at login the user's choice applies.
+  const [screenOnly, setScreenOnly] = useState(isPhoneNow)
+  const [greyscale, setGreyscale] = useState(false)
 
   // ── ZOOM ───────────────────────────────────────────────────────────────
   // Two independent zooms (1 = 100% = the original look):
   //   desktopZoom — desktop icons and their labels only
   //   windowZoom  — the content area of open application windows only
-  const readZoom = (key) => {
-    try { return clampZoom(parseFloat(localStorage.getItem(key)) || ZOOM_DEFAULT) } catch { return ZOOM_DEFAULT }
-  }
-  const [desktopZoom, setDesktopZoom] = useState(() => readZoom('desktopZoom'))
-  const [windowZoom,  setWindowZoom]  = useState(() => readZoom('windowZoom'))
+  const [desktopZoom, setDesktopZoom] = useState(ZOOM_DEFAULT)
+  const [windowZoom,  setWindowZoom]  = useState(ZOOM_DEFAULT)
+
+  // ── PER-USER SAVING ────────────────────────────────────────────────────
+  // Only while someone is signed in. Their values are put in place in the
+  // same render that makes them current (startSession), so these never
+  // write one user's values — or the defaults — into another's namespace.
   useEffect(() => {
-    try { localStorage.setItem('desktopZoom', desktopZoom) } catch {}
-  }, [desktopZoom])
+    if (!userNs || alwaysPref === null) return   // no choice made — nothing to save
+    writeUserPref(userNs, USER_KEYS.alwaysScreenOnly, alwaysPref)
+    writeUserPref(userNs, USER_KEYS.alwaysScreenOnlySet, 'true')
+  }, [userNs, alwaysPref])
   useEffect(() => {
-    try { localStorage.setItem('windowZoom', windowZoom) } catch {}
-  }, [windowZoom])
+    if (userNs) writeUserPref(userNs, USER_KEYS.greyscale, greyscale)
+  }, [userNs, greyscale])
+  useEffect(() => {
+    if (userNs) writeUserPref(userNs, USER_KEYS.desktopZoom, desktopZoom)
+  }, [userNs, desktopZoom])
+  useEffect(() => {
+    if (userNs) writeUserPref(userNs, USER_KEYS.windowZoom, windowZoom)
+  }, [userNs, windowZoom])
+  useEffect(() => {
+    if (userNs) writeUserPref(userNs, USER_KEYS.volume, Math.round(volume * 100) / 100)
+  }, [userNs, volume])
 
   // ── WINDOW MANAGEMENT ──────────────────────────────────────────────────
   const [openWindows, setOpenWindows] = useState([])
@@ -209,10 +232,56 @@ export default function App() {
   const illDial  = makeDial(setIlluminate, setIlluminateAngle, 0, 1,  0.03, illuminateIntervalRef)
   const aliDial  = makeDial(setAlign,      setAlignAngle,      0, 1,  0.03, alignIntervalRef)
 
+  // ── SESSION ────────────────────────────────────────────────────────────
+  // startSession: a login succeeded. The first login on a device that still
+  // has the old flat keys adopts them (userprefs.adoptLegacyData), then the
+  // user's settings and case progress replace whatever was showing.
+  const startSession = (user) => {
+    adoptLegacyData(user.username)
+    const p = readUserPrefs(user.username)
+    setGreyscale(p.greyscale ?? false)
+    setAlwaysPref(p.alwaysPref)
+    setScreenOnly(p.alwaysPref ?? phoneAtLoad)
+    setDesktopZoom(p.desktopZoom ?? ZOOM_DEFAULT)
+    setWindowZoom(p.windowZoom ?? ZOOM_DEFAULT)
+    // No saved volume yet: keep the knob where it is (it becomes theirs)
+    if (p.volume !== null) setVolume(p.volume)
+    setOpenWindows([])
+    loadCaseStoreFor(user.username)
+    readerActions.reset()
+    viewActions.set('panel')
+    setCurrentUser(user)
+  }
+
+  // endSession: logout or power-off. Nothing of the last user stays on
+  // screen or in memory; the next person starts from the device defaults.
+  // (Screen Only stays as it is — it's how the device is being viewed.)
+  const endSession = () => {
+    setCurrentUser(null)
+    setOpenWindows([])
+    setGreyscale(false)
+    setAlwaysPref(null)
+    setDesktopZoom(ZOOM_DEFAULT)
+    setWindowZoom(ZOOM_DEFAULT)
+    setVolume(VOLUME_DEFAULT)
+    setMusicPaused(false)
+    setDebugEnabled(DEBUG_DEFAULT)
+    loadCaseStoreFor(null)
+    readerActions.reset()
+    viewActions.set('panel')
+  }
+
+  const handleLogout = () => {
+    endSession()
+    setScreenState('login')   // back to the cathedral picture and the form
+  }
+
   // ── POWER ──────────────────────────────────────────────────────────────
+  // Off from the OS or from the login gate; either way the session ends,
+  // so the next power-on boots back to the login.
   const handlePowerClick = () => {
     if (screenState === 'off') { setBootKey(k => k + 1); setScreenState('crt_on') }
-    if (screenState === 'on')  { setOpenWindows([]); setScreenState('shutting_down') }
+    if (screenState === 'on' || screenState === 'login') { endSession(); setScreenState('shutting_down') }
   }
 
   const appFilter = greyscale ? 'saturate(0)' : undefined
@@ -240,6 +309,8 @@ export default function App() {
         desktopZoom={desktopZoom}    setDesktopZoom={setDesktopZoom}
         windowZoom={windowZoom}      setWindowZoom={setWindowZoom}
         phone={phone}                frame={frame}
+        currentUser={currentUser}
+        onLogin={startSession}       onLogout={handleLogout}
       />
 
       {/* ── SCREEN-ONLY POWER ─────────────────────────────────
@@ -375,12 +446,3 @@ export default function App() {
   )
 }
 
-// The explicit "Always load Screen Only" choice: true / false / null (none)
-function readAlwaysPref() {
-  try {
-    const v = localStorage.getItem('alwaysScreenOnly')
-    if (v === 'true') return true   // only ever written by the owner's toggle
-    if (v === 'false' && localStorage.getItem('alwaysScreenOnlySet') === 'true') return false
-  } catch { /* storage blocked — no saved choice */ }
-  return null
-}

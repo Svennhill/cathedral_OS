@@ -1,6 +1,7 @@
 // StartMenu — drops down from the COS button inside the screen frame
-// Sections: APPS (open windows), CASE PROGRESS (scripted.exe save state +
-// start-over), SETTINGS (accessibility + debug passcode)
+// User line (who is signed in + Log out), then sections: APPS (open
+// windows), CASE PROGRESS (scripted.exe save state + start-over), SETTINGS
+// (accessibility + debug passcode)
 //
 // phone: the phone layout (utils/phoneLayout.js) — full-width menu, rows and
 // controls at touch size. Every desktop value is unchanged.
@@ -10,6 +11,7 @@ import { ZOOM_STEPS } from "../utils/screenConstants"
 import { PHONE } from "../utils/phoneLayout"
 import { PASSAGES } from "./the_bible/passages"
 import { caseActions, useCaseState, caseStatus } from "./apps/scripted/casestore"
+import { displayName } from "../data/userstore"
 
 const GREEN  = "#00ff41"
 const TEAL   = "#009191"
@@ -276,6 +278,8 @@ export default function StartMenu({
   windowZoom,    setWindowZoom,
   taskbarHeightPct,
   phone = false,
+  currentUser = null,
+  onLogout,
 }) {
   const [appsOpen,     setAppsOpen]     = useState(true)
   const [progressOpen, setProgressOpen] = useState(false)
@@ -348,6 +352,9 @@ export default function StartMenu({
           ✕
         </button>
       </div>
+
+      {/* ── USER ──────────────────────────────────────────── */}
+      <UserLine user={currentUser} onLogout={onLogout} phone={phone} />
 
       {/* ── APPS SECTION ──────────────────────────────────── */}
       <SectionHeader label="APPS" id="apps" phone={phone} open={appsOpen} onToggle={() => setAppsOpen(o => !o)} />
@@ -424,25 +431,88 @@ export default function StartMenu({
 
           <Divider />
 
-          {/* Personalization — login required stub */}
+          {/* Personalization — not built yet */}
           <div style={{ padding: "1px 12px", fontFamily: FONT, fontSize: "65%", color: TEAL, letterSpacing: "0.08em" }}>
             PERSONALIZATION
           </div>
           <SettingToggle
             label="Background"
             locked
-            lockNote="login required"
+            lockNote="coming soon"
             phone={phone}
           />
           <SettingToggle
             label="Color theme"
             locked
-            lockNote="login required"
+            lockNote="coming soon"
             phone={phone}
           />
         </div>
       )}
 
+    </div>
+  )
+}
+
+// ── USER LINE ─────────────────────────────────────────────────────────────
+const SR_ONLY = {
+  position: "absolute", width: 1, height: 1, padding: 0, margin: -1,
+  overflow: "hidden", clip: "rect(0 0 0 0)", whiteSpace: "nowrap", border: 0,
+}
+// Who is signed in, and Log out. The display name is "First Last [tag]"
+// (userstore.displayName); every part is React text. No user only happens
+// when the passcode-gated debug panel jumps straight into the OS.
+function UserLine({ user, onLogout, phone }) {
+  const [hovered, setHovered] = useState(false)
+  const name = user ? [user.firstName, user.lastName].filter(Boolean).join(" ") || user.username : null
+  return (
+    <div data-user-line style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 8,
+      padding: phone ? "6px 8px 6px 14px" : "3px 6px 3px 12px",
+      borderBottom: `1px solid ${TEAL}`,
+      fontFamily: FONT,
+    }}>
+      <div style={{ minWidth: 0, lineHeight: 1.3 }} title={user ? displayName(user) : undefined}>
+        {user ? (
+          <>
+            <div style={{ fontSize: "72%", color: GREEN, overflowWrap: "anywhere" }}>
+              <span style={SR_ONLY}>Signed in as </span>
+              <span aria-hidden="true">▸ </span>{name}
+              {user.tag && <span style={{ color: TEAL }}> [{user.tag}]</span>}
+            </div>
+            <div style={{ fontSize: "58%", color: "rgba(0,255,65,0.55)", overflowWrap: "anywhere" }}>
+              @{user.username}
+            </div>
+          </>
+        ) : (
+          <div style={{ fontSize: "65%", color: "rgba(0,255,65,0.55)" }}>▸ not signed in (debug)</div>
+        )}
+      </div>
+      <button
+        onClick={onLogout}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        data-logout
+        style={{
+          flexShrink: 0,
+          fontFamily: FONT,
+          fontSize: "62%",
+          letterSpacing: "0.08em",
+          color: hovered ? BG : GREEN,
+          background: hovered ? GREEN : "transparent",
+          border: `1px solid ${GREEN}`,
+          borderRadius: 0,
+          padding: phone ? "0 12px" : "1px 6px",
+          minHeight: phone ? PHONE.HIT : undefined,
+          lineHeight: 1.3,
+          cursor: "pointer",
+        }}
+      >
+        Log out
+      </button>
     </div>
   )
 }
@@ -459,7 +529,7 @@ function CaseProgress({ phone }) {
   return (
     <div style={{ paddingTop: 2, paddingBottom: 4 }}>
       <div style={note}>
-        Case progress saves automatically on this device.
+        Case progress saves automatically to your account on this device.
         <br />Started: {started} of {PASSAGES.length} cases
       </div>
       <div

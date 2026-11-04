@@ -1,0 +1,37 @@
+PASS  boot ends at the login gate (not the OS)  — crt video: ended-naturally
+PASS  no debug panel on the production login screen
+PASS  before any login the case store reads/writes nothing: legacy keys untouched, no cos:* keys  — alwaysScreenOnly,alwaysScreenOnlySet,desktopZoom,greyscale,scriptedCaseProgress,windowZoom
+PASS  before login the legacy greyscale is NOT applied (no user yet)
+PASS  owner account created → back at sign in
+PASS  owner signs in → OS
+PASS  migration: legacy keys removed
+PASS  migration: values now under cos:owner_1:*
+PASS  migration: owner sees the old settings (greyscale on, zoom 150% / 125%)  — {"user":"Signed in as ▸ Steven Hildreth [the Skeptic] @Owner_1 Log out","greyscaleBox":true,"greyscaleFilter":"saturate(0)","desktopZoom":"150%","windowZoom":"125%","vol":"vol 50%","windows":0}
+PASS  migration: owner sees the old case progress  — In progress — 1 of 2 passages tested
+PASS  start menu user line: display name with tag + @username + Log out  — Signed in as ▸ Steven Hildreth [the Skeptic] @Owner_1 Log out
+PASS  owner: volume knob changed and saved per user  — vol 35% / saved 0.35
+PASS  owner: new case progress saved
+PASS  Log out → back to the login gate (cathedral), windows closed
+PASS  logged out: owner greyscale no longer applied on the gate
+PASS  logged out: no debug panel
+PASS  B signs in → OS
+PASS  B's world: defaults (no greyscale, 100% zooms, vol 50%)  — {"user":"Signed in as ▸ Bea O'Neil-Ruiz @bea Log out","greyscaleBox":false,"greyscaleFilter":"","desktopZoom":"100%","windowZoom":"100%","vol":"vol 50%","windows":0}
+PASS  B's world: none of the owner's case progress
+PASS  B's user line  — Signed in as ▸ Bea O'Neil-Ruiz @bea Log out
+PASS  B: own progress + window zoom saved
+PASS  A after B's session: settings intact (greyscale, 150%/125%, volume)  — {"user":"Signed in as ▸ Steven Hildreth [the Skeptic] @Owner_1 Log out","greyscaleBox":true,"greyscaleFilter":"saturate(0)","desktopZoom":"150%","windowZoom":"125%","vol":"vol 35%","windows":0}
+PASS  A after B's session: progress intact, B's case not there
+PASS  storage: two separate namespaces, no leakage
+PASS  storage: no flat legacy keys came back  — cos:bea:desktopZoom,cos:bea:greyscale,cos:bea:scriptedCaseProgress,cos:bea:volume,cos:bea:windowZoom,cos:owner_1:alwaysScreenOnly,cos:owner_1:alwaysScreenOnlySet,cos:owner_1:desktopZoom,cos:owner_1:greyscale,cos:owner_1:scriptedCaseProgress,cos:owner_1:volume,cos:owner_1:windowZoom,cosUsers
+PASS  storage: no plaintext password anywhere
+PASS  debug panel unlocks with the passcode inside a session
+PASS  power from the OS → shutting down
+PASS  …→ off
+PASS  power-off ended the session: debug panel re-locked
+PASS  power on → boot → the login gate again (not the OS)
+PASS  the OS never appeared during the power cycle
+PASS  after the power cycle, logging in as B shows B's world
+PASS  power-off works from the login gate too
+PASS  no page errors
+
+35/35 checks passed

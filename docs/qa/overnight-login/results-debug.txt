@@ -1,0 +1,13 @@
+PASS  panel lists 'login' among the state jumps
+PASS  panel 'login' → the gate
+PASS  panel 'on' BYPASSES the gate (dev tool, by design)
+PASS  no-user OS: start menu says 'not signed in (debug)'
+PASS  no-user OS: changing settings writes nothing to storage
+PASS  no-user OS: Log out → the gate, defaults restored
+PASS  loop default target is 'booting'
+PASS  loop → 'booting': the boot ends and restarts (the gate never shows)  — cmd true reboot true gate false
+PASS  loop target → 'on'
+PASS  loop → 'on': boot goes straight to the OS (existing boot-to-target behavior)
+PASS  no page errors
+
+11/11 checks passed

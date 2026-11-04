@@ -3,8 +3,13 @@
 // Lives at module level (not in component state) so a case survives the
 // window being minimized, which unmounts the app, and is mirrored to
 // localStorage so it survives a page reload too (same try/catch pattern as
-// the guest preferences in App.jsx — storage being unavailable just means
+// the preferences in App.jsx — storage being unavailable just means
 // progress isn't kept).
+//
+// Progress belongs to the signed-in user: it is saved under
+// cos:<username>:scriptedCaseProgress (see data/userprefs.js), and
+// loadCaseStoreFor() swaps it in on login and out on logout. With no user
+// signed in the store starts empty and reads and writes nothing.
 //
 // Scores are never held as state — they're derived from `tested`, so testing
 // a passage can only ever count once, and restoring a saved case can't apply
@@ -14,8 +19,9 @@
 import { useSyncExternalStore } from "react"
 import { PASSAGES } from "../../the_bible/passages"
 import { computeScores } from "./scoring"
+import { userKey, USER_KEYS } from "../../../data/userprefs"
 
-const STORAGE_KEY = "scriptedCaseProgress"
+let storageKey = null   // cos:<username>:scriptedCaseProgress, or null (no user)
 const LAST_STAGE  = 3   // 0 select · 1 rule · 2 test · 3 verdict
 
 const initial = {
@@ -31,8 +37,9 @@ const caseById = (id) => PASSAGES.find(c => c.id === id) ?? null
 // Whatever is read back is checked against the current case data, so a
 // stale or hand-edited save can't put the panel in an impossible state.
 function restore() {
+  if (!storageKey) return initial
   let saved
-  try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) } catch { return initial }
+  try { saved = JSON.parse(localStorage.getItem(storageKey)) } catch { return initial }
   if (!saved || typeof saved !== "object") return initial
 
   const tested = {}
@@ -54,9 +61,10 @@ function restore() {
 }
 
 function persist(s) {
+  if (!storageKey) return
   try {
     if (s.stage === 0 && !Object.keys(s.tested).length) {
-      localStorage.removeItem(STORAGE_KEY)
+      localStorage.removeItem(storageKey)
       return
     }
     const scores = {}
@@ -64,15 +72,23 @@ function persist(s) {
       const { logicIntegrity, truthIndex, versesTested, versesContradicted } = computeScores(caseById(id), ids)
       scores[id] = { logicIntegrity, truthIndex, versesTested, versesContradicted }
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    localStorage.setItem(storageKey, JSON.stringify({
       v: 1, stage: s.stage, caseId: s.caseId, tested: s.tested, scores,
     }))
   } catch { /* storage full or blocked — progress just isn't kept */ }
 }
 
 // ── STORE ────────────────────────────────────────────────────────────────
-let state = restore()
+let state = initial
 const listeners = new Set()
+
+// (Re)load the store for a user — call on login with their username and on
+// logout with null. Whatever was showing is replaced at once.
+export function loadCaseStoreFor(username) {
+  storageKey = username ? userKey(username, USER_KEYS.scriptedCaseProgress) : null
+  state = restore()
+  listeners.forEach(fn => fn())
+}
 
 function set(next) {
   state = { ...state, ...next }
